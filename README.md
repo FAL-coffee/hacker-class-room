@@ -1,8 +1,100 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# はかくらルームとは
 
-## Getting Started
+プログラミングの授業が始まるけど、付いていけるか不安......
 
-First, run the development server:
+情報処理の勉強が難しい。もしかして、こんなに苦労しているのは私だけ？
+
+ゲーム作りに興味があって、プログラミングを始めてみたいけど、何から始めればいいのかわからない
+
+ネットで見た通りにやったのに、環境構築でつまずいてしまった。
+
+プログラミングの知見を活かして、学生起業を行いたい。仲間をどうやって見つければいいだろうか？
+
+**はかくらルーム（Hacker ClassRoom）** は、そのような悩みを抱えた学生エンジニアのためのチャットコミュニケーションサービスです。
+
+不安を抱えている時、最も力になるのは、「**同じ不安を抱えた仲間**」であったり、「**似た境遇を乗り越えた先輩**」達です。はかくらルームは、**誰もが自由に、気持ちや感情を共有する仲間**を作ることが出来るプラットフォームです。
+
+プログラミングや IT 知識の勉強中につまずいてしまったとき、あなたには手を差し伸べてくれる「**励まし合いながら歩んできた仲間**」がいます。はかくらルームは、**仲間に助けを求めることが、もっと気軽に出来る**環境を提供します。
+
+プログラミングに自信がある、または、成長したいといった理由で、起業やコンクールへの出場を考えている時。仲間を探すのはとても大変で、本来強い運が必要なことです。はかくらルームでは、**容易に同志の仲間を探す**ことが出来ます。
+
+// 画面レイアウト完成次第、画像を添付
+
+# 使用技術
+
+-
+-
+-
+
+# インフラ構成図
+
+// draw.io
+
+# 機能一覧
+
+// 動作概要
+
+# 非機能一覧
+
+## テスト
+
+// テスト、storybook の起動方法、CICD、OAuth 関連等の実装方法や、実行についてを記述
+
+# UI design resource
+
+// figma url
+
+# コミットルール
+
+## コミットメッセージについて
+
+コミット時のコメントでは、コメントを以下のように分割します。
+
+| 区分    | 意味                                         | 例                                       |
+| ------- | -------------------------------------------- | ---------------------------------------- |
+| Prefix  | 何をしたか、を短く表すための接頭辞。         | Add、追加、Fix、修正、Improve、etc...    |
+| Subject | 何をしたのかを短い文章で表す。               | ◯◯ に △△ を追加、文言の修正、etc...      |
+| Body    | 何故それを行ったか、を文章で表す。           | ◯◯ 機能に △△ が必要であるため、etc...... |
+| Footer  | コミットの元となった課題の ID 等を記述する。 | Issue#444、バグチケット#000、etc......   |
+
+### Prefix の分類
+
+| 英語    | 日本語 | 意味                                       |
+| ------- | ------ | ------------------------------------------ |
+| ADD     | 追加   | （機能・ファイルなどを）追加する           |
+| Fix     | 修正   | （コードなどを）修正する                   |
+| Improve | 改善   | （コードなどを）改善する                   |
+| Update  | 更新   | （パッケージやドキュメントなどを）更新する |
+| Remove  | 削除   | （ファイル名やコードを）除去する           |
+| Rename  | 改名   | （ファイル名を）変更する                   |
+| Move    | 移動   | （A を B に）移動する                      |
+| Change  | 交換   | （A を B に）変更する                      |
+
+### コミットメッセージのフォーマット
+
+**Prefix**：**Subject**
+
+**Body**
+
+**Footer**
+
+Body、Footer については、必要な場合のみ。
+
+## ブランチの運用について
+
+[git-flow](https://danielkummer.github.io/git-flow-cheatsheet/index.ja_JP.html)を参照
+
+# 開発手順
+
+## 開発環境構築
+
+docker-compose
+
+```bash
+docker-compose //後で書く
+```
+
+## 開発サーバー立ち上げ
 
 ```bash
 npm run dev
@@ -10,25 +102,10 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ストーリーブック立ち上げ
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+npm run storybook
+# or
+yarn storybook
+```
