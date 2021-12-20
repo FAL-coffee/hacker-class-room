@@ -82,7 +82,7 @@ Body、Footer については、必要な場合のみ。
 
 ## ブランチの運用について
 
-[git-flow](https://danielkummer.github.io/git-flow-cheatsheet/index.ja_JP.html)を参照
+[github-flow](https://tracpath.com/bootcamp/learning_git_github_flow.html)を参照
 
 # 開発手順
 
