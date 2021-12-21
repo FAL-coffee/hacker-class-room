@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "baseUrl": ".",
       "esModuleInterop": true,
       "module": "commonjs",
       "jsx": "preserve",
@@ -15,6 +16,11 @@
       "noEmit": true,
       "moduleResolution": "node",
       "isolatedModules": true,
+      "paths": {
+        "@/*": ["./src/*"],
+        "@components/*": ["./src/components/*"],
+        "@types": ["./src/types/index.ts"]
+      },
     },
     "include": [
       "next-env.d.ts",
