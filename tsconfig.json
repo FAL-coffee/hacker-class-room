@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "module": "commonjs",
+      "jsx": "preserve",
+      "lib": ["es2019", "dom"],
+      "sourceMap": true,
+      "target": "es6",
+      "noUnusedLocals": true,
+      "resolveJsonModule": true,
+      "skipLibCheck": true,
+      "allowJs": true,
+      "strict": true,
+      "forceConsistentCasingInFileNames": true,
+      "noEmit": true,
+      "moduleResolution": "node",
+      "isolatedModules": true,
+    },
+    "include": [
+      "next-env.d.ts",
+      "**/*.ts",
+      "**/*.tsx"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
