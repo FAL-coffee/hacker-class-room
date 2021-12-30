@@ -12,8 +12,8 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Link href="/signup">
-          <a>signup</a>
+        <Link href="/signin">
+          <a>signin</a>
         </Link>
       </main>
 
