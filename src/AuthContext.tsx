@@ -7,7 +7,8 @@ import { signInWithRedirect } from "firebase/auth";
 interface User {
   displayName: string | null | undefined;
   email: string | null | undefined;
-  photoUrl?: string | null | undefined;
+  uid: string | null | undefined;
+  photoURL?: string | null | undefined;
 }
 interface AuthContextProps {
   currentUser: User | null | undefined;
