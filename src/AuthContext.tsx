@@ -1,13 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ReactNode } from "react";
-import { auth } from "./firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 import { signInWithRedirect } from "firebase/auth";
+import { auth, db, setDoc, doc, updateDoc, getDoc } from "@/firebase";
 
 interface User {
   displayName: string | null | undefined;
   email: string | null | undefined;
-  photoUrl?: string | null | undefined;
+  uid: string | null | undefined;
+  photoURL?: string | null | undefined;
 }
 interface AuthContextProps {
   currentUser: User | null | undefined;
@@ -28,7 +29,6 @@ export const useAuth = () => {
 const AuthProvider = ({ children }: Props) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
-
   const login = () => {
     const provider = new GoogleAuthProvider();
     return signInWithRedirect(auth, provider);
@@ -39,9 +39,27 @@ const AuthProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
-    return auth.onAuthStateChanged((user) => {
+    return auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
       setLoading(false);
+      if (!user) return;
+      // login時、firestore内のuser情報をuidをキーにし、登録を行う。
+      const docRef = await doc(db, "users", `${user.uid}`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        await updateDoc(docRef, {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        });
+      } else {
+        await setDoc(docRef, {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        });
+      }
     });
   }, []);
 
