@@ -3,11 +3,26 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 
-import { db, onSnapshot, doc } from "@/firebase";
+import {
+  db,
+  onSnapshot,
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  query,
+} from "@/firebase";
 // import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 // import { addDoc, Timestamp } from "firebase/firestore";
-import { Timestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  limit,
+  orderBy,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 import { NextPage } from "next";
 interface message {
   content: string;
@@ -26,61 +41,47 @@ const Room: NextPage = () => {
 
   //   console.log(router.query.id);
   // データ追加
-  //   const clickButton = () => {
-  //     const docRef = addDoc(collection(db, "users"), {
-  //       uid: "",
-  //       displayName: "",
-  //       email: "",
-  //       photoURL:
-  //         "",
-  //     });
-  //     console.log("Document", docRef);
-  //   };
+  const [text, setText] = useState<string>();
+  const post = async (event: FormEvent) => {
+    event.preventDefault();
+    const messagesRef = await collection(
+      db,
+      "chats",
+      `${router.query.id}`,
+      "messages"
+    );
+    await addDoc(messagesRef, {
+      content: text,
+      // postedAt:timestamp?, postUid:str?ref?, とか
+    });
+  };
 
-  const [chats, setChats] = useState<Array<chat>>([]);
+  const [messages, setMessages] = useState<Array<message>>([]);
 
   const router = useRouter();
   useEffect(() => {
-    let tempchats: Array<chat> = [];
-    // const q = query(collection(db, 'chats'), where('uid', '==', `${router.query.id}`))
-    // const q = query(collection(db, "chats"));
-    // dbに対する変更の全てを監視
-    // onSnapshot(q, (snapshot) => {
-    //   snapshot.docChanges().forEach((change) => {
-    //     if (change.type === "added") {
-    //       console.log("added");
-    //       console.log(change.doc.data());
-    //       console.log(change.doc);
-    //       tempchats.push({
-    //         ...(change.doc.data() as chat),
-    //       });
-    //     }
-    //     if (change.type === "modified") {
-    //       console.log("modified");
-    //       console.log(change.doc.data());
-    //       //   tempchats = [{ ...(change.doc.data() as chat) }];
-    //       tempchats.push({
-    //         ...(change.doc.data() as chat),
-    //       });
-    //     }
-    //   });
-    // });
+    let tempMessages: Array<message> = [];
 
-    // 特定のdocに対する変更の監視
-    onSnapshot(doc(db, "chats", `${router.query.id}`), (doc) => {
-      //   console.log(doc.data());
-      //   tempchats.push({
-      //     ...(doc.data() as chat),
-      //   });
-      tempchats = [{ ...(doc.data() as chat) }];
-      setChats(tempchats);
-    });
+    onSnapshot(
+      query(
+        collection(db, "chats", `${router.query.id}`, "messages"),
+        limit(10)
+        // postedAtでorderByしたい
+      ),
+      (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          console.log(change.doc.data());
+          tempMessages.push(change.doc.data() as message);
+        });
+        setMessages(tempMessages);
+      }
+    );
   }, [router.query.id]);
 
-  useEffect(() => {
-    console.log("useEffect");
-    console.log(chats);
-  }, [chats]);
+  // useEffect(() => {
+  //   console.log("useEffect");
+  //   console.log(messages);
+  // }, [messages]);
 
   return (
     <div>
@@ -98,16 +99,16 @@ const Room: NextPage = () => {
       <Link href="/top">
         <a>top</a>
       </Link>
-      {chats.map((chat: chat, i: number) => (
-        <div key={i}>
-          {chat.messages.map((message: message, j: number) => (
-            <p key={j}>
-              {message.content}
-              {/* {alert(message.content)} */}
-            </p>
-          ))}
-        </div>
+      {messages.map((message: message, i: number) => (
+        <p key={i}>
+          {message.content}
+          {/* {alert(message.content)} */}
+        </p>
       ))}
+      <form onSubmit={post}>
+        <textarea value={text} onChange={(e) => setText(e.target.value)} />
+        <input type="submit" />
+      </form>
     </div>
   );
 };
