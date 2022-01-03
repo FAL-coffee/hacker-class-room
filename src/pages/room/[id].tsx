@@ -2,18 +2,10 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
-
-import {
-  db,
-  onSnapshot,
-  doc,
-  getDoc,
-  updateDoc,
-  arrayUnion,
-  query,
-} from "@/firebase";
+import { db, onSnapshot, query } from "@/firebase";
 // import Image from "next/image";
 import React, { FormEvent, useEffect, useState } from "react";
+import { useAuth } from "@/AuthContext";
 // import { addDoc, Timestamp } from "firebase/firestore";
 import {
   addDoc,
@@ -21,29 +13,32 @@ import {
   limit,
   orderBy,
   Timestamp,
-  where,
 } from "firebase/firestore";
 import { NextPage } from "next";
 interface message {
   content: string;
-  createdAt: Timestamp;
-  uid: string;
+  postedAt: Timestamp;
+  postUid: string;
 }
-interface chat {
-  createdAt: Timestamp;
-  description: string;
-  messages: message[];
-  name: string;
-  owner: string;
-}
+// interface chat {
+//   createdAt: Timestamp;
+//   description: string;
+//   messages: message[];
+//   name: string;
+//   owner: string;
+// }
 const Room: NextPage = () => {
-  //   const { currentUser } = useAuth();
-
-  //   console.log(router.query.id);
-  // データ追加
+  const { currentUser } = useAuth();
   const [text, setText] = useState<string>();
   const post = async (event: FormEvent) => {
     event.preventDefault();
+    // textが空白ないし、空文字、null、未定義である場合の処理をここに書く
+    if (!text || !currentUser || !currentUser.uid) return;
+    const data: message = {
+      content: text,
+      postedAt: Timestamp.now(),
+      postUid: currentUser.uid,
+    };
     const messagesRef = await collection(
       db,
       "chats",
@@ -51,7 +46,7 @@ const Room: NextPage = () => {
       "messages"
     );
     await addDoc(messagesRef, {
-      content: text,
+      ...data,
       // postedAt:timestamp?, postUid:str?ref?, とか
     });
   };
@@ -61,27 +56,28 @@ const Room: NextPage = () => {
   const router = useRouter();
   useEffect(() => {
     let tempMessages: Array<message> = [];
-
     onSnapshot(
       query(
         collection(db, "chats", `${router.query.id}`, "messages"),
-        limit(10)
+        limit(10),
+        orderBy("postedAt", "desc")
         // postedAtでorderByしたい
       ),
       (snapshot) => {
         snapshot.docChanges().forEach((change) => {
-          console.log(change.doc.data());
-          tempMessages.push(change.doc.data() as message);
+          if (change.type === "added")
+            tempMessages.push(change.doc.data() as message);
+          // if(change.type === "removed") tempMessages
         });
         setMessages(tempMessages);
       }
     );
   }, [router.query.id]);
 
-  // useEffect(() => {
-  //   console.log("useEffect");
-  //   console.log(messages);
-  // }, [messages]);
+  useEffect(() => {
+    console.log("useEffect");
+    console.log(messages);
+  }, [messages]);
 
   return (
     <div>
