@@ -5,6 +5,10 @@ import theme from "../src/styles/theme";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
+  docs: {
+    inlineStories: false,
+    iframeHeight: "700px",
+  },
 };
 
 const withThemeProvider = (Story, context) => {
