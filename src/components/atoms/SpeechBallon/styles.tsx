@@ -49,25 +49,25 @@ export const container = styled.div.attrs(({ ...props }: Props) => ({
 }))`
   position: relative;
   display: inline-block;
-  margin-${(props) => mVectorMap.get(props.tail as string)}: ${(props) =>
+  margin-${(props) => mVectorMap.get(props.tail)}: ${(props) =>
   (props.tail === "right" || props.tail === "left") && "-"}13px;
-  padding: 1rem 1rem;
+  padding: 0.7rem 1rem;
   min-width: 60px;
   max-width: 20rem;
-  color: #929292;
+  border-radius: 5px;
+  color: #0d0015;
   font-size: 16px;
   background: ${(props) => props.color};
   &:before {
     content: "";
     position: absolute;
-    top: ${(props) => bTopMap.get(props.tail as string)};
-    left: ${(props) => bLeftMap.get(props.tail as string)};
+    top: ${(props) => bTopMap.get(props.tail)};
+    left: ${(props) => bLeftMap.get(props.tail)};
     ${(props) =>
-      props.tail != "top" && `margin-top: ${bmTMap.get(props.tail as string)};`}
-    margin-left: ${(props) => bmLMap.get(props.tail as string)};
+      props.tail != "top" && `margin-top: ${bmTMap.get(props.tail)};`}
+    margin-left: ${(props) => bmLMap.get(props.tail)};
     border: 13px solid transparent;
-    border-${(props) => arrowVectorMap.get(props.tail as string)}-color: ${(
-  props
-) => props.color};
+    border-${(props) => arrowVectorMap.get(props.tail)}-color: ${(props) =>
+  props.color};
   }
 `;
