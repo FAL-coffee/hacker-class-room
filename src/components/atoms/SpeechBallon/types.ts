@@ -1,5 +1,6 @@
 export interface Props {
   tail: "top" | "right" | "bottom" | "left";
-  color: string;
+  textColor?:string,
+  color?: string;
   value: string;
 }

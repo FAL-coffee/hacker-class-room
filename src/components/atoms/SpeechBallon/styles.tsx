@@ -59,6 +59,7 @@ const vectorMap: Map<string, VectorMap> = new Map([
 
 export const container = styled.div.attrs(({ ...props }: Props) => ({
   tail: props.tail || "top",
+  textColor: props.textColor || "black",
   color: props.color || "pink",
 }))`
   position: relative;
@@ -69,7 +70,7 @@ export const container = styled.div.attrs(({ ...props }: Props) => ({
   min-width: 60px;
   max-width: 20rem;
   border-radius: 5px;
-  color: #0d0015;
+  color: ${(props) => props.textColor};
   font-size: 16px;
   background: ${(props) => props.color};
   &:before {
