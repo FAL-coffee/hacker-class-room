@@ -1,46 +1,60 @@
 import styled from "styled-components";
 import { Props } from "./types";
 
-const mVectorMap: Map<string, string> = new Map([
-  ["top", "top"],
-  ["right", "left"],
-  ["bottom", "bottom"],
-  ["left", "right"],
-]);
+interface VectorMap {
+  marginsVector: Props["tail"];
+  before_top: string;
+  before_left: string;
+  before_marginTop: string;
+  before_marginLeft: string;
+  before_bordersVector: Props["tail"];
+}
 
-const bTopMap: Map<string, string> = new Map([
-  ["top", "-26px"],
-  ["right", "50%"],
-  ["bottom", "100%"],
-  ["left", "50%"],
-]);
-
-const bLeftMap: Map<string, string> = new Map([
-  ["top", "50%"],
-  ["right", "100%"],
-  ["bottom", "50%"],
-  ["left", "-13px"],
-]);
-
-const bmTMap: Map<string, string> = new Map([
-  ["top", "0px"],
-  ["right", "-13px"],
-  ["bottom", "0px"],
-  ["left", "-13px"],
-]);
-
-const bmLMap: Map<string, string> = new Map([
-  ["top", "-13px"],
-  ["right", "0px"],
-  ["bottom", "-13px"],
-  ["left", "-13px"],
-]);
-
-const arrowVectorMap: Map<string, string> = new Map([
-  ["top", "bottom"],
-  ["right", "left"],
-  ["bottom", "top"],
-  ["left", "right"],
+const vectorMap: Map<string, VectorMap> = new Map([
+  [
+    "top",
+    {
+      marginsVector: "top",
+      before_top: "-26px",
+      before_left: "50%",
+      before_marginTop: "0px",
+      before_marginLeft: "-13px",
+      before_bordersVector: "bottom",
+    },
+  ],
+  [
+    "right",
+    {
+      marginsVector: "left",
+      before_top: "50%",
+      before_left: "100%",
+      before_marginTop: "-13px",
+      before_marginLeft: "0px",
+      before_bordersVector: "left",
+    },
+  ],
+  [
+    "bottom",
+    {
+      marginsVector: "bottom",
+      before_top: "100%",
+      before_left: "50%",
+      before_marginTop: "0px",
+      before_marginLeft: "-13px",
+      before_bordersVector: "top",
+    },
+  ],
+  [
+    "left",
+    {
+      marginsVector: "right",
+      before_top: "50%",
+      before_left: "-13px",
+      before_marginTop: "-13px",
+      before_marginLeft: "-13px",
+      before_bordersVector: "right",
+    },
+  ],
 ]);
 
 export const container = styled.div.attrs(({ ...props }: Props) => ({
@@ -49,7 +63,7 @@ export const container = styled.div.attrs(({ ...props }: Props) => ({
 }))`
   position: relative;
   display: inline-block;
-  margin-${(props) => mVectorMap.get(props.tail)}: ${(props) =>
+  margin-${(props) => vectorMap.get(props.tail)?.marginsVector}: ${(props) =>
   (props.tail === "right" || props.tail === "left") && "-"}13px;
   padding: 0.7rem 1rem;
   min-width: 60px;
@@ -61,13 +75,15 @@ export const container = styled.div.attrs(({ ...props }: Props) => ({
   &:before {
     content: "";
     position: absolute;
-    top: ${(props) => bTopMap.get(props.tail)};
-    left: ${(props) => bLeftMap.get(props.tail)};
+    top: ${(props) => vectorMap.get(props.tail)?.before_top};
+    left: ${(props) => vectorMap.get(props.tail)?.before_left};
     ${(props) =>
-      props.tail != "top" && `margin-top: ${bmTMap.get(props.tail)};`}
-    margin-left: ${(props) => bmLMap.get(props.tail)};
+      props.tail != "top" &&
+      `margin-top: ${vectorMap.get(props.tail)?.before_marginTop};`}
+    margin-left: ${(props) => vectorMap.get(props.tail)?.before_marginLeft};
     border: 13px solid transparent;
-    border-${(props) => arrowVectorMap.get(props.tail)}-color: ${(props) =>
+    border-${(props) =>
+      vectorMap.get(props.tail)?.before_bordersVector}-color: ${(props) =>
   props.color};
   }
 `;
