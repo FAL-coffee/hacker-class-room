@@ -30,6 +30,7 @@ interface message {
 const Room: NextPage = () => {
   const { currentUser } = useAuth();
   const [text, setText] = useState<string>();
+
   const post = async (event: FormEvent) => {
     event.preventDefault();
     // textが空白ないし、空文字、null、未定義である場合の処理をここに書く
@@ -47,7 +48,6 @@ const Room: NextPage = () => {
     );
     await addDoc(messagesRef, {
       ...data,
-      // postedAt:timestamp?, postUid:str?ref?, とか
     });
   };
 
@@ -56,22 +56,21 @@ const Room: NextPage = () => {
   const router = useRouter();
   useEffect(() => {
     let tempMessages: Array<message> = [];
-    onSnapshot(
-      query(
-        collection(db, "chats", `${router.query.id}`, "messages"),
-        limit(10),
-        orderBy("postedAt", "desc")
-        // postedAtでorderByしたい
-      ),
-      (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
+    const q = query(
+      collection(db, "chats", `${router.query.id}`, "messages"),
+      orderBy("postedAt", "desc"),
+      limit(10)
+    );
+    onSnapshot(q, (snapshot) => {
+      snapshot
+        .docChanges()
+        .reverse()
+        .forEach((change) => {
           if (change.type === "added")
             tempMessages.push(change.doc.data() as message);
-          // if(change.type === "removed") tempMessages
         });
-        setMessages(tempMessages);
-      }
-    );
+      setMessages([...tempMessages]);
+    });
   }, [router.query.id]);
 
   useEffect(() => {
