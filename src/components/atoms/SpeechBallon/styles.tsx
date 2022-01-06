@@ -63,12 +63,13 @@ export const container = styled.div.attrs(({ ...props }: Props) => ({
   color: props.color || "pink",
 }))`
   position: relative;
+  overflow-wrap: break-word;
   display: inline-block;
   margin-${(props) => vectorMap.get(props.tail)?.marginsVector}: ${(props) =>
   (props.tail === "right" || props.tail === "left") && "-"}13px;
   padding: 0.7rem 1rem;
   min-width: 60px;
-  max-width: 20rem;
+  max-width: 40rem;
   border-radius: 5px;
   color: ${(props) => props.textColor};
   font-size: 16px;
