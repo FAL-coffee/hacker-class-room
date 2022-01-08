@@ -26,7 +26,8 @@ const vectorMap: Map<string, VectorMap> = new Map([
     "right",
     {
       marginsVector: "left",
-      before_top: "50%",
+      // before_top: "50%",
+      before_top: "21px",
       before_left: "100%",
       before_marginTop: "-13px",
       before_marginLeft: "0px",
@@ -48,7 +49,8 @@ const vectorMap: Map<string, VectorMap> = new Map([
     "left",
     {
       marginsVector: "right",
-      before_top: "50%",
+      // before_top: "50%",
+      before_top: "21px",
       before_left: "-13px",
       before_marginTop: "-13px",
       before_marginLeft: "-13px",
@@ -62,6 +64,7 @@ export const container = styled.div.attrs(({ ...props }: Props) => ({
   textColor: props.textColor || "black",
   color: props.color || "pink",
 }))`
+  text-align:left;
   position: relative;
   overflow-wrap: break-word;
   display: inline-block;

@@ -1,10 +1,7 @@
 import React from "react";
-import { configure, mount, shallow } from "enzyme";
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
+import { mount, shallow } from "enzyme";
 import "jest-styled-components";
 import "jsdom-global/register";
-
-configure({ adapter: new Adapter() });
 
 import { SpeechBallon } from ".";
 
