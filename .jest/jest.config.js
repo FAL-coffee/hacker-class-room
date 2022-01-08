@@ -1,17 +1,23 @@
 module.exports = {
-  testEnvironment: "jsdom",
-  presets: ["@babel/preset-env", "@babel/preset-react"],
+  // testEnvironment: "jsdom",
+  // preset: ["@babel/preset-env", "@babel/preset-react"],
   roots: ["../"],
-  setupFilesAfterEnv: ["<rootDir>/.jest/setupTests.js"],
+  setupFilesAfterEnv: ["<rootDir>/setupTests.js"],
+  // transformIgnorePatterns: [
+  //   'node_modules/?!core-js',
+  // ],
   transform: {
+    "^.+\\.(j|t)sx?$": "babel-jest",
     "^.+\\.(ts|tsx)$": "ts-jest",
-    // "^.+\\.(ts|tsx)$": "babel-jest",
   },
   globals: {
     "ts-jest": {
-      tsconfig: "<rootDir>/.jest/tsconfig.jest.json",
+      tsconfig: "<rootDir>/tsconfig.jest.json",
     },
   },
-  moduleDirectories: ["node_modules", "<rootDir>"],
-  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/src/__tests__/utils"],
+  moduleNameMapper: {
+    '@/(.+)': '<rootDir>/../src/$1',
+  },
+  moduleDirectories: ["node_modules", "../"],
+  testPathIgnorePatterns: ["/node_modules/"],
 };
