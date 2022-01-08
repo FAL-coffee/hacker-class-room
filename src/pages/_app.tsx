@@ -1,10 +1,14 @@
 import React from "react";
 import { AppProps } from "next/app";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "@/styles/theme";
 import AuthProvider from "@/AuthContext";
 const App = ({ Component, pageProps }: AppProps) => (
+  <ThemeProvider theme={theme}>
     <AuthProvider>
-        <Component {...pageProps} />
+      <Component {...pageProps} />
     </AuthProvider>
+  </ThemeProvider>
 );
 
 export default App;
