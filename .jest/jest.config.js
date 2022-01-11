@@ -16,8 +16,8 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    '@/(.+)': '<rootDir>/../src/$1',
+    "@/(.+)": "<rootDir>/../src/$1",
   },
-  moduleDirectories: ["node_modules", "../"],
+  // moduleDirectories: ["node_modules", "../"],
   testPathIgnorePatterns: ["/node_modules/"],
 };
