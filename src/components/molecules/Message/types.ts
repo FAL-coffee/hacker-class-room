@@ -1,7 +1,7 @@
-import { User, Message } from "@types";
+import { IUser, IMessage } from "@types";
 export interface Props {
-  user: User;
-  message: Message;
+  user: IUser;
+  message: IMessage;
   isMine: boolean;
   onIconClick: (uid: string) => void;
 }
