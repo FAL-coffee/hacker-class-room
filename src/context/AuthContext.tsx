@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { signInWithRedirect } from "firebase/auth";
-import { auth, db, setDoc, doc, updateDoc, getDoc } from "@/firebase";
+import { auth, db, setDoc, doc, updateDoc, getDoc } from "@/plugin/firebase";
 
 interface User {
   displayName: string | null | undefined;

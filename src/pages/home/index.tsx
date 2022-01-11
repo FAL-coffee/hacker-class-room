@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useAuth } from "@/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
