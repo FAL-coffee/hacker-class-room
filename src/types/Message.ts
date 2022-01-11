@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export interface Message {
+export interface IMessage {
   value: string;
   postedAt: Timestamp;
   postedUid: string;
