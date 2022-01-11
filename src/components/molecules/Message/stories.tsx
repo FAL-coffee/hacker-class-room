@@ -5,7 +5,7 @@ import { USER } from "./fixture";
 import { IMessage } from "@types";
 import { Timestamp } from "@/firebase";
 
-export const MESSAGE: IMessage = {
+const MESSAGE: IMessage = {
   value: `test message`,
   postedAt: Timestamp.fromDate(new Date()),
   postedUid: `mockUsersUID`,
