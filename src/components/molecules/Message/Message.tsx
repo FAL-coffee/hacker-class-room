@@ -23,19 +23,25 @@ export const Message = ({ ...props }: Props) => {
   return (
     <>
       {props.isMine ? (
-        <Stack direction="row">
-          <div style={{ textAlign: "right", marginRight: 15 }}>
-            <Typography variant="body2">{props.user.displayName}</Typography>
+        <Stack id="message-is_mine" direction="row">
+          <div
+            id="message-speech-container"
+            style={{ textAlign: "right", marginRight: 15 }}
+          >
+            <Typography id="message-user_displayname" variant="body2">
+              {props.user.displayName}
+            </Typography>
             <SpeechBallon
               color={theme.palette.info.light}
               tail="right"
               value={props.message.value}
             />
-            <Typography variant="body2" gutterBottom>
+            <Typography id="message-date_time" variant="body2" gutterBottom>
               {DateTime}
             </Typography>
           </div>
           <Avatar
+            id="message-user_avatar"
             alt={props.user.displayName}
             src={props.user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
@@ -44,21 +50,24 @@ export const Message = ({ ...props }: Props) => {
         </Stack>
       ) : (
         // isnt mine
-        <Stack direction="row" spacing={2}>
+        <Stack id="message-is_not_mine" direction="row" spacing={2}>
           <Avatar
+            id="message-user_avatar"
             alt={props.user.displayName}
             src={props.user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
             onClick={() => props.onIconClick(props.user.uid)}
           />
           <div>
-            <Typography variant="body2">{props.user.displayName}</Typography>
+            <Typography id="message-user_displayname" variant="body2">
+              {props.user.displayName}
+            </Typography>
             <SpeechBallon
               color={theme.palette.info.light}
               tail="left"
               value={props.message.value}
             />
-            <Typography variant="body2" gutterBottom>
+            <Typography id="message-date_time" variant="body2" gutterBottom>
               {DateTime}
             </Typography>
           </div>
