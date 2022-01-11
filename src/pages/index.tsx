@@ -9,9 +9,6 @@ const Top: NextPage = () => {
   // const { currentUser, login, logout } = useAuth();
   const { currentUser, login, logout } = useAuth();
   const router = useRouter();
-  // useEffect(() => {
-  //   if (!currentUser) router.push("/top");
-  // }, [currentUser, router]);
   const handleLoginButton = () => {
     login && login();
   };

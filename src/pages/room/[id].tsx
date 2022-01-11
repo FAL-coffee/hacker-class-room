@@ -1,12 +1,9 @@
-// import { useAuth } from "@/AuthContext";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
-import { db, onSnapshot, query } from "@/firebase";
-// import Image from "next/image";
+import { db, onSnapshot, query } from "@/plugin/firebase";
 import React, { FormEvent, useEffect, useState } from "react";
-import { useAuth } from "@/AuthContext";
-// import { addDoc, Timestamp } from "firebase/firestore";
+import { useAuth } from "@/context/AuthContext";
 import {
   addDoc,
   collection,
@@ -15,18 +12,9 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { NextPage } from "next";
-interface message {
-  content: string;
-  postedAt: Timestamp;
-  postUid: string;
-}
-// interface chat {
-//   createdAt: Timestamp;
-//   description: string;
-//   messages: message[];
-//   name: string;
-//   owner: string;
-// }
+
+import { IMessage } from "@types";
+
 const Room: NextPage = () => {
   const { currentUser } = useAuth();
   const [text, setText] = useState<string>();
@@ -35,10 +23,10 @@ const Room: NextPage = () => {
     event.preventDefault();
     // textが空白ないし、空文字、null、未定義である場合の処理をここに書く
     if (!text || !currentUser || !currentUser.uid) return;
-    const data: message = {
-      content: text,
+    const data: IMessage = {
+      value: text,
       postedAt: Timestamp.now(),
-      postUid: currentUser.uid,
+      postedUid: currentUser.uid,
     };
     const messagesRef = await collection(
       db,
@@ -51,11 +39,11 @@ const Room: NextPage = () => {
     });
   };
 
-  const [messages, setMessages] = useState<Array<message>>([]);
+  const [messages, setMessages] = useState<Array<IMessage>>([]);
 
   const router = useRouter();
   useEffect(() => {
-    let tempMessages: Array<message> = [];
+    let tempMessages: Array<IMessage> = [];
     const q = query(
       collection(db, "chats", `${router.query.id}`, "messages"),
       orderBy("postedAt", "desc"),
@@ -67,7 +55,7 @@ const Room: NextPage = () => {
         .reverse()
         .forEach((change) => {
           if (change.type === "added")
-            tempMessages.push(change.doc.data() as message);
+            tempMessages.push(change.doc.data() as IMessage);
         });
       setMessages([...tempMessages]);
     });
@@ -94,9 +82,9 @@ const Room: NextPage = () => {
       <Link href="/top">
         <a>top</a>
       </Link>
-      {messages.map((message: message, i: number) => (
+      {messages.map((message: IMessage, i: number) => (
         <p key={i}>
-          {message.content}
+          {message.value}
           {/* {alert(message.content)} */}
         </p>
       ))}
