@@ -9,7 +9,7 @@ export default {
 } as ComponentMeta<typeof AppHeader>;
 
 const Template: ComponentStory<typeof AppHeader> = (args) => (
-  <div style={{ height: "500px" }}>
+  <div style={{ height: "900px" }}>
     <AppHeader {...args} />
   </div>
 );
