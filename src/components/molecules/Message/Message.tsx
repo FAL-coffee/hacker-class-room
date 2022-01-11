@@ -23,12 +23,12 @@ export const Message = ({ ...props }: Props) => {
   return (
     <>
       {props.isMine ? (
-        <Stack id="message-is_mine" direction="row">
+        <Stack id="message_is-mine" direction="row">
           <div
             id="message-speech-container"
             style={{ textAlign: "right", marginRight: 15 }}
           >
-            <Typography id="message-user_displayname" variant="body2">
+            <Typography id="message_user-displayname" variant="body2">
               {props.user.displayName}
             </Typography>
             <SpeechBallon
@@ -36,12 +36,12 @@ export const Message = ({ ...props }: Props) => {
               tail="right"
               value={props.message.value}
             />
-            <Typography id="message-date_time" variant="body2" gutterBottom>
+            <Typography id="message_date-time" variant="body2" gutterBottom>
               {DateTime}
             </Typography>
           </div>
           <Avatar
-            id="message-user_avatar"
+            id="message_user-avatar"
             alt={props.user.displayName}
             src={props.user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
@@ -50,16 +50,16 @@ export const Message = ({ ...props }: Props) => {
         </Stack>
       ) : (
         // isnt mine
-        <Stack id="message-is_not_mine" direction="row" spacing={2}>
+        <Stack id="message_is-not-mine" direction="row" spacing={2}>
           <Avatar
-            id="message-user_avatar"
+            id="message_user-avatar"
             alt={props.user.displayName}
             src={props.user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
             onClick={() => props.onIconClick(props.user.uid)}
           />
           <div>
-            <Typography id="message-user_displayname" variant="body2">
+            <Typography id="message_user-displayname" variant="body2">
               {props.user.displayName}
             </Typography>
             <SpeechBallon
@@ -67,7 +67,7 @@ export const Message = ({ ...props }: Props) => {
               tail="left"
               value={props.message.value}
             />
-            <Typography id="message-date_time" variant="body2" gutterBottom>
+            <Typography id="message_date-time" variant="body2" gutterBottom>
               {DateTime}
             </Typography>
           </div>
@@ -76,5 +76,3 @@ export const Message = ({ ...props }: Props) => {
     </>
   );
 };
-
-export default Message;

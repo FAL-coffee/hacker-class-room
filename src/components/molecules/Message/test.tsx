@@ -1,5 +1,5 @@
 import React from "react";
-import { mount, shallow } from "enzyme";
+import { shallow } from "enzyme";
 import "jest-styled-components";
 import "jsdom-global/register";
 
@@ -49,28 +49,28 @@ describe("<Message />", () => {
     // isMine=true時、#message-is_mine要素が表示され、#message-is_not_mine要素が表示されないこと
     it("Switching the display of elements", () => {
       // expect(messageIsMine.length).toBe(1);
-      expect(mineMessageWrapper.find("#message-is_mine").length).toBe(1);
-      expect(mineMessageWrapper.find("#message-is_not_mine").length).toBe(0);
+      expect(mineMessageWrapper.find("#message_is-mine").length).toBe(1);
+      expect(mineMessageWrapper.find("#message_is-not-mine").length).toBe(0);
     });
 
     it("renders displayName", () => {
       expect(
-        mineMessageWrapper.find("#message-user_displayname").text()
+        mineMessageWrapper.find("#message_user-displayname").text()
       ).toEqual(USER.displayName);
     });
 
     it("renders dateTime", () => {
-      expect(mineMessageWrapper.find("#message-date_time").text()).toEqual(
+      expect(mineMessageWrapper.find("#message_date-time").text()).toEqual(
         DateTime
       );
     });
 
     it("render users icon", () => {
       expect(
-        mineMessageWrapper.find("#message-user_avatar").props().src
+        mineMessageWrapper.find("#message_user-avatar").props().src
       ).toEqual(USER.photoURL);
       expect(
-        mineMessageWrapper.find("#message-user_avatar").props().alt
+        mineMessageWrapper.find("#message_user-avatar").props().alt
       ).toEqual(USER.displayName);
     });
 
@@ -85,7 +85,7 @@ describe("<Message />", () => {
 
     // icon click時、onIconClickイベントが発火する事
     it("Ignition of the event", () => {
-      mineMessageWrapper.find("#message-user_avatar").simulate("click", () => {
+      mineMessageWrapper.find("#message_user-avatar").simulate("click", () => {
         expect(props.onIconClick).toHaveBeenCalled();
       });
     });
@@ -100,28 +100,28 @@ describe("<Message />", () => {
 
     // isMine=false時、#message-is_mine要素が表示され、#message-is_not_mine要素が表示されないこと
     it("Switching the display of elements", () => {
-      expect(notMineMessageWrapper.find("#message-is_not_mine").length).toBe(1);
-      expect(notMineMessageWrapper.find("#message-is_mine").length).toBe(0);
+      expect(notMineMessageWrapper.find("#message_is-not-mine").length).toBe(1);
+      expect(notMineMessageWrapper.find("#message_is-mine").length).toBe(0);
     });
 
     it("renders displayName", () => {
       expect(
-        notMineMessageWrapper.find("#message-user_displayname").text()
+        notMineMessageWrapper.find("#message_user-displayname").text()
       ).toEqual(USER.displayName);
     });
 
     it("renders dateTime", () => {
-      expect(notMineMessageWrapper.find("#message-date_time").text()).toEqual(
+      expect(notMineMessageWrapper.find("#message_date-time").text()).toEqual(
         DateTime
       );
     });
 
     it("render users icon", () => {
       expect(
-        notMineMessageWrapper.find("#message-user_avatar").props().src
+        notMineMessageWrapper.find("#message_user-avatar").props().src
       ).toEqual(USER.photoURL);
       expect(
-        notMineMessageWrapper.find("#message-user_avatar").props().alt
+        notMineMessageWrapper.find("#message_user-avatar").props().alt
       ).toEqual(USER.displayName);
     });
 
@@ -137,8 +137,8 @@ describe("<Message />", () => {
     // icon click時、onIconClickイベントが発火する事
     it("Ignition of the event", () => {
       notMineMessageWrapper
-        .find("#message-is_not_mine")
-        .find("#message-user_avatar")
+        .find("#message_is-not-mine")
+        .find("#message_user-avatar")
         .simulate("click", () => {
           expect(props.onIconClick).toHaveBeenCalled();
         });
