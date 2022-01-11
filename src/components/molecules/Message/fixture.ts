@@ -1,13 +1,6 @@
-import { Message, User } from "@types";
-import { Timestamp } from "@/firebase";
+import { IUser } from "@types";
 
-export const MESSAGE: Message = {
-  value: `test message`,
-  postedAt: Timestamp.fromDate(new Date()),
-  postedUid: `mockUsersUID`,
-};
-
-export const USER: User = {
+export const USER: IUser = {
   uid: "mockUsersUID",
   email: "test@test.test",
   photoURL: "/favicon.ico",
