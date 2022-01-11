@@ -4,10 +4,6 @@ import Link from "next/link";
 import Head from "next/head";
 import { NextPage } from "next";
 
-// import { db, onSnapshot, doc } from "@/firebase";
-// import Image from "next/image";
-// import React, { useEffect, useState } from "react";
-// import { addDoc, Timestamp } from "firebase/firestore";
 const RoomList: NextPage = () => {
   return (
     <div>
@@ -17,7 +13,6 @@ const RoomList: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>RoomList</h1>
-      {/* <button onClick={clickButton}>Firestore追加</button> */}
       <Link href="/">
         <a>home</a>
       </Link>

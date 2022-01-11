@@ -3,7 +3,7 @@ import React from "react";
 import { Message } from ".";
 import { USER } from "./fixture";
 import { IMessage } from "@types";
-import { Timestamp } from "@/firebase";
+import { Timestamp } from "@/plugin/firebase";
 
 const MESSAGE: IMessage = {
   value: `test message`,
