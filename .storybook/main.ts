@@ -10,7 +10,7 @@ module.exports = {
       ...config.resolve.alias,
       "@": path.resolve(__dirname, "../src/"),
       "@components": path.resolve(__dirname, "../src/components/"),
-      "@types": path.resolve(__dirname, "../src/types/"),
+      "@types": path.resolve(__dirname, "../src/types/index.ts"),
     };
     return config;
   },
