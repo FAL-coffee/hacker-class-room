@@ -59,22 +59,29 @@ export const AppHeader = ({ ...props }: Props) => {
   ]);
 
   return (
-    <AppBar position="fixed">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+    <AppBar position="fixed" id="app-header">
+      <Container maxWidth="xl" id="app-header_container">
+        <Toolbar disableGutters id="app-header_toolbar">
           <Button
+            id="app-header_logoimage_btn_under-md"
             size="large"
             sx={{ display: { xs: "none", md: "flex" } }}
             onClick={props.onLogoClick}
           >
-            <Image src="/logo.png" alt="LOGO" height={50} width={140} />
+            <Image
+              id="app-header_logoimage_under-md"
+              src="/logo.png"
+              alt="LOGO"
+              height={50}
+              width={140}
+            />
           </Button>
 
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
+              id="app-header_menu-icon-btn"
+              aria-controls="app-header_menu"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
@@ -82,7 +89,7 @@ export const AppHeader = ({ ...props }: Props) => {
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
+              id="app-header_link-menu"
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
@@ -119,8 +126,18 @@ export const AppHeader = ({ ...props }: Props) => {
             }}
             textAlign="justify"
           >
-            <Button size="large" onClick={props.onLogoClick}>
-              <Image src="/logo.png" alt="LOGO" height={50} width={140} />
+            <Button
+              id="app-header_logoimage_btn_more_than_lg"
+              size="large"
+              onClick={props.onLogoClick}
+            >
+              <Image
+                id="app-header_logoimage_more_than_lg"
+                src="/logo.png"
+                alt="LOGO"
+                height={50}
+                width={140}
+              />
             </Button>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -140,7 +157,11 @@ export const AppHeader = ({ ...props }: Props) => {
           {!!props.user ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton
+                  id="app-header_user-avatar"
+                  onClick={handleOpenUserMenu}
+                  sx={{ p: 0 }}
+                >
                   <Avatar
                     alt={props.user.displayName}
                     src={props.user.photoURL}
@@ -149,7 +170,7 @@ export const AppHeader = ({ ...props }: Props) => {
               </Tooltip>
               <Menu
                 sx={{ mt: "45px" }}
-                id="menu-appbar"
+                id="app-header_user-menu"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
                   vertical: "top",
@@ -178,6 +199,7 @@ export const AppHeader = ({ ...props }: Props) => {
           ) : (
             <Box sx={{ flexGrow: 0, minWidth: 200 }}>
               <span
+                id="app-header_google-signin-btn"
                 onMouseDown={() => setGoogleSigninBtn("pressed")}
                 onMouseUp={() => setGoogleSigninBtn("normal")}
                 onClick={props.onGoogleSigninClick}
