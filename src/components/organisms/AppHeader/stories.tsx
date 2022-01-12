@@ -18,3 +18,7 @@ export const login = Template.bind({});
 login.args = {
   user: USER,
 };
+export const not_login = Template.bind({});
+not_login.args = {
+  user: null,
+};

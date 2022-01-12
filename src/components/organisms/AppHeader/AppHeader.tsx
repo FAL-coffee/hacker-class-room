@@ -16,12 +16,13 @@ import { Props } from "./types";
 
 import Image from "next/image";
 
-// const pages = ["Products", "Pricing", "Blog"];
-const links = [{ key: "products", name: "Products" }];
-// const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const links = [
+  { key: "home", name: "ホームへ戻る" },
+  { key: "roomList", name: "チャットルーム一覧" },
+];
 const userMenu = [
-  { key: "profile", name: "Profile" },
-  { key: "logout", name: "Logout" },
+  { key: "profile", name: "プロフィール情報" },
+  { key: "logout", name: "ログアウト" },
 ];
 
 export const AppHeader = ({ ...props }: Props) => {
@@ -46,6 +47,17 @@ export const AppHeader = ({ ...props }: Props) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const [googleSigninBtn, setGoogleSigninBtn] = React.useState<
+    "normal" | "focus" | "pressed"
+  >("normal");
+
+  const googleSigninBtnImageMap: Map<string, string> = new Map([
+    ["normal", "/btn_google_signin/btn_google_signin_dark_normal_web@2x.png"],
+    ["focus", "/btn_google_signin/btn_google_signin_dark_focus_web@2x.png"],
+    ["pressed", "/btn_google_signin/btn_google_signin_dark_pressed_web@2x.png"],
+  ]);
+
   return (
     <AppBar position="fixed">
       <Container maxWidth="xl">
@@ -55,7 +67,7 @@ export const AppHeader = ({ ...props }: Props) => {
             sx={{ display: { xs: "none", md: "flex" } }}
             onClick={props.onLogoClick}
           >
-            <Image src="/logo.png" alt="alt" height={50} width={140} />
+            <Image src="/logo.png" alt="LOGO" height={50} width={140} />
           </Button>
 
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
@@ -103,11 +115,12 @@ export const AppHeader = ({ ...props }: Props) => {
             sx={{
               flexGrow: 2,
               display: { xs: "flex", md: "none" },
+              minWidth: "140px",
             }}
             textAlign="justify"
           >
             <Button size="large" onClick={props.onLogoClick}>
-              <Image src="/logo.png" alt="alt" height={50} width={140} />
+              <Image src="/logo.png" alt="LOGO" height={50} width={140} />
             </Button>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -124,40 +137,61 @@ export const AppHeader = ({ ...props }: Props) => {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {userMenu.map((item) => (
-                <MenuItem
-                  key={item.key}
-                  onClick={() => (
-                    handleCloseUserMenu(), props.onUserMenuClick(item.key)
-                  )}
-                >
-                  <Typography textAlign="center">{item.name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {!!props.user ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={props.user.displayName}
+                    src={props.user.photoURL}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {userMenu.map((item) => (
+                  <MenuItem
+                    key={item.key}
+                    onClick={() => (
+                      handleCloseUserMenu(), props.onUserMenuClick(item.key)
+                    )}
+                  >
+                    <Typography textAlign="center">{item.name}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          ) : (
+            <Box sx={{ flexGrow: 0, minWidth: 200 }}>
+              <span
+                onMouseDown={() => setGoogleSigninBtn("pressed")}
+                onMouseUp={() => setGoogleSigninBtn("normal")}
+                onClick={props.onGoogleSigninClick}
+                style={{ cursor: "pointer" }}
+              >
+                <Image
+                  src={googleSigninBtnImageMap.get(googleSigninBtn) as string}
+                  alt="G"
+                  height={50}
+                  width={200}
+                />
+              </span>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
