@@ -2,6 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { StylesProvider } from "@mui/styles";
 import { createTheme } from "@mui/material";
+import * as NextImage from "next/image";
 
 const theme = createTheme({
   palette: {
@@ -48,7 +49,12 @@ export const parameters = {
     iframeHeight: "700px",
   },
 };
+const OriginalNextImage = NextImage.default;
 
+Object.defineProperty(NextImage, "default", {
+  configurable: true,
+  value: (props) => <OriginalNextImage {...props} unoptimized />,
+});
 const withThemeProvider = (Story, context) => {
   return (
     <StylesProvider injectFirst>
