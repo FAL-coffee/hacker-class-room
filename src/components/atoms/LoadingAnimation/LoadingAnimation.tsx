@@ -1,5 +1,4 @@
 import * as styled from "./styles";
-import "./stylestyle.css";
 export const LoadingAnimation = () => {
   return (
     <>
