@@ -1,6 +1,7 @@
+import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import React from "react";
+
 import { MessagePostForm } from "@components/molecules";
 import { Chats } from "@components/organisms";
 import { USER } from "./fixture";
@@ -10,7 +11,7 @@ import { ChatRoom } from ".";
 
 const SChatDisplayArea = () => {
   const MESSAGE: IMessage = {
-    value: `test message`,
+    value: `test message\ntest`,
     postedAt: Timestamp.fromDate(new Date()),
     postedUid: `mockUsersUID`,
   };
@@ -26,7 +27,7 @@ const SChatDisplayArea = () => {
 
 const SMessagePostForm = () => {
   const props = {
-    onSubmit: action,
+    onSubmit: action("onSubmit"),
   };
   return <MessagePostForm {...props} />;
 };

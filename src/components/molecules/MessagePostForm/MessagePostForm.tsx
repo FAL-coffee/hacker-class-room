@@ -10,8 +10,14 @@ import SendIcon from "@mui/icons-material/Send";
 
 export const MessagePostForm = ({ ...props }: Props) => {
   const [message, setMessage] = useState<string>("");
-  const submitHandler = (event: FormEvent) => {
-    event.preventDefault();
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+      submitHandler();
+    }
+  };
+
+  const submitHandler = (event?: FormEvent) => {
+    event?.preventDefault();
     if (!message) return;
     props.onSubmit(message);
     setMessage("");
@@ -29,7 +35,11 @@ export const MessagePostForm = ({ ...props }: Props) => {
           id="message-post-form_input-box"
           autoComplete="off"
           type="text"
+          autoFocus
+          multiline
+          maxRows={4}
           value={message}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setMessage(e.target.value)}
           endAdornment={
             <InputAdornment position="end">

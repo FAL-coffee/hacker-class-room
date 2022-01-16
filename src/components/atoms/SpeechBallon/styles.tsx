@@ -64,6 +64,7 @@ export const container = styled.div.attrs(({ ...props }: Props) => ({
   textColor: props.textColor || "black",
   color: props.color || "pink",
 }))`
+  white-space: pre-line;
   text-align:left;
   position: relative;
   overflow-wrap: break-word;
