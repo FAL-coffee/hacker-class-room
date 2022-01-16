@@ -11,7 +11,7 @@ import { ChatRoom } from ".";
 
 const SChatDisplayArea = () => {
   const MESSAGE: IMessage = {
-    value: `test message\ntest`,
+    value: `test message\nhello! this is storybook! You can also run the maximum width test at the same time.`,
     postedAt: Timestamp.fromDate(new Date()),
     postedUid: `mockUsersUID`,
   };
