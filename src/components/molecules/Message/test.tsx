@@ -27,7 +27,7 @@ describe("<Message />", () => {
   );
 
   const month = postedDate.getMonth() + 1;
-  const day = postedDate.getDay();
+  const day = postedDate.getDate();
   const hours = postedDate.getHours();
   const minutes = postedDate.getMinutes();
   const seconds = postedDate.getSeconds();
