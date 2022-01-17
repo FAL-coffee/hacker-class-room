@@ -8,15 +8,7 @@ export const ChatRoom = ({ ...props }: Props) => {
     <>
       <Container>
         <styled.ChatDisplayArea>{props.ChatDisplayArea}</styled.ChatDisplayArea>
-        <Container
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "88%",
-          }}
-        >
-          {props.MessagePostForm}
-        </Container>
+        {props.MessagePostForm}
       </Container>
     </>
   );

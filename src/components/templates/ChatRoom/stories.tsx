@@ -20,6 +20,16 @@ const SChatDisplayArea = () => {
     userMessageList: [
       { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
       { user: USER, message: MESSAGE },
+      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
+      { user: USER, message: MESSAGE },
+      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
+      { user: USER, message: MESSAGE },
+      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
+      { user: USER, message: MESSAGE },
+      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
+      { user: USER, message: MESSAGE },
+      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
+      { user: USER, message: MESSAGE },
     ],
   };
   return <Chats {...props} />;
