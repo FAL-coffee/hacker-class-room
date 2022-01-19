@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { useAuth } from "@/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 const Top: NextPage = () => {
   // const { currentUser, login, logout } = useAuth();
