@@ -14,7 +14,7 @@ describe("<Message />", () => {
   const MESSAGE: IMessage = {
     value: `test message`,
     postedAt: { seconds: 0, nanoseconds: 0 } as IMessage["postedAt"],
-    postedUid: `mockUsersUID`,
+    user: USER,
   };
   let props: Props = {
     user: USER,

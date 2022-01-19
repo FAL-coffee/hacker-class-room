@@ -1,8 +1,6 @@
 import { SpeechBallon } from "@/components/atoms/SpeechBallon";
 import { Props } from "./types";
-import { IUser } from "@types";
 import theme from "@/styles/theme";
-
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";

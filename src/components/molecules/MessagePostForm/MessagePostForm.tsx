@@ -8,7 +8,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
-export const MessagePostForm = ({ ...props }: Props) => {
+export const MessagePostForm = ({ loading = false, ...props }: Props) => {
   const [message, setMessage] = useState<string>("");
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
@@ -37,8 +37,8 @@ export const MessagePostForm = ({ ...props }: Props) => {
           type="text"
           autoFocus
           multiline
+          disabled={!!loading}
           rows={3}
-          maxRows={4}
           value={message}
           onKeyDown={handleKeyDown}
           onChange={(e) => setMessage(e.target.value)}

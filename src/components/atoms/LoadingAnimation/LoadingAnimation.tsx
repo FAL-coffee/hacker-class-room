@@ -1,9 +1,9 @@
 import * as styled from "./styles";
-import "./style.css";
 export const LoadingAnimation = () => {
   return (
     <>
       <styled.IconChartWrapper>
+        <h4>認証中...</h4>
         <styled.FirstItem />
         <styled.SecondItem />
         <styled.LastItem />
