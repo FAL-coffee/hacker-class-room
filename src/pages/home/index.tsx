@@ -1,60 +1,17 @@
 import type { NextPage } from "next";
 import { useAuth } from "@/context/AuthContext";
-import Image from "next/image";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { Layout } from "@components/layout";
 import React from "react";
 
 const Home: NextPage = () => {
-  const { currentUser, login, logout } = useAuth();
-  const handleLoginButton = () => {
-    login && login();
-  };
-  const handleLogoutButton = () => {
-    logout && logout();
-  };
-
-  //   useEffect(() => {
-  //     return auth.onAuthStateChanged((user) => {
-  //       router.push("/chats/m6s2o6brCyEsXBRxhS3M");
-  //     });
-  //   }, [router]);
+  // const { currentUser, login, logout } = useAuth();
   return (
-    <div>
-      <Head>
-        <title>home</title>
-        <meta name="" content="" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        {currentUser ? (
-          <div>
-            <button onClick={handleLogoutButton}>ログアウト</button>
-            {currentUser.photoURL && (
-              <Image
-                src={currentUser.photoURL}
-                alt=""
-                width="100"
-                height="100"
-              />
-            )}
-            <Link href="/room/m6s2o6brCyEsXBRxhS3M">
-              <a>m6s2o6brCyEsXBRxhS3M</a>
-            </Link>
-            <div></div>
-            <Link href="/room/list">
-              <a>room/list</a>
-            </Link>
-          </div>
-        ) : (
-          <button onClick={handleLoginButton}>signin</button>
-        )}
-      </main>
-
-      <footer></footer>
-    </div>
+    <Layout title="HOME">
+      <h1>現在この画面は工事中です！( TДT)ｺﾞﾒﾝﾖｰ</h1>
+      <p>
+        HOME画面は、あなただけのページとして、フォローしているユーザーの活動や、自分の連携しているＳＮＳの活動記録をチェック出来ます。
+      </p>
+    </Layout>
   );
 };
 
