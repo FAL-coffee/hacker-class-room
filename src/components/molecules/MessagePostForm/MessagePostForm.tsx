@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 
 import { Props } from "./types";
 import FormControl from "@mui/material/FormControl";
@@ -8,7 +8,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
-export const MessagePostForm = ({ loading = false, ...props }: Props) => {
+export const MessagePostForm = ({ loggedIn = false, ...props }: Props) => {
   const [message, setMessage] = useState<string>("");
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
@@ -18,10 +18,14 @@ export const MessagePostForm = ({ loading = false, ...props }: Props) => {
 
   const submitHandler = (event?: FormEvent) => {
     event?.preventDefault();
-    if (!message) return;
+    if (!message || !loggedIn) return;
     props.onSubmit(message);
     setMessage("");
   };
+
+  useEffect(() => {
+    if (!loggedIn) setMessage("ログインしている場合のみ書き込みが可能です。");
+  }, [loggedIn]);
   return (
     <form onSubmit={submitHandler} id="message-post-form">
       <FormControl sx={{ m: 1 }} variant="outlined" fullWidth>
@@ -37,7 +41,7 @@ export const MessagePostForm = ({ loading = false, ...props }: Props) => {
           type="text"
           autoFocus
           multiline
-          disabled={!!loading}
+          disabled={!loggedIn}
           rows={3}
           value={message}
           onKeyDown={handleKeyDown}
@@ -50,7 +54,7 @@ export const MessagePostForm = ({ loading = false, ...props }: Props) => {
                 type="submit"
                 edge="end"
               >
-                {<SendIcon color="info" />}
+                {<SendIcon color={loggedIn ? "info" : "disabled"} />}
               </IconButton>
             </InputAdornment>
           }

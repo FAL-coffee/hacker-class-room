@@ -1,4 +1,4 @@
 export interface Props {
-  loading: Boolean;
+  loggedIn: Boolean;
   onSubmit: (value: string) => void;
 }
