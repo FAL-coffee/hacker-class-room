@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 
-import { ChatRoomCard } from "@components/molecules";
+import { ChatRoomCard } from "@/components/molecules";
 import { IChatRoom } from "@types";
 import { Props } from "./types";
 
