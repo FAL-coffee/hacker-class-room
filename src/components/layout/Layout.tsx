@@ -11,8 +11,8 @@ export const Layout = ({ children, ...props }: Props) => {
   const router = useRouter();
 
   const handleLinkClick = (key: HeaderLinkKey) => {
-    if (key === "home") return;
-    else if (key === "roomList") return;
+    if (key === "home") return router.push("/home");
+    else if (key === "roomList") return router.push("/room/list");
   };
 
   const handleMenuClick = (key: UserMenuKey) => {
