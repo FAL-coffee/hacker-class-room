@@ -10,12 +10,12 @@ import { IMessage } from "@types";
 const MESSAGE: IMessage = {
   value: `test message`,
   postedAt: { seconds: 0, nanoseconds: 0 } as IMessage["postedAt"],
-  postedUid: `mockUsersUID`,
+  user: USER,
 };
 describe("<Chats />", () => {
   const props: Props = {
     user: USER,
-    userMessageList: [{ user: USER, message: MESSAGE }],
+    messages: [MESSAGE],
   };
   const chats = shallow(<Chats {...props} />);
 

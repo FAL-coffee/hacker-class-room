@@ -8,7 +8,7 @@ import { Timestamp } from "@/plugin/firebase";
 const MESSAGE: IMessage = {
   value: `test message`,
   postedAt: Timestamp.fromDate(new Date()),
-  postedUid: `mockUsersUID`,
+  user: USER,
 };
 
 export default {
