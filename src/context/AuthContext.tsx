@@ -2,7 +2,15 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { signInWithRedirect } from "firebase/auth";
-import { auth, db, setDoc, doc, updateDoc, getDoc } from "@/plugin/firebase";
+import {
+  auth,
+  db,
+  setDoc,
+  doc,
+  updateDoc,
+  getDoc,
+  DocumentReference,
+} from "@/plugin/firebase";
 import { IUser } from "@types";
 
 interface AuthContextProps {
@@ -21,6 +29,16 @@ const AuthContext = createContext<AuthContextProps>({ currentUser: null });
 export const useAuth = () => {
   return useContext(AuthContext);
 };
+
+/**
+ * β版ではユーザーには事前用意したデフォルトルームにのみ加入させる。
+ * (その後、βではユーザーの操作によるルームへの加入は不可)
+ */
+const defaultBelongRooms: DocumentReference[] = [
+  // doc(db, "chats/" + ""),
+  // doc(db, "chats/" + ""),
+  // doc(db, "chats/" + ""),
+];
 
 const AuthProvider = ({ children }: Props) => {
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
@@ -54,6 +72,7 @@ const AuthProvider = ({ children }: Props) => {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
+          belongRooms: defaultBelongRooms,
         });
       }
     });

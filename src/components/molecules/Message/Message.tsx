@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 export const Message = ({
-  user = { uid: "", displayName: "", photoURL: "", email: "" },
+  user = { uid: "", displayName: "", email: "" },
   ...props
 }: Props) => {
   const postedDate = new Date(
@@ -21,7 +21,6 @@ export const Message = ({
 
   const DateTime = `${month}/${day} ${hours}:${minutes}:${seconds}`;
 
-  // console.log(Theme);
   return (
     <>
       {props.isMine ? (
