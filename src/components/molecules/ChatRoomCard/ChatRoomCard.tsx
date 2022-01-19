@@ -9,7 +9,7 @@ import { Props } from "./types";
 
 export const ChatRoomCard = ({ ...props }: Props) => {
   return (
-    <Card sx={{ maxWidth: 600 }}>
+    <Card>
       <CardContent>
         <Typography gutterBottom variant="h4" component="div">
           {props.chatRoom.name}
