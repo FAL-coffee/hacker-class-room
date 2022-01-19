@@ -3,15 +3,10 @@ import { ReactNode } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { signInWithRedirect } from "firebase/auth";
 import { auth, db, setDoc, doc, updateDoc, getDoc } from "@/plugin/firebase";
+import { IUser } from "@types";
 
-interface User {
-  displayName: string | null | undefined;
-  email: string | null | undefined;
-  uid: string | null | undefined;
-  photoURL?: string | null | undefined;
-}
 interface AuthContextProps {
-  currentUser: User | null | undefined;
+  currentUser: IUser | null | undefined;
   login?: () => Promise<void>;
   logout?: () => Promise<void>;
 }
@@ -27,7 +22,7 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }: Props) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
   const login = () => {
     const provider = new GoogleAuthProvider();
@@ -40,7 +35,7 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     return auth.onAuthStateChanged(async (user) => {
-      setCurrentUser(user);
+      setCurrentUser(user as IUser);
       setLoading(false);
       if (!user) return;
       // login時、firestore内のuser情報をuidをキーにし、登録を行う。

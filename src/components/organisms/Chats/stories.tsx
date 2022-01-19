@@ -15,14 +15,11 @@ const Template: ComponentStory<typeof Chats> = (args) => <Chats {...args} />;
 const MESSAGE: IMessage = {
   value: `test message`,
   postedAt: Timestamp.fromDate(new Date()),
-  postedUid: `mockUsersUID`,
+  user: USER,
 };
 
 export const login = Template.bind({});
 login.args = {
   user: USER,
-  userMessageList: [
-    { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
-    { user: USER, message: MESSAGE },
-  ],
+  messages: [MESSAGE, MESSAGE],
 };

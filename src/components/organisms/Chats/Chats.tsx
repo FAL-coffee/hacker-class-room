@@ -1,38 +1,40 @@
-import React from "react";
+import { createRef, useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { Message } from "@/components/molecules";
-import { Props, UserMessage } from "./types";
+import { Props } from "./types";
+import { IMessage } from "@types";
 export const Chats = ({ ...props }: Props) => {
-  const isMine = (userMessage: UserMessage): boolean => {
-    return userMessage.user.uid === props.user?.uid;
+  const isMine = (message: IMessage): boolean => {
+    if (!message.user) return false;
+    else return message.user.uid === props.user?.uid;
   };
 
-  const ref = React.createRef<HTMLDivElement>();
-  const scrollToButtom = React.useCallback(() => {
+  const ref = createRef<HTMLDivElement>();
+  const scrollToButtom = useCallback(() => {
     ref!.current!.scrollIntoView({
       behavior: "smooth",
       block: "end",
     });
   }, [ref]);
 
-  React.useEffect(() => {
-    scrollToButtom();
-  }, [props.userMessageList]);
+  useEffect(() => {
+    if (!!props.messages) scrollToButtom();
+  }, [props.messages, scrollToButtom]);
   return (
     <Box ref={ref}>
-      {props.userMessageList?.map((userMessage: UserMessage, i) => (
+      {props.messages?.map((message: IMessage, i) => (
         <Box
           key={i}
           sx={{
             mb: 2,
-            textAlign: isMine(userMessage) ? "right" : "left",
+            textAlign: isMine(message) ? "right" : "left",
           }}
         >
           <Box sx={{ display: "inline-flex" }}>
             <Message
-              user={userMessage.user}
-              message={userMessage.message}
-              isMine={isMine(userMessage)}
+              user={message.user}
+              message={message}
+              isMine={isMine(message)}
               onIconClick={() => undefined}
             />
           </Box>
