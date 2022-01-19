@@ -6,7 +6,7 @@ import { Props } from "./types";
 
 const DEFAULT_PROPS: Props = {
   onSubmit: action("onSubmit"),
-  loading: false,
+  loggedIn: true,
 };
 
 storiesOf("@components/molecules/MessagePostForm", module)
