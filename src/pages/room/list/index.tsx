@@ -49,14 +49,20 @@ const RoomList: NextPage = () => {
 
   return (
     <Layout title="chat list">
-      <ChatRoomList
-        ChatRoomListDisplayArea={
-          <ChatRoomCardList
-            chatRooms={chatRooms}
-            onOpenClick={chatRoomOpenHandler}
-          />
-        }
-      />
+      {!!currentUser ? (
+        <ChatRoomList
+          ChatRoomListDisplayArea={
+            <ChatRoomCardList
+              chatRooms={chatRooms}
+              onOpenClick={chatRoomOpenHandler}
+            />
+          }
+        />
+      ) : (
+        <p>
+          ログインすると、デフォルトで参加可能なチャットルームを表示できます
+        </p>
+      )}
     </Layout>
   );
 };
