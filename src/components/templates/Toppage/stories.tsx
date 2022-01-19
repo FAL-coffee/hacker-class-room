@@ -1,8 +1,8 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { Home } from ".";
+import { Toppage } from ".";
 
 storiesOf("@components/template/Toppage", module)
-  .addParameters({ component: Home })
-  .add("default", () => <Home />);
+  .addParameters({ component: Toppage })
+  .add("default", () => <Toppage />);
