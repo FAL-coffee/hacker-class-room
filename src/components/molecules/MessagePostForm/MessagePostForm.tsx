@@ -37,6 +37,7 @@ export const MessagePostForm = ({ ...props }: Props) => {
           type="text"
           autoFocus
           multiline
+          rows={3}
           maxRows={4}
           value={message}
           onKeyDown={handleKeyDown}
