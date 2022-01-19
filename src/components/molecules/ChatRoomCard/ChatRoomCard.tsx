@@ -9,7 +9,7 @@ import { Props } from "./types";
 
 export const ChatRoomCard = ({ ...props }: Props) => {
   return (
-    <Card>
+    <Card sx={{ background: "#e3f2fd" }}>
       <CardContent>
         <Typography gutterBottom variant="h4" component="div">
           {props.chatRoom.name}
