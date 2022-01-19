@@ -63,12 +63,21 @@ const Room: NextPage = () => {
         .forEach(async (change) => {
           if (change.type === "added") {
             const userSnap = await getDoc(change.doc.data().user);
+            const userData = await userSnap.data();
             snappedTempMessages.push({
               ...(change.doc.data() as TempMessage),
-              user: userSnap.data() as IUser,
+              user: userData as IUser,
             });
           }
-          await setMessages([...snappedTempMessages]);
+
+          await setMessages([
+            ...snappedTempMessages.sort(
+              (a, b) =>
+                a.postedAt.seconds * 1000 +
+                a.postedAt.nanoseconds / 1000000 -
+                (b.postedAt.seconds * 1000 + b.postedAt.nanoseconds / 1000000)
+            ),
+          ]);
         });
     });
   }, [router.query.id]);
