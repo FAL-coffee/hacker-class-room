@@ -13,30 +13,18 @@ const SChatDisplayArea = () => {
   const MESSAGE: IMessage = {
     value: `test message\nhello! this is storybook! You can also run the maximum width test at the same time.`,
     postedAt: Timestamp.fromDate(new Date()),
-    postedUid: `mockUsersUID`,
+    user: USER,
   };
   const props = {
     user: USER,
-    userMessageList: [
-      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
-      { user: USER, message: MESSAGE },
-      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
-      { user: USER, message: MESSAGE },
-      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
-      { user: USER, message: MESSAGE },
-      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
-      { user: USER, message: MESSAGE },
-      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
-      { user: USER, message: MESSAGE },
-      { user: { ...USER, uid: USER.uid + "00" }, message: MESSAGE },
-      { user: USER, message: MESSAGE },
-    ],
+    messages: [MESSAGE],
   };
   return <Chats {...props} />;
 };
 
 const SMessagePostForm = () => {
   const props = {
+    loading: false,
     onSubmit: action("onSubmit"),
   };
   return <MessagePostForm {...props} />;
