@@ -4,17 +4,18 @@ import { useAuth } from "@/context/AuthContext";
 import { UserMenuKey, HeaderLinkKey } from "@types";
 import { AppHeader } from "@components/organisms";
 import { useRouter } from "next/router";
+import { LoadingAnimation } from "@components/atoms";
 
 export const Layout = ({ children, ...props }: Props) => {
-  const { currentUser, login, logout } = useAuth();
+  const { currentUser, login, logout, loading } = useAuth();
   const router = useRouter();
 
-  const linkHandler = (key: HeaderLinkKey) => {
+  const handleLinkClick = (key: HeaderLinkKey) => {
     if (key === "home") return;
     else if (key === "roomList") return;
   };
 
-  const menuHandler = (key: UserMenuKey) => {
+  const handleMenuClick = (key: UserMenuKey) => {
     if (key === "logout") return logoutHandler();
     else if (key === "profile") return;
   };
@@ -39,10 +40,11 @@ export const Layout = ({ children, ...props }: Props) => {
       <AppHeader
         user={currentUser}
         onLogoClick={() => router.push("/")}
-        onUserMenuClick={menuHandler}
-        onLinkClick={linkHandler}
+        onUserMenuClick={handleMenuClick}
+        onLinkClick={handleLinkClick}
         onGoogleSigninClick={loginHandler}
       />
+      {loading && <LoadingAnimation />}
       <main>{children}</main>
     </>
   );

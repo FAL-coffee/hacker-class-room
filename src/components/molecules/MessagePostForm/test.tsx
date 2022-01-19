@@ -9,6 +9,7 @@ import { Props } from "./types";
 describe("<MessagePostForm />", () => {
   let props: Props = {
     onSubmit: jest.fn(),
+    loading: false,
   };
   const messagePostForm = shallow(<MessagePostForm {...props} />);
 

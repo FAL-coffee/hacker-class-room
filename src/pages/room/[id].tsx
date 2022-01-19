@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
-import Link from "next/link";
-import Head from "next/head";
 import { db, onSnapshot, query } from "@/plugin/firebase";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout } from "@components/layout";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -29,9 +27,7 @@ interface TempMessage {
 }
 
 const Room: NextPage = () => {
-  const { currentUser } = useAuth();
-  const [text, setText] = useState<string>();
-  const [tempMessages, setTempMessages] = useState<Array<TempMessage>>([]);
+  const { currentUser, loading } = useAuth();
   const [messages, setMessages] = useState<Array<IMessage>>([]);
 
   const post = async (value: string) => {
@@ -90,7 +86,9 @@ const Room: NextPage = () => {
             }
           />
         }
-        MessagePostForm={<MessagePostForm onSubmit={post} />}
+        MessagePostForm={
+          <MessagePostForm onSubmit={post} loading={!!loading} />
+        }
       />
     </Layout>
   );

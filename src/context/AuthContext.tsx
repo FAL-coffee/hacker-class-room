@@ -9,6 +9,7 @@ interface AuthContextProps {
   currentUser: IUser | null | undefined;
   login?: () => Promise<void>;
   logout?: () => Promise<void>;
+  loading?: Boolean;
 }
 
 interface Props {
@@ -62,13 +63,10 @@ const AuthProvider = ({ children }: Props) => {
     currentUser,
     login,
     logout,
+    loading,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {loading ? <p>認証中...</p> : children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
