@@ -96,7 +96,10 @@ const Room: NextPage = () => {
           />
         }
         MessagePostForm={
-          <MessagePostForm onSubmit={post} loading={!!loading} />
+          <MessagePostForm
+            onSubmit={post}
+            loggedIn={!loading && !!currentUser}
+          />
         }
       />
     </Layout>
