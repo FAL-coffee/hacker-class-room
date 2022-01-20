@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 export const IconChartWrapper = styled("div")`
   position: absolute;
