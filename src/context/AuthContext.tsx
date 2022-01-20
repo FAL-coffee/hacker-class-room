@@ -35,8 +35,8 @@ export const useAuth = () => {
  * (その後、βではユーザーの操作によるルームへの加入は不可)
  */
 const defaultBelongRooms: DocumentReference[] = [
-  // doc(db, "chats/" + ""),
-  // doc(db, "chats/" + ""),
+  doc(db, "chats/" + "1NDPnApW4DvWR8HvyvvZ"),
+  doc(db, "chats/" + "ehV7kS3zRJ34Y6iWj4cz"),
   // doc(db, "chats/" + ""),
 ];
 
@@ -65,6 +65,7 @@ const AuthProvider = ({ children }: Props) => {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
+          belongRooms: defaultBelongRooms,
         });
       } else {
         await setDoc(docRef, {
