@@ -1,7 +1,6 @@
-import { useEffect } from "react";
 import type { NextPage } from "next";
 import Image from "next/image";
-import { useAuth } from "@/context/AuthContext";
+// import { useAuth } from "@/context/AuthContext";
 import { Layout } from "@components/layout";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";

@@ -1,4 +1,4 @@
-import { createRef, useCallback, useEffect, useState } from "react";
+import { createRef, useCallback, useEffect } from "react";
 import { Box } from "@mui/material";
 import { Message } from "@/components/molecules";
 import { Props } from "./types";
