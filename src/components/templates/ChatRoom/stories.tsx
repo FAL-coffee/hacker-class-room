@@ -24,7 +24,7 @@ const SChatDisplayArea = () => {
 
 const SMessagePostForm = () => {
   const props = {
-    loading: false,
+    loggedIn: false,
     onSubmit: action("onSubmit"),
   };
   return <MessagePostForm {...props} />;
