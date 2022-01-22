@@ -17,7 +17,10 @@ export const Layout = ({ children, ...props }: Props) => {
 
   const handleMenuClick = (key: UserMenuKey) => {
     if (key === "logout") return logoutHandler();
-    else if (key === "profile") return;
+    else if (key === "profile")
+      return router.push(
+        `/profile/${!!currentUser ? currentUser.uid : "null"}`
+      );
   };
 
   const loginHandler = () => {
