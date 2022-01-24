@@ -111,3 +111,6 @@ npm run storybook
 # or
 yarn storybook
 ```
+
+# LICENCE
+はかくらは[MIT LICENCE](https://github.com/FAL-coffee/hacker-class-room/blob/main/LICENSE)です。
