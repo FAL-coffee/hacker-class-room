@@ -1,5 +1,5 @@
-import { IChatRoom } from "@types";
+import { IUser } from "@types";
 export interface Props {
-  chatRoom: IChatRoom;
-  onOpenClick: (id: string) => void;
+  user: IUser;
+  onClick: (uid: string) => void;
 }
