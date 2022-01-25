@@ -19,4 +19,5 @@ export const arrowBar = Template.bind({});
 arrowBar.args = {
   value: "this is storybook!",
   arrowColor: "grey",
+  avatarImage: "/favicon.ico",
 };

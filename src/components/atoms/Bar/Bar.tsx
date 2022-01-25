@@ -8,7 +8,7 @@ export const Bar = ({ ...props }: Props) => {
   return (
     <styled.wrapper onClick={props.onClick} id="bar_wrapper">
       <Stack direction="row" spacing={1} alignItems="center" id="bar_stack">
-        <Avatar alt="" src="/favicon.ico" id="bar_avatar" />
+        <Avatar alt={props.value} src={props.avatarImage} id="bar_avatar" />
         <styled.typographyWrapper id="bar_typography-wrapper">
           <styled.typography id="bar_typography">
             {props.value}
