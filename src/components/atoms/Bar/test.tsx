@@ -35,6 +35,12 @@ describe("<Bar />", () => {
     );
   });
 
+  it("props avatarImage, the image of the avatar changes", () => {
+    bar.setProps({ avatarImage: "/test", value: "test" });
+    expect(bar.find("#bar_avatar").props().src).toEqual("/test");
+    expect(bar.find("#bar_avatar").props().alt).toEqual("test");
+  });
+
   it("When clicked, the event will fire", () => {
     bar.simulate("click", () => {
       expect(props.onClick()).toHaveBeenCalled();
