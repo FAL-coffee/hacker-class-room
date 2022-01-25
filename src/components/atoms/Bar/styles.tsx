@@ -3,13 +3,16 @@ import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import { Props } from "./types";
 
-export const wrapper = styled("div")`
+export const wrapper = styled.div.attrs(({ ...props }: Props) => ({
+  bgColor: props.bgColor || "#f5f5f5",
+}))`
   width: 100%;
   padding: 5px;
   padding-right: 12px;
+  border-radius: 15px;
   cursor: pointer;
   &:hover {
-    background: #f5f5f5;
+    background: ${(props) => props.bgColor};
   }
 `;
 
