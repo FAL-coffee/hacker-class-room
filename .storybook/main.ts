@@ -11,6 +11,7 @@ module.exports = {
       "@": path.resolve(__dirname, "../src/"),
       "@components": path.resolve(__dirname, "../src/components/"),
       "@types": path.resolve(__dirname, "../src/types/index.ts"),
+      "@fixtures": path.resolve(__dirname, "../src/fixtures/index.ts"),
     };
     return config;
   },
