@@ -28,6 +28,9 @@
       ],
       "@types": [
         "./src/types/index.ts"
+      ],
+      "@fixtures": [
+        "./src/fixtures/index.ts"
       ]
     },
     "incremental": true

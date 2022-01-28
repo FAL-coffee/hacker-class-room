@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import React from "react";
 import { AppHeader } from ".";
-import { USER } from "./fixture";
+import { USER } from "@fixtures";
 
 export default {
   title: "@components/organisms/AppHeader",

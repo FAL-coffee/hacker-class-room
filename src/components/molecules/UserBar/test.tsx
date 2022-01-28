@@ -5,7 +5,7 @@ import "jsdom-global/register";
 import { Bar } from "@/components/atoms";
 import { UserBar } from ".";
 import { Props } from "./types";
-import { USER } from "./fixture";
+import { USER } from "@fixtures";
 
 describe("<UserBar />", () => {
   const props: Props = {

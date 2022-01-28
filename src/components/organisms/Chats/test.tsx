@@ -4,14 +4,9 @@ import "jest-styled-components";
 import "jsdom-global/register";
 
 import { Chats } from ".";
-import { USER } from "./fixture";
+import { USER, MESSAGE } from "@fixtures";
 import { Props } from "./types";
-import { IMessage } from "@types";
-const MESSAGE: IMessage = {
-  value: `test message`,
-  postedAt: { seconds: 0, nanoseconds: 0 } as IMessage["postedAt"],
-  user: USER,
-};
+
 describe("<Chats />", () => {
   const props: Props = {
     user: USER,

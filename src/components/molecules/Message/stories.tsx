@@ -1,15 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import React from "react";
 import { Message } from ".";
-import { USER } from "./fixture";
-import { IMessage } from "@types";
-import { Timestamp } from "@/plugin/firebase";
-
-const MESSAGE: IMessage = {
-  value: `test message`,
-  postedAt: Timestamp.fromDate(new Date()),
-  user: USER,
-};
+import { MESSAGE, USER } from "@fixtures";
 
 export default {
   title: "@components/molecules/Message",
