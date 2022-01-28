@@ -4,7 +4,7 @@ import "jest-styled-components";
 import "jsdom-global/register";
 
 import { AppHeader } from ".";
-import { USER } from "./fixture";
+import { USER } from "@fixtures";
 import { Props } from "./types";
 
 describe("<AppHeader />", () => {
