@@ -1,6 +1,6 @@
 export interface Props {
   id?: string;
-  name: string;
+  value: string;
   size?: "small" | "medium";
   color?:
     | "default"
@@ -10,5 +10,5 @@ export interface Props {
     | "info"
     | "success"
     | "warning";
-  onClick?: (id: number) => void;
+  onClick?: (id: string) => void;
 }

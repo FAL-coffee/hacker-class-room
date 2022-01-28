@@ -6,12 +6,12 @@ export const Tag = ({ size = "small", color = "default", ...props }: Props) => {
     <Chip
       onClick={() =>
         typeof props.onClick === "function" &&
-        typeof props.id === "number" &&
+        typeof props.id === "string" &&
         props.onClick(props.id)
       }
       variant="outlined"
       size={size}
-      label={props.name}
+      label={props.value}
       color={color}
     ></Chip>
   );
