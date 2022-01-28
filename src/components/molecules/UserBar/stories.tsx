@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import React from "react";
 import { UserBar } from ".";
-import { USER } from "./fixture";
+import { USER } from "@fixtures";
 
 export default {
   title: "@components/molecules/UserBar",
