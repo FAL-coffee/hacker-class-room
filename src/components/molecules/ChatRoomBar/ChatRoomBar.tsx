@@ -1,13 +1,14 @@
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
 
 import { Bar, Tag } from "@/components/atoms";
 import { Props } from "./types";
 
 export const ChatRoomBar = ({ ...props }: Props) => {
   return (
-    <>
+    <Paper sx={{ p: 2 }} elevation={3}>
       <Bar
         value={props.chatRoom.name}
         avatarImage={props.chatRoom.iconURL}
@@ -29,6 +30,6 @@ export const ChatRoomBar = ({ ...props }: Props) => {
           </Box>
         </Stack>
       </Box>
-    </>
+    </Paper>
   );
 };
