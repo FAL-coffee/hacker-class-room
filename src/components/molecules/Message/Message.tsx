@@ -21,6 +21,10 @@ export const Message = ({
 
   const DateTime = `${month}/${day} ${hours}:${minutes}:${seconds}`;
 
+  const handleUserClick = () => {
+    if (!!props.message.user && !!props.onUserClick)
+      props.onUserClick(props.message.user.uid);
+  };
   return (
     <>
       {props.isMine ? (
@@ -46,7 +50,7 @@ export const Message = ({
             alt={user.displayName}
             src={user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
-            onClick={() => props.onUserClick(user.uid)}
+            onClick={handleUserClick}
           />
         </Stack>
       ) : (
@@ -57,7 +61,7 @@ export const Message = ({
             alt={user.displayName}
             src={user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
-            onClick={() => props.onUserClick(user.uid)}
+            onClick={handleUserClick}
           />
           <div>
             <Typography id="message_user-displayname" variant="body2">
