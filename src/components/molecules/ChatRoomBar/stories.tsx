@@ -14,6 +14,11 @@ const CHATROOM: IChatRoom = {
   id: "this is storybook",
   owner: USER,
   name: "storybook",
+  iconURL: "/logo.png",
+  tags: [
+    { id: "test-tag1-id", value: "test-tag1-value" },
+    { id: "test-tag2-id", value: "test-tag2-value" },
+  ],
   description: "hello! this is chatroom card testing for storybook.",
   createdAt: Timestamp.fromDate(new Date()),
 };
@@ -25,4 +30,5 @@ const Template: ComponentStory<typeof ChatRoomBar> = (args) => (
 export const chatRoomBar = Template.bind({});
 chatRoomBar.args = {
   chatRoom: CHATROOM,
+  // user: USER,
 };

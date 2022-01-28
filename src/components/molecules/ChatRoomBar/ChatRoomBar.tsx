@@ -1,31 +1,34 @@
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-// import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Stack from "@mui/material/Stack";
+
+import { Bar, Tag } from "@/components/atoms";
 import { Props } from "./types";
 
 export const ChatRoomBar = ({ ...props }: Props) => {
   return (
-    <Card sx={{ background: "#e3f2fd" }}>
-      <CardContent>
-        <Typography gutterBottom variant="h4" component="div">
-          {props.chatRoom.name}
+    <>
+      <Bar
+        value={props.chatRoom.name}
+        avatarImage={props.chatRoom.iconURL}
+        arrowColor="#f48fb1"
+        onClick={() => props.onClick(props.chatRoom.owner.uid)}
+      />
+      <Box>
+        <Typography variant="subtitle2">
+          owner： {props.chatRoom.owner.displayName}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {props.chatRoom.description}
-        </Typography>
-      </CardContent>
-      <Box sx={{ textAlign: "right", mb: 2, mr: 2 }}>
-        <Button
-          endIcon={<ArrowForwardIcon />}
-          onClick={() => props.onOpenClick(props.chatRoom.id)}
-        >
-          チャットに参加する
-        </Button>
+        <Stack direction="row" spacing={1} sx={{ pt: 1 }}>
+          <Typography variant="subtitle2">tags：</Typography>
+          <Box>
+            {props.chatRoom.tags.map((tag) => (
+              <span key={tag.id} style={{ padding: 1 }}>
+                <Tag {...tag} onClick={(id: string) => props.onTagClick(id)} />
+              </span>
+            ))}
+          </Box>
+        </Stack>
       </Box>
-    </Card>
+    </>
   );
 };
