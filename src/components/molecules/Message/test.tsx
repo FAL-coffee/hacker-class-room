@@ -4,18 +4,12 @@ import "jest-styled-components";
 import "jsdom-global/register";
 
 import { SpeechBallon } from "@/components/atoms/SpeechBallon";
-import { USER } from "./fixture";
+import { MESSAGE, USER } from "@fixtures";
 
 import { Message } from ".";
 import { Props } from "./types";
-import { IMessage } from "@types";
 
 describe("<Message />", () => {
-  const MESSAGE: IMessage = {
-    value: `test message`,
-    postedAt: { seconds: 0, nanoseconds: 0 } as IMessage["postedAt"],
-    user: USER,
-  };
   let props: Props = {
     user: USER,
     message: MESSAGE,
