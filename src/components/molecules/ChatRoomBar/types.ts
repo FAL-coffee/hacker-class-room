@@ -1,4 +1,4 @@
-import { IChatRoom, IUser } from "@types";
+import { IChatRoom } from "@types";
 export interface Props {
   // user: IUser;
   chatRoom: IChatRoom;
