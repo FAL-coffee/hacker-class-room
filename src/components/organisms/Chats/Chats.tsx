@@ -35,7 +35,7 @@ export const Chats = ({ ...props }: Props) => {
               user={message.user}
               message={message}
               isMine={isMine(message)}
-              onIconClick={() => undefined}
+              // onUserClick={() => undefined}
             />
           </Box>
         </Box>

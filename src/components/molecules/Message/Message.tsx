@@ -46,7 +46,7 @@ export const Message = ({
             alt={user.displayName}
             src={user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
-            onClick={() => props.onIconClick(user.uid)}
+            onClick={() => props.onUserClick(user.uid)}
           />
         </Stack>
       ) : (
@@ -57,7 +57,7 @@ export const Message = ({
             alt={user.displayName}
             src={user.photoURL}
             style={{ margin: "24px 0 0 0", cursor: "pointer" }}
-            onClick={() => props.onIconClick(user.uid)}
+            onClick={() => props.onUserClick(user.uid)}
           />
           <div>
             <Typography id="message_user-displayname" variant="body2">

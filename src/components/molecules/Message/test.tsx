@@ -14,7 +14,7 @@ describe("<Message />", () => {
     user: USER,
     message: MESSAGE,
     isMine: true,
-    onIconClick: jest.fn(),
+    onUserClick: jest.fn(),
   };
   const postedDate = new Date(
     MESSAGE.postedAt.seconds * 1000 + MESSAGE.postedAt.nanoseconds / 1000000
@@ -77,10 +77,10 @@ describe("<Message />", () => {
       );
     });
 
-    // icon click時、onIconClickイベントが発火する事
+    // icon click時、onUserClickイベントが発火する事
     it("Ignition of the event", () => {
       mineMessageWrapper.find("#message_user-avatar").simulate("click", () => {
-        expect(props.onIconClick).toHaveBeenCalled();
+        expect(props.onUserClick).toHaveBeenCalled();
       });
     });
   });
@@ -128,13 +128,13 @@ describe("<Message />", () => {
       );
     });
 
-    // icon click時、onIconClickイベントが発火する事
+    // icon click時、onUserClickイベントが発火する事
     it("Ignition of the event", () => {
       notMineMessageWrapper
         .find("#message_is-not-mine")
         .find("#message_user-avatar")
         .simulate("click", () => {
-          expect(props.onIconClick).toHaveBeenCalled();
+          expect(props.onUserClick).toHaveBeenCalled();
         });
     });
   });
