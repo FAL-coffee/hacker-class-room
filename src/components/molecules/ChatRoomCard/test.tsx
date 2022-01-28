@@ -4,20 +4,13 @@ import "jest-styled-components";
 import "jsdom-global/register";
 
 import { ChatRoomCard } from ".";
-import { IMessage } from "@types";
 import { Props } from "./types";
-import { USER } from "./fixture";
+import { CHATROOM } from "@fixtures";
 
 describe("<ChatRoomCard />", () => {
   const props: Props = {
     onOpenClick: jest.fn(),
-    chatRoom: {
-      id: "test",
-      owner: USER,
-      name: "storybook",
-      description: "hello! this is chatroom card testing for storybook.",
-      createdAt: { seconds: 0, nanoseconds: 0 } as IMessage["postedAt"],
-    },
+    chatRoom: CHATROOM,
   };
   const chatRoomCard = shallow(<ChatRoomCard {...props} />);
 
