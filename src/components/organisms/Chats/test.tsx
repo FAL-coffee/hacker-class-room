@@ -11,6 +11,7 @@ describe("<Chats />", () => {
   const props: Props = {
     user: USER,
     messages: [MESSAGE],
+    onUserClick:jest.fn()
   };
   const chats = shallow(<Chats {...props} />);
 

@@ -17,6 +17,10 @@ export const Chats = ({ ...props }: Props) => {
     });
   }, [ref]);
 
+  const handleUserClick = (uid: string) => {
+    if (!!props.onUserClick) props.onUserClick(uid);
+  };
+
   useEffect(() => {
     if (!!props.messages) scrollToButtom();
   }, [props.messages, scrollToButtom]);
@@ -35,7 +39,7 @@ export const Chats = ({ ...props }: Props) => {
               user={message.user}
               message={message}
               isMine={isMine(message)}
-              onIconClick={() => undefined}
+              onUserClick={handleUserClick}
             />
           </Box>
         </Box>

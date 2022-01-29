@@ -3,5 +3,5 @@ export interface Props {
   user?: IUser;
   message: IMessage;
   isMine: boolean;
-  onIconClick: (uid: string) => void;
+  onUserClick?: (uid: string) => void;
 }
