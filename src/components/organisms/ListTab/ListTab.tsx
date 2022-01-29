@@ -3,7 +3,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 
 import { Props, tabData } from "./types";
 
@@ -48,7 +47,7 @@ export const ListTab = ({ ...props }: Props) => {
   };
 
   return (
-    <Container>
+    <>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
@@ -67,6 +66,6 @@ export const ListTab = ({ ...props }: Props) => {
           {tab.component}
         </TabPanel>
       ))}
-    </Container>
+    </>
   );
 };
