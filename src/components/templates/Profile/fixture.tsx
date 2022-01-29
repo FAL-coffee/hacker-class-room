@@ -1,6 +1,6 @@
 import { action } from "@storybook/addon-actions";
 
-import { ChatRoomBarList, UserBarList } from "@components/organisms";
+import { ChatRoomBarList, UserBarList } from "@/components/organisms";
 import { CHATROOM, USER } from "@fixtures";
 
 const CHATROOMS = [CHATROOM, CHATROOM, CHATROOM];
