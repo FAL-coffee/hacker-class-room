@@ -18,6 +18,7 @@ module.exports = {
   moduleNameMapper: {
     "@/(.+)": "<rootDir>/../src/$1",
     "@fixtures": "<rootDir>/../src/fixtures/index.ts",
+    "@components": "<rootDir>/../src/components/$1",
     "\\.(css|scss)$": "<rootDir>/../node_modules/jest-css-modules"
   },
   // moduleDirectories: ["node_modules", "../"],
