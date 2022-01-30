@@ -7,7 +7,15 @@ import { UserInformation } from ".";
 import { USER } from "@fixtures";
 
 describe("<UserInformation />", () => {
-  const userInformation = shallow(<UserInformation user={USER} />);
+  const props = {
+    user: USER,
+    isMe: false,
+    following: false,
+    onFollowClick: jest.fn(),
+    onUnFollowClick: jest.fn(),
+    onSendMessageClick: jest.fn(),
+  };
+  const userInformation = shallow(<UserInformation {...props} />);
 
   it("render", () => {
     expect(userInformation.exists());
