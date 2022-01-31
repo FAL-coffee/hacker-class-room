@@ -127,25 +127,26 @@ export const UserInformation = ({ ...props }: Props) => {
               value={props.user.message}
             />
           )}
-          {props.following ? (
-            <Button
-              fullWidth
-              variant="contained"
-              endIcon={<ArrowDropUpIcon />}
-              onClick={handleUnFollow}
-            >
-              Un Follow
-            </Button>
-          ) : (
-            <Button
-              fullWidth
-              variant="outlined"
-              endIcon={<KeyboardArrowDownIcon />}
-              onClick={handleFollow}
-            >
-              Follow
-            </Button>
-          )}
+          {!props.isMe &&
+            (props.following ? (
+              <Button
+                fullWidth
+                variant="contained"
+                endIcon={<ArrowDropUpIcon />}
+                onClick={handleUnFollow}
+              >
+                Un Follow
+              </Button>
+            ) : (
+              <Button
+                fullWidth
+                variant="outlined"
+                endIcon={<KeyboardArrowDownIcon />}
+                onClick={handleFollow}
+              >
+                Follow
+              </Button>
+            ))}
         </Stack>
       </Box>
     </>
