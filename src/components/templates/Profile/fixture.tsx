@@ -1,10 +1,26 @@
 import { action } from "@storybook/addon-actions";
 
-import { ChatRoomBarList, UserBarList } from "@/components/organisms";
+import {
+  ListTab,
+  UserInformation,
+  ChatRoomBarList,
+  UserBarList,
+} from "@/components/organisms";
 import { CHATROOM, USER } from "@fixtures";
 
 const CHATROOMS = [CHATROOM, CHATROOM, CHATROOM];
 const USERS = [USER, USER, USER];
+
+export const FUserInformation = () => {
+  const props = {
+    user: USER,
+    isMe: false,
+    following: false,
+    onFollowClick: action("onFollowClick"),
+    onSendMessageClick: action("onSendMessageClick"),
+  };
+  return <UserInformation {...props} />;
+};
 
 const FChatRoomBarList = () => {
   const props = {
@@ -22,18 +38,22 @@ const FUserBarList = () => {
   };
   return <UserBarList {...props} />;
 };
-
-export const TABS = [
-  {
-    name: "Follow",
-    component: <FUserBarList />,
-  },
-  {
-    name: "Follower",
-    component: <FUserBarList />,
-  },
-  {
-    name: "Rooms",
-    component: <FChatRoomBarList />,
-  },
-];
+export const FListTab = () => {
+  const props = {
+    tabs: [
+      {
+        name: "Follow",
+        component: <FUserBarList />,
+      },
+      {
+        name: "Follower",
+        component: <FUserBarList />,
+      },
+      {
+        name: "Rooms",
+        component: <FChatRoomBarList />,
+      },
+    ],
+  };
+  return <ListTab {...props} />;
+};
