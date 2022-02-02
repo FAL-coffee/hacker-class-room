@@ -14,6 +14,9 @@ import {
   where,
   getDocs,
   addDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "@/plugin/firebase";
 import { IChatRoom, ITag, IUser } from "@types";
 import { Profile } from "@components/templates";
@@ -45,6 +48,7 @@ const ProfilePage: NextPage = () => {
   const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
   const [follows, setFollows] = useState<IUser[]>([]);
   const [followers, setFollowers] = useState<IUser[]>([]);
+  const [following, setFollowing] = useState<boolean>(false);
 
   /**
    * 画面表示時処理
@@ -138,17 +142,65 @@ const ProfilePage: NextPage = () => {
           }
         );
       }
-    })();
-  }, [router.query.id]);
 
-  const handleUnFollow = (uid: string) => {
+      // 自身が該当userではない場合、該当userをfollowしているかをsetする
+      if (!currentUser) return;
+      if (currentUser?.uid !== userSnapData.uid) {
+        const currentUserRef = await doc(db, "users", `${currentUser?.uid}`);
+        const currentUserSnap = await getDoc(currentUserRef);
+        setFollowing(
+          currentUserSnap
+            .data()
+            ?.follows.some((v: { id: string }) => v.id === userSnapData.uid)
+        );
+      }
+    })();
+  }, [router.query.id, currentUser]);
+
+  const handleUnFollow = async (uid: string) => {
     if (uid === currentUser?.uid) return;
-    // currentUserに対しupdate
+    // currentUser.followsから、userDataの参照を削除する
+    const currentUserRef = await doc(db, "users", `${currentUser?.uid}`);
+    const currentUserSnap = await getDoc(currentUserRef);
+    if (currentUserSnap.exists()) {
+      await updateDoc(currentUserRef, {
+        follows: arrayRemove(doc(db, "users", `${userData.uid}`)),
+      });
+    }
+
+    // userData.followersから、currentUserの参照を削除する
+    const targetUserRef = await doc(db, "users", `${userData.uid}`);
+    const targetUserSnap = await getDoc(targetUserRef);
+    if (targetUserSnap.exists()) {
+      await updateDoc(targetUserRef, {
+        followers: arrayRemove(doc(db, "users", `${currentUser?.uid}`)),
+      });
+    }
+    // reloadにより情報を最新化する
+    router.reload();
   };
 
-  const handleFollow = (uid: string) => {
+  const handleFollow = async (uid: string) => {
     if (uid === currentUser?.uid) return;
-    // currentUserに対しupdate
+    // currentUser.followsにuserDataの参照を追加する
+    const currentUserRef = await doc(db, "users", `${currentUser?.uid}`);
+    const currentUserSnap = await getDoc(currentUserRef);
+    if (currentUserSnap.exists()) {
+      await updateDoc(currentUserRef, {
+        follows: arrayUnion(doc(db, "users", `${userData.uid}`)),
+      });
+    }
+
+    // userData.followersにcurrentUserの参照を追加する
+    const targetUserRef = await doc(db, "users", `${userData.uid}`);
+    const targetUserSnap = await getDoc(targetUserRef);
+    if (targetUserSnap.exists()) {
+      await updateDoc(targetUserRef, {
+        followers: arrayUnion(doc(db, "users", `${currentUser?.uid}`)),
+      });
+    }
+    // reloadにより情報を最新化する
+    router.reload();
   };
 
   const handleSendMessage = async (uid: string) => {
@@ -170,14 +222,17 @@ const ProfilePage: NextPage = () => {
       where("type", "==", "directMessage"),
       where("members", "==", [currentUser?.uid, uid])
     );
+
     const querySnapshot1 = await getDocs(q1);
     const querySnapshot2 = await getDocs(q2);
     const querySnapshot =
       querySnapshot1.size > 0 ? querySnapshot1 : querySnapshot2;
+
     let directMessageChatRoomId: string = "";
     querySnapshot.forEach((doc) => {
       directMessageChatRoomId = doc.id;
     });
+
     if (querySnapshot.size > 0)
       return router.push(`/room/${directMessageChatRoomId}`);
     else {
@@ -214,8 +269,9 @@ const ProfilePage: NextPage = () => {
         userInformationArea={
           <UserInformation
             user={userData}
-            // isMe={currentUser?.uid === userData.uid}
-            isMe={false}
+            isMe={currentUser ? currentUser?.uid === userData.uid : false}
+            // isMe={false}
+            following={following}
             onUnFollowClick={handleUnFollow}
             onFollowClick={handleFollow}
             onSendMessageClick={handleSendMessage}
