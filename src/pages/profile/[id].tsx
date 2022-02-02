@@ -62,6 +62,10 @@ const ProfilePage: NextPage = () => {
    */
   const router = useRouter();
   useEffect(() => {
+    setBelongRooms([]);
+    setFollows([]);
+    setFollowers([]);
+    setFollowing(false);
     (async () => {
       // ログイン中のユーザー情報から、usersCollection内でのdocumentを特定する
       const userRef = await doc(db, "users", `${router.query.id}`);
