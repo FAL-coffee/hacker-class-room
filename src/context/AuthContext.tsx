@@ -37,7 +37,6 @@ export const useAuth = () => {
 const defaultBelongRooms: DocumentReference[] = [
   doc(db, "chats/" + "1NDPnApW4DvWR8HvyvvZ"),
   doc(db, "chats/" + "ehV7kS3zRJ34Y6iWj4cz"),
-  // doc(db, "chats/" + ""),
 ];
 
 const AuthProvider = ({ children }: Props) => {
