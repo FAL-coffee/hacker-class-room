@@ -145,8 +145,8 @@ const ProfilePage: NextPage = () => {
 
       // 自身が該当userではない場合、該当userをfollowしているかをsetする
       if (!currentUser) return;
-      if (currentUser?.uid !== userSnapData.uid) {
-        const currentUserRef = await doc(db, "users", `${currentUser?.uid}`);
+      if (currentUser.uid !== userSnapData.uid) {
+        const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
         const currentUserSnap = await getDoc(currentUserRef);
         setFollowing(
           currentUserSnap
@@ -158,9 +158,10 @@ const ProfilePage: NextPage = () => {
   }, [router.query.id, currentUser]);
 
   const handleUnFollow = async (uid: string) => {
-    if (uid === currentUser?.uid) return;
+    if (!currentUser) return;
+    if (uid === currentUser.uid) return;
     // currentUser.followsから、userDataの参照を削除する
-    const currentUserRef = await doc(db, "users", `${currentUser?.uid}`);
+    const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
     const currentUserSnap = await getDoc(currentUserRef);
     if (currentUserSnap.exists()) {
       await updateDoc(currentUserRef, {
@@ -173,7 +174,7 @@ const ProfilePage: NextPage = () => {
     const targetUserSnap = await getDoc(targetUserRef);
     if (targetUserSnap.exists()) {
       await updateDoc(targetUserRef, {
-        followers: arrayRemove(doc(db, "users", `${currentUser?.uid}`)),
+        followers: arrayRemove(doc(db, "users", `${currentUser.uid}`)),
       });
     }
     // reloadにより情報を最新化する
@@ -181,9 +182,10 @@ const ProfilePage: NextPage = () => {
   };
 
   const handleFollow = async (uid: string) => {
-    if (uid === currentUser?.uid) return;
+    if (!currentUser) return;
+    if (uid === currentUser.uid) return;
     // currentUser.followsにuserDataの参照を追加する
-    const currentUserRef = await doc(db, "users", `${currentUser?.uid}`);
+    const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
     const currentUserSnap = await getDoc(currentUserRef);
     if (currentUserSnap.exists()) {
       await updateDoc(currentUserRef, {
@@ -196,7 +198,7 @@ const ProfilePage: NextPage = () => {
     const targetUserSnap = await getDoc(targetUserRef);
     if (targetUserSnap.exists()) {
       await updateDoc(targetUserRef, {
-        followers: arrayUnion(doc(db, "users", `${currentUser?.uid}`)),
+        followers: arrayUnion(doc(db, "users", `${currentUser.uid}`)),
       });
     }
     // reloadにより情報を最新化する
