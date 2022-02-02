@@ -73,6 +73,7 @@ const AuthProvider = ({ children }: Props) => {
           email: user.email,
           photoURL: user.photoURL,
           belongRooms: defaultBelongRooms,
+          follows: [doc(db, "users/" + "xXaMhPIz9sP1ej7XHRRoUyxwDGZ2")],
         });
       }
     });

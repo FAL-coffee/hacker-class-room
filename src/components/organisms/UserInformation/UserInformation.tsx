@@ -57,7 +57,7 @@ export const UserInformation = ({ ...props }: Props) => {
               value={props.user.message}
             />
           )}
-          {!!props.isMe || (
+          {!props.isMe && (
             <Stack direction="row" sx={{ width: "100%" }} spacing={1}>
               {props.following ? (
                 <Button
@@ -114,7 +114,7 @@ export const UserInformation = ({ ...props }: Props) => {
             <Typography variant="subtitle1">
               {props.user.displayName}
             </Typography>
-            {!!props.isMe || (
+            {!props.isMe && (
               <IconButton color="primary" onClick={handleSendMessage}>
                 <MailOutlineIcon />
               </IconButton>
