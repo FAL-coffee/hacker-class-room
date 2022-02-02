@@ -13,7 +13,7 @@ export const ChatRoomBar = ({ ...props }: Props) => {
         value={props.chatRoom.name}
         avatarImage={props.chatRoom.iconURL}
         arrowColor="#f48fb1"
-        onClick={() => props.onClick(props.chatRoom.owner.uid)}
+        onClick={() => props.onClick(props.chatRoom.id)}
       />
       <Box>
         <Typography variant="subtitle2">
