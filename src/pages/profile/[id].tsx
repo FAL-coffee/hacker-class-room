@@ -276,8 +276,8 @@ const ProfilePage: NextPage = () => {
           <UserInformation
             user={userData}
             isMe={currentUser ? currentUser?.uid === userData.uid : false}
-            // isMe={false}
             following={following}
+            freezeDirectMessage={true}
             onUnFollowClick={handleUnFollow}
             onFollowClick={handleFollow}
             onSendMessageClick={handleSendMessage}

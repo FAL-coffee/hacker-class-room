@@ -51,7 +51,7 @@ const DirectMessageIconButton = ({
   ...props
 }: DirectMessageIconButtonProps) => {
   return (
-    <>
+    <span style={{ display: "inline-flex" }}>
       {props.disabled ? (
         <></>
       ) : (
@@ -59,8 +59,7 @@ const DirectMessageIconButton = ({
           <MailOutlineIcon />
         </IconButton>
       )}
-      ;
-    </>
+    </span>
   );
 };
 
@@ -118,12 +117,12 @@ export const UserInformation = ({
                 following={following}
                 onClick={() => (following ? handleFollow() : handleUnFollow())}
               />
+              <DirectMessageIconButton
+                onClick={handleSendMessage}
+                disabled={freezeDirectMessage}
+              />
             </Stack>
           )}
-          <DirectMessageIconButton
-            onClick={handleSendMessage}
-            disabled={freezeDirectMessage}
-          />
         </Stack>
       </Box>
 
