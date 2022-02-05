@@ -26,3 +26,17 @@ isNotMe.args = {
   isMe: false,
   following: false,
 };
+export const following = Template.bind({});
+following.args = {
+  user: USER,
+  isMe: false,
+  following: true,
+};
+
+export const freezeDirectMessage = Template.bind({})
+freezeDirectMessage.args = {
+  user:USER,
+  isMe:false,
+  following:false,
+  freezeDirectMessage:true
+}

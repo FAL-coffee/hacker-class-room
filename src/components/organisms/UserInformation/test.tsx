@@ -11,6 +11,7 @@ describe("<UserInformation />", () => {
     user: USER,
     isMe: false,
     following: false,
+    freezeDirectMessage:false,
     onFollowClick: jest.fn(),
     onUnFollowClick: jest.fn(),
     onSendMessageClick: jest.fn(),

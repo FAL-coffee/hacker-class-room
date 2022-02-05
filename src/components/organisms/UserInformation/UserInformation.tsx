@@ -13,14 +13,68 @@ import { SpeechBallon } from "@components/atoms";
 
 import { Props } from "./types";
 
-export const UserInformation = ({ ...props }: Props) => {
+interface FollowButtonProps {
+  following: boolean;
+  onClick: () => void;
+}
+const FollowButton = ({ ...props }: FollowButtonProps) => {
+  return (
+    <>
+      {props.following ? (
+        <Button
+          fullWidth
+          variant="contained"
+          endIcon={<ArrowDropUpIcon />}
+          onClick={props.onClick}
+        >
+          Un Follow
+        </Button>
+      ) : (
+        <Button
+          fullWidth
+          variant="outlined"
+          endIcon={<KeyboardArrowDownIcon />}
+          onClick={props.onClick}
+        >
+          Follow
+        </Button>
+      )}
+    </>
+  );
+};
+
+interface DirectMessageIconButtonProps {
+  disabled: boolean;
+  onClick: () => void;
+}
+const DirectMessageIconButton = ({
+  ...props
+}: DirectMessageIconButtonProps) => {
+  return (
+    <span style={{ display: "inline-flex" }}>
+      {props.disabled ? (
+        <></>
+      ) : (
+        <IconButton color="primary" onClick={props.onClick}>
+          <MailOutlineIcon />
+        </IconButton>
+      )}
+    </span>
+  );
+};
+
+export const UserInformation = ({
+  freezeDirectMessage = false,
+  following = false,
+  ...props
+}: Props) => {
   const handleUnFollow = () => {
-    if (!props.isMe && !!props.following && !!props.onUnFollowClick)
+    if (!props.isMe && !!following && !!props.onUnFollowClick)
       props.onUnFollowClick(props.user.uid);
   };
 
   const handleFollow = () => {
-    if (!props.isMe && !props.following && !!props.onFollowClick)
+    if (!props.isMe && !following && !!props.onFollowClick)
       props.onFollowClick(props.user.uid);
   };
 
@@ -59,28 +113,14 @@ export const UserInformation = ({ ...props }: Props) => {
           )}
           {!props.isMe && (
             <Stack direction="row" sx={{ width: "100%" }} spacing={1}>
-              {props.following ? (
-                <Button
-                  fullWidth
-                  variant="contained"
-                  endIcon={<ArrowDropUpIcon />}
-                  onClick={handleUnFollow}
-                >
-                  Un Follow
-                </Button>
-              ) : (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  endIcon={<KeyboardArrowDownIcon />}
-                  onClick={handleFollow}
-                >
-                  Follow
-                </Button>
-              )}
-              <IconButton color="primary" onClick={handleSendMessage}>
-                <MailOutlineIcon />
-              </IconButton>
+              <FollowButton
+                following={following}
+                onClick={() => (following ? handleFollow() : handleUnFollow())}
+              />
+              <DirectMessageIconButton
+                onClick={handleSendMessage}
+                disabled={freezeDirectMessage}
+              />
             </Stack>
           )}
         </Stack>
@@ -115,9 +155,10 @@ export const UserInformation = ({ ...props }: Props) => {
               {props.user.displayName}
             </Typography>
             {!props.isMe && (
-              <IconButton color="primary" onClick={handleSendMessage}>
-                <MailOutlineIcon />
-              </IconButton>
+              <DirectMessageIconButton
+                onClick={handleSendMessage}
+                disabled={freezeDirectMessage}
+              />
             )}
           </Stack>
           {!!props.user.message && (
@@ -127,26 +168,12 @@ export const UserInformation = ({ ...props }: Props) => {
               value={props.user.message}
             />
           )}
-          {!props.isMe &&
-            (props.following ? (
-              <Button
-                fullWidth
-                variant="contained"
-                endIcon={<ArrowDropUpIcon />}
-                onClick={handleUnFollow}
-              >
-                Un Follow
-              </Button>
-            ) : (
-              <Button
-                fullWidth
-                variant="outlined"
-                endIcon={<KeyboardArrowDownIcon />}
-                onClick={handleFollow}
-              >
-                Follow
-              </Button>
-            ))}
+          {!props.isMe && (
+            <FollowButton
+              following={following}
+              onClick={() => (following ? handleFollow() : handleUnFollow())}
+            />
+          )}
         </Stack>
       </Box>
     </>
