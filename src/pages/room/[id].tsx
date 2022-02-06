@@ -88,6 +88,7 @@ const Room: NextPage = () => {
         ChatDisplayArea={
           <Chats
             messages={messages}
+            onUserClick={() => undefined}
             user={
               currentUser
                 ? currentUser
