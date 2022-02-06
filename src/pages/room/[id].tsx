@@ -48,6 +48,11 @@ const Room: NextPage = () => {
     });
   };
 
+  const handleUserClick = (uid: string) => {
+    if (!uid) return;
+    router.push(`/profile/${uid}`);
+  };
+
   const router = useRouter();
   useEffect(() => {
     let snappedTempMessages: Array<IMessage> = [];
@@ -88,7 +93,7 @@ const Room: NextPage = () => {
         ChatDisplayArea={
           <Chats
             messages={messages}
-            onUserClick={() => undefined}
+            onUserClick={handleUserClick}
             user={
               currentUser
                 ? currentUser
