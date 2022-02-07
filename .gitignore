@@ -33,4 +33,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-/.devcontainer/devcontainer.json
+# cypress env files
+serviceAccount.json
+cypress.env.json
