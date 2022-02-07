@@ -12,6 +12,12 @@
         "javascript.updateImportsOnFileMove.enabled": "always",
         "prettier.vueIndentScriptAndStyle": true,
         "prettier.tabWidth": 4,
+        "[typescriptreact]": {
+            "editor.defaultFormatter": "svipas.prettier-plus"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "svipas.prettier-plus"
+      },
     },
     "extensions": [
         "eamodio.gitlens",
