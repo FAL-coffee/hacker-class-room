@@ -27,12 +27,16 @@ import {
   UserBarList,
 } from "@/components/organisms";
 
+interface ITagRef {
+  genreRef: DocumentReference;
+  tagRef: DocumentReference;
+}
 interface ITempChatRoom {
   id: string;
   owner: DocumentReference;
   iconURL?: string;
   name: string;
-  tags: string[];
+  tags: ITagRef[];
   description: string;
   createdAt: Timestamp;
   messages?: DocumentReference;
@@ -96,13 +100,13 @@ const ProfilePage: NextPage = () => {
             // tagsの取得・格納
             if (!!tempBelongRoomData.tags) {
               await tempBelongRoomData.tags.map(
-                async (tagId: string, j: number) => {
-                  const tagRef = await doc(db, "tags", `${tagId}`);
-                  const tagDoc = await getDoc(tagRef);
+                async (tag: ITagRef, j: number) => {
+                  const tagDoc = await getDoc(tag.tagRef);
                   const tagData = tagDoc.data();
                   belongRoomData.tags.push({
-                    id: tagRef.id,
+                    id: tag.tagRef.id,
                     value: tagData?.value,
+                    genreId: tag.genreRef.id,
                   } as ITag);
                 }
               );
