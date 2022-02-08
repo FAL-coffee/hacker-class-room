@@ -24,7 +24,10 @@ export const ChatRoomBar = ({ ...props }: Props) => {
           <Box>
             {props.chatRoom.tags.map((tag) => (
               <span key={tag.id} style={{ padding: 1 }}>
-                <Tag {...tag} onClick={(id: string) => props.onTagClick(id)} />
+                <Tag
+                  {...tag}
+                  onClick={(id: string) => props.onTagClick(tag.genreId, id)}
+                />
               </span>
             ))}
           </Box>
