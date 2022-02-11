@@ -26,7 +26,7 @@
     "cypress-firebase": "^2.2.1",
     "firebase": "^9.6.1",
     "firebase-tools-extra": "^1.0.0",
-    "next": "12.0.7",
+    "next": "12.0.9",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "styled-components": "^5.3.1"
