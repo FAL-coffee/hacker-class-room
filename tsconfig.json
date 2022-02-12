@@ -31,6 +31,9 @@
       ],
       "@fixtures": [
         "./src/fixtures/index.ts"
+      ],
+      "@hooks": [
+        "./src/hooks/index.ts"
       ]
     },
     "incremental": true
