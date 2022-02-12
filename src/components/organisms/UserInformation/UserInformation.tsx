@@ -115,7 +115,7 @@ export const UserInformation = ({
             <Stack direction="row" sx={{ width: "100%" }} spacing={1}>
               <FollowButton
                 following={following}
-                onClick={() => (following ? handleFollow() : handleUnFollow())}
+                onClick={() => (following ? handleUnFollow() : handleFollow())}
               />
               <DirectMessageIconButton
                 onClick={handleSendMessage}
@@ -171,7 +171,7 @@ export const UserInformation = ({
           {!props.isMe && (
             <FollowButton
               following={following}
-              onClick={() => (following ? handleFollow() : handleUnFollow())}
+              onClick={() => (following ? handleUnFollow() : handleFollow())}
             />
           )}
         </Stack>
