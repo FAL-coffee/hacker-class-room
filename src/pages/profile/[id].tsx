@@ -8,7 +8,8 @@ import {
   doc,
   getDoc,
   DocumentReference,
-  Timestamp,
+  // DocumentSnapshot,
+  // Timestamp,
   query,
   collection,
   where,
@@ -18,7 +19,8 @@ import {
   arrayUnion,
   arrayRemove,
 } from "@/plugin/firebase";
-import { IChatRoom, ITag, IUser } from "@types";
+// import { IChatRoom, ITag, IUser } from "@types";
+import { IUser } from "@types";
 import { Profile } from "@components/templates";
 import {
   ListTab,
@@ -26,30 +28,18 @@ import {
   ChatRoomBarList,
   UserBarList,
 } from "@/components/organisms";
-
-interface ITagRef {
-  genreRef: DocumentReference;
-  tagRef: DocumentReference;
-}
-interface ITempChatRoom {
-  id: string;
-  owner: DocumentReference;
-  iconURL?: string;
-  name: string;
-  tags: ITagRef[];
-  description: string;
-  createdAt: Timestamp;
-  messages?: DocumentReference;
-}
+import { useBelongRooms } from "@hooks";
 
 const ProfilePage: NextPage = () => {
+  const router = useRouter();
   const { currentUser } = useAuth();
   const [userData, setUserData] = useState<IUser>({
     displayName: "user is not found",
     email: "user is not found",
     uid: "404",
   });
-  const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
+  // const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
+  const [belongRooms, setBelongRooms] = useBelongRooms();
   const [follows, setFollows] = useState<IUser[]>([]);
   const [followers, setFollowers] = useState<IUser[]>([]);
   const [following, setFollowing] = useState<boolean>(false);
@@ -64,9 +54,8 @@ const ProfilePage: NextPage = () => {
    * 4. user.followersからフォロワーリストを全件取得する
    *      ( 本番verでは件数制限を行い、「次の十件を取得」ボタンみたいなのを追加する )
    */
-  const router = useRouter();
   useEffect(() => {
-    setBelongRooms([]);
+    // setBelongRooms(undefined);
     setFollows([]);
     setFollowers([]);
     setFollowing(false);
@@ -75,53 +64,11 @@ const ProfilePage: NextPage = () => {
       const userRef = await doc(db, "users", `${router.query.id}`);
       // 特定したdocumentからデータを抽出する
       const userSnap = await getDoc(userRef);
+      setBelongRooms(userSnap);
+      // setUserSnap(userSnap);
       const userSnapData = userSnap.data() as IUser;
       if (!userSnapData) return;
       setUserData(userSnapData);
-
-      // user.belongRooms（DocumentData[]）を一件ずつ読み取り、dataを取得しbelongRooms(useState)に格納する
-      if (!userSnapData.belongRooms) return;
-      else if (!!userSnapData.belongRooms) {
-        const tempBelongRooms: IChatRoom[] = [];
-        userSnapData.belongRooms.map(
-          async (belongRoomRef: DocumentReference, i: number) => {
-            const belongRoomDoc = await getDoc(belongRoomRef);
-            const tempBelongRoomData = belongRoomDoc.data() as ITempChatRoom;
-            const belongRoomData: IChatRoom = {
-              ...tempBelongRoomData,
-              id: belongRoomRef.id,
-              tags: [],
-              owner: {
-                displayName: "user is not found",
-                email: "user is not found",
-                uid: "404",
-              },
-            };
-            // tagsの取得・格納
-            if (!!tempBelongRoomData.tags) {
-              await tempBelongRoomData.tags.map(
-                async (tag: ITagRef, j: number) => {
-                  const tagDoc = await getDoc(tag.tagRef);
-                  const tagData = tagDoc.data();
-                  belongRoomData.tags.push({
-                    id: tag.tagRef.id,
-                    value: tagData?.value,
-                    genreId: tag.genreRef.id,
-                  } as ITag);
-                }
-              );
-            }
-
-            const ownerRef = tempBelongRoomData.owner;
-            const ownerDoc = await getDoc(ownerRef);
-            const ownerData = await ownerDoc.data();
-            belongRoomData.owner = ownerData as IUser;
-
-            tempBelongRooms.push(belongRoomData);
-            setBelongRooms([...tempBelongRooms]);
-          }
-        );
-      }
 
       // user.follows（DocumentData[]）を一件ずつ読み取り、dataを取得しfollows(useState)に格納する
       if (!userSnapData.follows) setFollows([]);
@@ -163,7 +110,7 @@ const ProfilePage: NextPage = () => {
         );
       }
     })();
-  }, [router.query.id, currentUser]);
+  }, [router.query.id, currentUser, setBelongRooms]);
 
   const handleUnFollow = async (uid: string) => {
     if (!currentUser) return;
@@ -312,7 +259,7 @@ const ProfilePage: NextPage = () => {
                 name: "room",
                 component: (
                   <ChatRoomBarList
-                    chatRooms={belongRooms}
+                    chatRooms={belongRooms ? belongRooms : []}
                     onOpenClick={handleOpenChatRoom}
                     onTagClick={handleChatRoomSearch}
                   />
