@@ -8,10 +8,11 @@ module.exports = {
       "@types": path.resolve(__dirname, "src/types/index.ts"),
       "@components": path.resolve(__dirname, "src/components"),
       "@fixtures": path.resolve(__dirname, "src/fixtures/index.ts"),
+      "@hooks": path.resolve(__dirname, "src/hooks/index.ts"),
     };
     return config;
   },
   images: {
-    domains: ['lh3.googleusercontent.com'],
+    domains: ["lh3.googleusercontent.com"],
   },
-}
+};
