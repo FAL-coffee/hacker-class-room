@@ -19,11 +19,6 @@ const RoomList: NextPage = () => {
   };
 
   useEffect(() => {
-    console.log("belongRoomsが更新されました！");
-    console.log(belongRooms);
-  }, [belongRooms]);
-
-  useEffect(() => {
     if (!currentUser) return;
     // const tempRooms: IChatRoom[] = [];
     (async () => {
