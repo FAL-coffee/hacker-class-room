@@ -1,3 +1,4 @@
+export const TOP = "/";
 export const HOME = "/home";
 export const PROFILE = "/profile"
 export const PROFILE_EDIT = "/profile/edit"

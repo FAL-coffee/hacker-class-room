@@ -19,6 +19,7 @@ import { MessagePostForm } from "@components/molecules";
 import { Chats } from "@components/organisms";
 import { ChatRoom } from "@components/templates";
 import { IMessage, IUser } from "@types";
+import * as routes from "@routes";
 
 interface TempMessage {
   postedAt: Timestamp;
@@ -50,7 +51,7 @@ const Room: NextPage = () => {
 
   const handleUserClick = (uid: string) => {
     if (!uid) return;
-    router.push(`/profile/${uid}`);
+    router.push(`${routes.PROFILE}/${uid}`);
   };
 
   const router = useRouter();

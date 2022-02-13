@@ -7,6 +7,7 @@ import { Layout } from "@components/layout";
 import { ChatRoomList } from "@components/templates";
 import { ChatRoomCardList } from "@components/organisms";
 import { useBelongRooms } from "@hooks";
+import * as routes from "@routes";
 
 const RoomList: NextPage = () => {
   const { currentUser } = useAuth();
@@ -15,7 +16,7 @@ const RoomList: NextPage = () => {
   // const [chatRooms, setChatRooms] = useState<Array<IChatRoom>>([]);
 
   const chatRoomOpenHandler = (id: string) => {
-    router.push(`/room/${id}`);
+    router.push(`${routes.ROOM}/${id}`);
   };
 
   useEffect(() => {
