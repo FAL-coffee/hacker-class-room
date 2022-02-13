@@ -11,6 +11,7 @@ describe("<ChatRoomBar />", () => {
   const props: Props = {
     onClick: jest.fn(),
     onTagClick: jest.fn(),
+    onUserClick: jest.fn(),
     chatRoom: CHATROOM,
   };
   const chatRoomBar = shallow(<ChatRoomBar {...props} />);

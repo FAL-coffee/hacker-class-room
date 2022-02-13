@@ -12,6 +12,7 @@ export const ChatRoomBarList = ({ ...props }: Props) => {
           key={i}
           chatRoom={chatRoom}
           onClick={props.onOpenClick}
+          onUserClick={props.onUserClick}
           onTagClick={props.onTagClick}
         />
       ))}
