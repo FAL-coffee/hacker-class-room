@@ -90,11 +90,23 @@ Body、Footer については、必要な場合のみ。
 
 ## 開発環境構築
 
-docker-compose
-
-```bash
-docker-compose //後で書く
-```
+1. Firebaseのプロジェクトを作成する
+  - firebase authentication( google providerを有効化する )
+  - firestore
+2. .env.localファイルを作成する
+  ```.env
+  NEXT_PUBLIC_FIREBASE_API_KEY=
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+  NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID=
+  NEXT_PUBLIC_FIREBASE_APP_ID=
+  NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+  ```
+3. cypress.env.jsonを作成する
+  ```json
+  {}
+  ```
 
 ## 開発サーバー立ち上げ
 
