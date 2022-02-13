@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
+import Box from "@mui/material/Box";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { db, doc, getDoc } from "@/plugin/firebase";
 import { Layout } from "@components/layout";
 import { ChatRoomList } from "@components/templates";
-import { ChatRoomCardList } from "@components/organisms";
+import { ChatRoomCardList, ChatRoomBarList } from "@components/organisms";
 import { useBelongRooms } from "@hooks";
 import * as routes from "@routes";
 
@@ -38,17 +39,25 @@ const RoomList: NextPage = () => {
     })();
   }, [currentUser, setBelongRooms]);
 
+  const chatRoomListProps = {
+    chatRooms: belongRooms,
+    onOpenClick: handleOpenChatRoom,
+    onTagClick: handleChatRoomSearch,
+    onUserClick: handleOpenProfile,
+  };
   return (
     <Layout title="chat list">
       {!!currentUser ? (
         <ChatRoomList
           ChatRoomListDisplayArea={
-            <ChatRoomCardList
-              chatRooms={belongRooms}
-              onOpenClick={handleOpenChatRoom}
-              onTagClick={handleChatRoomSearch}
-              onUserClick={handleOpenProfile}
-            />
+            <Box>
+              <Box sx={{ display: { xs: "none", md: "block" }, m: 1 }}>
+                <ChatRoomCardList {...chatRoomListProps} />
+              </Box>
+              <Box sx={{ display: { xs: "block", md: "none" }, m: 1 }}>
+                <ChatRoomBarList {...chatRoomListProps} />
+              </Box>
+            </Box>
           }
         />
       ) : (
