@@ -262,6 +262,7 @@ const ProfilePage: NextPage = () => {
                   <ChatRoomBarList
                     chatRooms={belongRooms ? belongRooms : []}
                     onOpenClick={handleOpenChatRoom}
+                    onUserClick={handleOpenProfile}
                     onTagClick={handleChatRoomSearch}
                   />
                 ),
