@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { Props } from "./types";
 import { HeaderLink, UserMenu } from "@types";
+import { GoogleSigninButton } from "@components/atoms";
 
 import Image from "next/image";
 
@@ -48,16 +49,6 @@ export const AppHeader = ({ ...props }: Props) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const [googleSigninBtn, setGoogleSigninBtn] = React.useState<
-    "normal" | "focus" | "pressed"
-  >("normal");
-
-  const googleSigninBtnImageMap: Map<string, string> = new Map([
-    ["normal", "/btn_google_signin/btn_google_signin_dark_normal_web@2x.png"],
-    ["focus", "/btn_google_signin/btn_google_signin_dark_focus_web@2x.png"],
-    ["pressed", "/btn_google_signin/btn_google_signin_dark_pressed_web@2x.png"],
-  ]);
 
   return (
     <div style={{ marginBottom: 80 }}>
@@ -124,24 +115,8 @@ export const AppHeader = ({ ...props }: Props) => {
               sx={{
                 flexGrow: 2,
                 display: { xs: "flex", md: "none" },
-                minWidth: "140px",
               }}
-              textAlign="justify"
-            >
-              <Button
-                id="app-header_logoimage_btn_more_than_lg"
-                size="large"
-                onClick={props.onLogoClick}
-              >
-                <Image
-                  id="app-header_logoimage_more_than_lg"
-                  src="/logo.png"
-                  alt="LOGO"
-                  height={50}
-                  width={140}
-                />
-              </Button>
-            </Box>
+            ></Box>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {links.map((link) => (
                 <Button
@@ -199,21 +174,8 @@ export const AppHeader = ({ ...props }: Props) => {
                 </Menu>
               </Box>
             ) : (
-              <Box sx={{ flexGrow: 0, minWidth: 200 }}>
-                <span
-                  id="app-header_google-signin-btn"
-                  onMouseDown={() => setGoogleSigninBtn("pressed")}
-                  onMouseUp={() => setGoogleSigninBtn("normal")}
-                  onClick={props.onGoogleSigninClick}
-                  style={{ cursor: "pointer" }}
-                >
-                  <Image
-                    src={googleSigninBtnImageMap.get(googleSigninBtn) as string}
-                    alt="G"
-                    height={50}
-                    width={200}
-                  />
-                </span>
+              <Box sx={{ flexGrow: 0 }}>
+                <GoogleSigninButton onClick={props.onGoogleSigninClick} />
               </Box>
             )}
           </Toolbar>
