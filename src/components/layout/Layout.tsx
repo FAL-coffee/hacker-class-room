@@ -5,21 +5,22 @@ import { UserMenuKey, HeaderLinkKey } from "@types";
 import { AppHeader } from "@components/organisms";
 import { useRouter } from "next/router";
 import { LoadingAnimation } from "@components/atoms";
+import * as routes from "@routes";
 
 export const Layout = ({ children, ...props }: Props) => {
   const { currentUser, login, logout, loading } = useAuth();
   const router = useRouter();
 
   const handleLinkClick = (key: HeaderLinkKey) => {
-    if (key === "home") return router.push("/home");
-    else if (key === "roomList") return router.push("/room/list");
+    if (key === "home") return router.push(routes.HOME);
+    else if (key === "roomList") return router.push(routes.ROOM_LIST);
   };
 
   const handleMenuClick = (key: UserMenuKey) => {
     if (key === "logout") return logoutHandler();
     else if (key === "profile")
       return router.push(
-        `/profile/${!!currentUser ? currentUser.uid : "null"}`
+        `${routes.PROFILE}/${!!currentUser ? currentUser.uid : "null"}`
       );
   };
 
@@ -42,7 +43,7 @@ export const Layout = ({ children, ...props }: Props) => {
       </Head>
       <AppHeader
         user={currentUser}
-        onLogoClick={() => router.push("/")}
+        onLogoClick={() => router.push(routes.TOP)}
         onUserMenuClick={handleMenuClick}
         onLinkClick={handleLinkClick}
         onGoogleSigninClick={loginHandler}

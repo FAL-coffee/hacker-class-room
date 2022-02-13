@@ -29,6 +29,7 @@ import {
   UserBarList,
 } from "@/components/organisms";
 import { useBelongRooms } from "@hooks";
+import * as routes from "@routes";
 
 const ProfilePage: NextPage = () => {
   const router = useRouter();
@@ -191,7 +192,7 @@ const ProfilePage: NextPage = () => {
     });
 
     if (querySnapshot.size > 0)
-      return router.push(`/room/${directMessageChatRoomId}`);
+      return router.push(`${routes.ROOM}/${directMessageChatRoomId}`);
     else {
       const dmRef = await addDoc(chatsRef, {
         name: `${currentUser?.displayName}と${userData.displayName}の会話`,
@@ -200,18 +201,18 @@ const ProfilePage: NextPage = () => {
         owner: doc(db, "users", `${currentUser?.uid}`),
         type: "directMessage",
       });
-      return router.push(`/room/${dmRef.id}`);
+      return router.push(`${routes.ROOM}/${dmRef.id}`);
     }
   };
 
   const handleOpenProfile = (uid: string) => {
     // plofile/$idを表示する
-    router.push(`/profile/${uid}`);
+    router.push(`${routes.PROFILE}/${uid}`);
   };
 
   const handleOpenChatRoom = (id: string) => {
     // /room/$idを表示する
-    router.push(`/room/${id}`);
+    router.push(`${routes.ROOM}/${id}`);
   };
 
   const handleChatRoomSearch = (genreId: string, id: string) => {

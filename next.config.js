@@ -9,6 +9,7 @@ module.exports = {
       "@components": path.resolve(__dirname, "src/components"),
       "@fixtures": path.resolve(__dirname, "src/fixtures/index.ts"),
       "@hooks": path.resolve(__dirname, "src/hooks/index.ts"),
+      "@routes": path.resolve(__dirname, "src/constants/routes.ts"),
     };
     return config;
   },
