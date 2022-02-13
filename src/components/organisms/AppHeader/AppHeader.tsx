@@ -134,7 +134,7 @@ export const AppHeader = ({ ...props }: Props) => {
 
             {!!props.user ? (
               <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
+                <Tooltip title="profile menu">
                   <IconButton
                     id="app-header_user-avatar"
                     onClick={handleOpenUserMenu}
