@@ -207,7 +207,7 @@ const ProfilePage: NextPage = () => {
 
   const handleOpenProfile = (uid: string) => {
     // plofile/$idを表示する
-    router.push(`/profile/${uid}`);
+    router.push(`${routes.PROFILE}/${uid}`);
   };
 
   const handleOpenChatRoom = (id: string) => {
