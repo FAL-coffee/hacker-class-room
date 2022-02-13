@@ -26,6 +26,7 @@ const FChatRoomBarList = () => {
   const props = {
     chatRooms: CHATROOMS,
     onOpenClick: action("onOpenClick"),
+    onUserClick: action("onUserClick"),
     onTagClick: action("onTagClick"),
   };
   return <ChatRoomBarList {...props} />;
