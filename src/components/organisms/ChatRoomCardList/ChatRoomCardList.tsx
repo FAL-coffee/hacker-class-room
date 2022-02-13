@@ -12,6 +12,8 @@ export const ChatRoomCardList = ({ ...props }: Props) => {
           key={i}
           chatRoom={chatRoom}
           onOpenClick={props.onOpenClick}
+          onTagClick={props.onTagClick}
+          onUserClick={props.onUserClick}
         />
       ))}
     </Stack>

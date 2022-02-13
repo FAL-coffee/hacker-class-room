@@ -1,6 +1,5 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 // import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
@@ -14,9 +13,15 @@ import { Props } from "./types";
 import { Tag } from "@/components/atoms";
 
 export const ChatRoomCard = ({ ...props }: Props) => {
-  const handleUserClick = () => {};
-  const handleOpenClick = () => {};
-  const handleTagClick = (genreId: string, id: string) => {};
+  const handleUserClick = () => {
+    props.onUserClick(props.chatRoom.owner.uid);
+  };
+  const handleOpenClick = () => {
+    props.onOpenClick(props.chatRoom.id);
+  };
+  const handleTagClick = (genreId: string, id: string) => {
+    props.onTagClick(genreId, id);
+  };
   return (
     <Card>
       <CardContent>
@@ -80,10 +85,7 @@ export const ChatRoomCard = ({ ...props }: Props) => {
         </CardActions>
       </CardContent>
       <Box sx={{ textAlign: "right", mb: 2, mr: 2 }}>
-        <Button
-          endIcon={<ArrowForwardIcon />}
-          onClick={() => props.onOpenClick(props.chatRoom.id)}
-        >
+        <Button endIcon={<ArrowForwardIcon />} onClick={handleOpenClick}>
           チャットに参加する
         </Button>
       </Box>

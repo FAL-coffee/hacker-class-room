@@ -10,6 +10,8 @@ import { CHATROOM } from "@fixtures";
 describe("<ChatRoomCardList />", () => {
   const props: Props = {
     onOpenClick: jest.fn(),
+    onTagClick: jest.fn(),
+    onUserClick: jest.fn(),
     chatRooms: [CHATROOM, CHATROOM],
   };
   const chatRoomCardList = shallow(<ChatRoomCardList {...props} />);
