@@ -13,6 +13,7 @@ export const Layout = ({ children, ...props }: Props) => {
 
   const handleLinkClick = (key: HeaderLinkKey) => {
     if (key === "home") return router.push(routes.HOME);
+    else if (key === "top") return router.push(routes.TOP);
     else if (key === "roomList") return router.push(routes.ROOM_LIST);
   };
 

@@ -19,6 +19,7 @@ import { GoogleSigninButton } from "@components/atoms";
 import Image from "next/image";
 
 const links: Array<HeaderLink> = [
+  { key: "top", name: "トップページ" },
   { key: "home", name: "ホームへ戻る" },
   { key: "roomList", name: "チャットルーム一覧" },
 ];
