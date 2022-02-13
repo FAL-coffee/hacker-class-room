@@ -15,8 +15,15 @@ const RoomList: NextPage = () => {
   const [belongRooms, setBelongRooms] = useBelongRooms();
   // const [chatRooms, setChatRooms] = useState<Array<IChatRoom>>([]);
 
-  const chatRoomOpenHandler = (id: string) => {
+  const handleOpenChatRoom = (id: string) => {
     router.push(`${routes.ROOM}/${id}`);
+  };
+
+  const handleChatRoomSearch = (genreId: string, id: string) => {};
+
+  const handleOpenProfile = (uid: string) => {
+    // plofile/$idを表示する
+    router.push(`${routes.PROFILE}/${uid}`);
   };
 
   useEffect(() => {
@@ -38,7 +45,9 @@ const RoomList: NextPage = () => {
           ChatRoomListDisplayArea={
             <ChatRoomCardList
               chatRooms={belongRooms}
-              onOpenClick={chatRoomOpenHandler}
+              onOpenClick={handleOpenChatRoom}
+              onTagClick={handleChatRoomSearch}
+              onUserClick={handleOpenProfile}
             />
           }
         />
