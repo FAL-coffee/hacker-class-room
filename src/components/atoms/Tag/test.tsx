@@ -12,7 +12,7 @@ describe("<Tag />", () => {
     value: "test-tag-value",
     size: "small",
     color: "default",
-    onClick: jest.fn(),
+    // onClick: jest.fn(),
   };
   const tag = shallow(<Tag {...props} />);
 
@@ -35,10 +35,12 @@ describe("<Tag />", () => {
     expect(tag.props().size).toEqual("large");
   });
 
-  // it("When clicked, the event will fire", () => {
-  //   tag.setProps({ id: "click-simulation-test" });
-  //   tag.simulate("click", () => {
-  //     expect(props.onClick("click-simulation-test")).toHaveBeenCalled();
-  //   });
-  // });
+  it("When clicked, the event will fire", () => {
+    tag.setProps({ id: "click-simulation-test" });
+    tag.simulate("click", () => {
+      expect(
+        props.onClick && props.onClick("click-simulation-test")
+      ).toHaveBeenCalled();
+    });
+  });
 });
