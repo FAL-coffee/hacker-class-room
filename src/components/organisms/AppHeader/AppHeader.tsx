@@ -18,12 +18,12 @@ import { GoogleSigninButton } from "@components/atoms";
 
 import Image from "next/image";
 
-const links: Array<HeaderLink> = [
+export const links: Array<HeaderLink> = [
   { key: "top", name: "トップページ" },
   { key: "home", name: "ホームへ戻る" },
   { key: "roomList", name: "チャットルーム一覧" },
 ];
-const userMenu: Array<UserMenu> = [
+export const userMenu: Array<UserMenu> = [
   { key: "profile", name: "プロフィール情報" },
   { key: "logout", name: "ログアウト" },
 ];
@@ -103,6 +103,7 @@ export const AppHeader = ({ ...props }: Props) => {
                 {links.map((link) => (
                   <MenuItem
                     key={link.key}
+                    data-cy={`pagination-link-xs-${link.key}`}
                     onClick={() => (
                       handleCloseNavMenu(), props.onLinkClick(link.key)
                     )}
@@ -126,6 +127,7 @@ export const AppHeader = ({ ...props }: Props) => {
                     handleCloseNavMenu(), props.onLinkClick(link.key)
                   )}
                   sx={{ my: 2, color: "white", display: "block" }}
+                  data-cy={`pagination-link-md-${link.key}`}
                 >
                   {link.name}
                 </Button>
@@ -165,6 +167,7 @@ export const AppHeader = ({ ...props }: Props) => {
                   {userMenu.map((item) => (
                     <MenuItem
                       key={item.key}
+                      data-cy={`account-menu-item-${item.key}`}
                       onClick={() => (
                         handleCloseUserMenu(), props.onUserMenuClick(item.key)
                       )}
