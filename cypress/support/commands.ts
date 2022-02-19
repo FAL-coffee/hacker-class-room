@@ -1,4 +1,4 @@
-import firebase from "firebase/compat/app";
+import firebase from "firebase-admin";
 import "firebase/compat/auth";
 import "firebase/compat/database";
 import "firebase/compat/firestore";
@@ -18,3 +18,17 @@ const fbConfig = {
 firebase.initializeApp(fbConfig);
 
 attachCustomCommands({ Cypress, cy, firebase });
+
+export const signInWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
+  return await firebase.auth().getUserByEmail(email);
+};
+
+export const createUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
+  return await firebase.auth().createUser({ email, password });
+};
