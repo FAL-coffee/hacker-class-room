@@ -38,4 +38,6 @@ cypress.env.json
 cypress/config.json
 serviceAccount.json
 
-cypress/videos*
+cypress/videos
+cypress/screenshots
+cypress/fixtures/example.json
