@@ -16,14 +16,20 @@ export const ChatRoomBar = ({ ...props }: Props) => {
         onClick={() => props.onClick(props.chatRoom.id)}
       />
       <Box>
-        <Typography variant="subtitle2">
+        <Typography variant="subtitle2" id="chat_room_bar-owner">
           owner： {props.chatRoom.owner.displayName}
         </Typography>
         <Stack direction="row" spacing={1} sx={{ pt: 1 }}>
-          <Typography variant="subtitle2">tags：</Typography>
-          <Box>
+          <Typography variant="subtitle2" id="chat_room_bar-tags_label">
+            tags：
+          </Typography>
+          <Box id="chat_room_bar-tags_area">
             {props.chatRoom.tags.map((tag) => (
-              <span key={tag.id} style={{ padding: 1 }}>
+              <span
+                key={tag.id}
+                id={`chat_room_bar-tag_${tag.id}`}
+                style={{ padding: 1 }}
+              >
                 <Tag
                   {...tag}
                   onClick={(id: string) => props.onTagClick(tag.genreId, id)}
