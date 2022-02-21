@@ -36,7 +36,12 @@ export const ChatRoomCard = ({ ...props }: Props) => {
             src={props.chatRoom.iconURL}
             sx={{ width: 36, height: 36 }}
           />
-          <Typography variant="h2" component="div" sx={{ fontSize: 36 }}>
+          <Typography
+            variant="h2"
+            component="div"
+            sx={{ fontSize: 36 }}
+            id="chat_room_card-chat_room_name"
+          >
             {props.chatRoom.name}
           </Typography>
         </Stack>
@@ -59,21 +64,34 @@ export const ChatRoomCard = ({ ...props }: Props) => {
                 sx={{ width: 28, height: 28 }}
                 style={{ cursor: "pointer" }}
               />
-              <Typography variant="h4" sx={{ fontSize: 20 }}>
+              <Typography
+                variant="h4"
+                sx={{ fontSize: 20 }}
+                id="chat_room_card-chat_room_owner"
+              >
                 {props.chatRoom.owner.displayName}
               </Typography>
             </Stack>
           </Box>
         </Stack>
-        <Typography variant="body2" sx={{ ml: 5 }} color="text.secondary">
+        <Typography
+          variant="body2"
+          sx={{ ml: 5 }}
+          color="text.secondary"
+          id="chat_room_card-chat_room_descriotion"
+        >
           {props.chatRoom.description}
         </Typography>
         <CardActions>
           <Stack direction="row" sx={{ ml: 5 }} spacing={1}>
             <Typography variant="subtitle2">tags：</Typography>
-            <Box>
+            <Box id="chat_room_card-tags_area">
               {props.chatRoom.tags.map((tag) => (
-                <span key={tag.id} style={{ padding: 1 }}>
+                <span
+                  key={tag.id}
+                  style={{ padding: 1 }}
+                  id={`chat_room_card-tag_${tag.id}`}
+                >
                   <Tag
                     {...tag}
                     onClick={(id: string) => handleTagClick(tag.genreId, id)}
@@ -85,7 +103,11 @@ export const ChatRoomCard = ({ ...props }: Props) => {
         </CardActions>
       </CardContent>
       <Box sx={{ textAlign: "right", mb: 2, mr: 2 }}>
-        <Button endIcon={<ArrowForwardIcon />} onClick={handleOpenClick}>
+        <Button
+          id="chat_room_card-open_button"
+          endIcon={<ArrowForwardIcon />}
+          onClick={handleOpenClick}
+        >
           チャットに参加する
         </Button>
       </Box>
