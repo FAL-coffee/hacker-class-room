@@ -8,7 +8,9 @@ export const UserBarList = ({ ...props }: Props) => {
   return (
     <Stack direction="column" spacing={3}>
       {props.users.map((user: IUser, i: number) => (
-        <UserBar key={i} user={user} onClick={props.onUserClick} />
+        <span key={i} id={`user_bar_list-user_bar_${user.uid}`}>
+          <UserBar user={user} onClick={props.onUserClick} />
+        </span>
       ))}
     </Stack>
   );
