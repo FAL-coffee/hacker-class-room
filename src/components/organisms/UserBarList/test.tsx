@@ -9,7 +9,7 @@ import { Props } from "./types";
 import { IUser } from "@types";
 import { USER } from "@fixtures";
 
-const getChatRoomDemoDatas = (): IUser[] => {
+const getUserDemoDatas = (): IUser[] => {
   let userDemoDatas: IUser[] = [];
   for (let i = 0; i < 5; i++) {
     userDemoDatas.push({ ...USER, uid: USER.uid + i });
@@ -20,7 +20,7 @@ const getChatRoomDemoDatas = (): IUser[] => {
 describe("<UserBarList />", () => {
   const props: Props = {
     onUserClick: jest.fn(),
-    users: getChatRoomDemoDatas(),
+    users: getUserDemoDatas(),
   };
   const userBarList = shallow(<UserBarList {...props} />);
 
