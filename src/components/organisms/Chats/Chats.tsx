@@ -25,10 +25,11 @@ export const Chats = ({ ...props }: Props) => {
     if (!!props.messages) scrollToButtom();
   }, [props.messages, scrollToButtom]);
   return (
-    <Box ref={ref}>
+    <Box ref={ref} id="chats_container">
       {props.messages?.map((message: IMessage, i) => (
         <Box
           key={i}
+          id={`chats-message_container_${i}`}
           sx={{
             mb: 2,
             textAlign: isMine(message) ? "right" : "left",
