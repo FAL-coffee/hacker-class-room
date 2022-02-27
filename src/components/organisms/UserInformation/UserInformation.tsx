@@ -88,7 +88,7 @@ export const UserInformation = ({
   return (
     <>
       <Box
-        id="user_information_md"
+        id="user_information-md"
         sx={{
           display: { xs: "none", md: "flex" },
           justifyContent: "center",
