@@ -104,6 +104,7 @@ export const AppHeader = ({ ...props }: Props) => {
                   <MenuItem
                     key={link.key}
                     data-cy={`pagination-link-xs-${link.key}`}
+                    id={`app-header_link-xs-${link.key}`}
                     onClick={() => (
                       handleCloseNavMenu(), props.onLinkClick(link.key)
                     )}
@@ -128,6 +129,7 @@ export const AppHeader = ({ ...props }: Props) => {
                   )}
                   sx={{ my: 2, color: "white", display: "block" }}
                   data-cy={`pagination-link-md-${link.key}`}
+                  id={`app-header_link-md-${link.key}`}
                 >
                   {link.name}
                 </Button>
@@ -135,7 +137,7 @@ export const AppHeader = ({ ...props }: Props) => {
             </Box>
 
             {!!props.user ? (
-              <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{ flexGrow: 0 }} id="app-header_user-wrapper">
                 <Tooltip title="profile menu">
                   <IconButton
                     id="app-header_user-avatar"
@@ -168,6 +170,7 @@ export const AppHeader = ({ ...props }: Props) => {
                     <MenuItem
                       key={item.key}
                       data-cy={`account-menu-item-${item.key}`}
+                      id={`app-header_user-menu_item-${item.key}`}
                       onClick={() => (
                         handleCloseUserMenu(), props.onUserMenuClick(item.key)
                       )}
