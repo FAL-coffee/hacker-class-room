@@ -17,11 +17,12 @@ interface FollowButtonProps {
   following: boolean;
   onClick: () => void;
 }
-const FollowButton = ({ ...props }: FollowButtonProps) => {
+export const FollowButton = ({ ...props }: FollowButtonProps) => {
   return (
     <>
       {props.following ? (
         <Button
+          id="unFollow_button"
           fullWidth
           variant="contained"
           endIcon={<ArrowDropUpIcon />}
@@ -31,6 +32,7 @@ const FollowButton = ({ ...props }: FollowButtonProps) => {
         </Button>
       ) : (
         <Button
+          id="follow_button"
           fullWidth
           variant="outlined"
           endIcon={<KeyboardArrowDownIcon />}
@@ -47,7 +49,7 @@ interface DirectMessageIconButtonProps {
   disabled: boolean;
   onClick: () => void;
 }
-const DirectMessageIconButton = ({
+export const DirectMessageIconButton = ({
   ...props
 }: DirectMessageIconButtonProps) => {
   return (
@@ -86,6 +88,7 @@ export const UserInformation = ({
   return (
     <>
       <Box
+        id="user_information-md"
         sx={{
           display: { xs: "none", md: "flex" },
           justifyContent: "center",
@@ -99,11 +102,14 @@ export const UserInformation = ({
           spacing={2}
         >
           <Avatar
+            id="user_information-avatar"
             alt={props.user.displayName}
             src={props.user.photoURL}
             sx={{ width: 126, height: 126 }}
           />
-          <Typography variant="h3">{props.user.displayName}</Typography>
+          <Typography variant="h3" id="user_information-name">
+            {props.user.displayName}
+          </Typography>
           {!!props.user.message && (
             <SpeechBallon
               tail="top"
@@ -127,6 +133,7 @@ export const UserInformation = ({
       </Box>
 
       <Box
+        id="user_information-xs"
         sx={{
           display: { xs: "flex", md: "none" },
           justifyContent: "center",
@@ -147,11 +154,12 @@ export const UserInformation = ({
             spacing={1}
           >
             <Avatar
+              id="user_information-avatar"
               alt={props.user.displayName}
               src={props.user.photoURL}
               sx={{ width: 48, height: 48 }}
             />
-            <Typography variant="subtitle1">
+            <Typography variant="subtitle1" id="user_information-name">
               {props.user.displayName}
             </Typography>
             {!props.isMe && (
