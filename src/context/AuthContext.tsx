@@ -10,6 +10,7 @@ import {
   updateDoc,
   getDoc,
   DocumentReference,
+  arrayUnion,
 } from "@/plugin/firebase";
 import { IUser } from "@types";
 
@@ -73,8 +74,18 @@ const AuthProvider = ({ children }: Props) => {
           email: user.email,
           photoURL: user.photoURL,
           belongRooms: defaultBelongRooms,
-          follows: [doc(db, "users/" + "xXaMhPIz9sP1ej7XHRRoUyxwDGZ2")],
+          follows: [doc(db, "users/xXaMhPIz9sP1ej7XHRRoUyxwDGZ2")],
         });
+        const officialAccountRef = await doc(
+          db,
+          "users/xXaMhPIz9sP1ej7XHRRoUyxwDGZ2"
+        );
+        const officialAccountSnap = await getDoc(officialAccountRef);
+        if (officialAccountSnap.exists()) {
+          await updateDoc(officialAccountRef, {
+            followers: arrayUnion(doc(db, "users", `${user.uid}`)),
+          });
+        }
       }
     });
   }, []);
