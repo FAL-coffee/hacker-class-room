@@ -20,7 +20,7 @@ const RoomList: NextPage = () => {
     router.push(`${routes.ROOM}/${id}`);
   };
 
-  const handleChatRoomSearch = (genreId: string, id: string) => {};
+  const handleChatRoomSearch = (id: string) => {};
 
   const handleOpenProfile = (uid: string) => {
     // plofile/$idを表示する

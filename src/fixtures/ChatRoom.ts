@@ -7,8 +7,8 @@ export const CHATROOM: IChatRoom = {
   name: "test chatrooms name",
   iconURL: "/favicon.ico",
   tags: [
-    { id: "test-tag1-id", genreId:"test-genre-1" , value: "test-tag1-value" },
-    { id: "test-tag2-id", genreId:"test-genre-2" , value: "test-tag2-value" },
+    { id: "test-tag1-id", value: "test-tag1-value" },
+    { id: "test-tag2-id", value: "test-tag2-value" },
   ],
   description: "hello! this is chatroom card testing for localhost.",
   createdAt: { seconds: 0, nanoseconds: 0 } as IMessage["postedAt"],

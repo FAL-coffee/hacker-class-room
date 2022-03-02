@@ -215,7 +215,7 @@ const ProfilePage: NextPage = () => {
     router.push(`${routes.ROOM}/${id}`);
   };
 
-  const handleChatRoomSearch = (genreId: string, id: string) => {
+  const handleChatRoomSearch = (id: string) => {
     // /room/searchを表示する。その時、検索条件を保持する。
     //  => &tagId=${id}みたいな感じで、パラメータとして渡すことが出来るのが理想
     // router.push({ pathname: "/room/search/", query: { tagIds: [id] } });
