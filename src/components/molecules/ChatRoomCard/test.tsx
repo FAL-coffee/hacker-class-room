@@ -63,7 +63,7 @@ describe("<ChatRoomCard />", () => {
       expect(tagWrapper.find(Tag).props().id).toEqual(tag.id);
       expect(tagWrapper.find(Tag).props().value).toEqual(tag.value);
       tagWrapper.find(Tag).simulate("click", () => {
-        expect(props.onTagClick(tag.genreId, tag.id)).toHaveBeenCalled();
+        expect(props.onTagClick(tag.id)).toHaveBeenCalled();
       });
     });
   });
