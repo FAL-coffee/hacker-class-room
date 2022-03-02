@@ -5,7 +5,7 @@ import {
   Timestamp,
   DocumentSnapshot,
 } from "@/plugin/firebase";
-import { IChatRoom, ITag, IUser } from "@types";
+import { IChatRoom, IUser } from "@types";
 
 // interface ITagRef {
 //   genreRef: DocumentReference;
