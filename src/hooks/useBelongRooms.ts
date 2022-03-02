@@ -7,16 +7,16 @@ import {
 } from "@/plugin/firebase";
 import { IChatRoom, ITag, IUser } from "@types";
 
-interface ITagRef {
-  genreRef: DocumentReference;
-  tagRef: DocumentReference;
-}
+// interface ITagRef {
+//   genreRef: DocumentReference;
+//   tagRef: DocumentReference;
+// }
 interface ITempChatRoom {
   id: string;
   owner: DocumentReference;
   iconURL?: string;
   name: string;
-  tags: ITagRef[];
+  tags: DocumentReference[];
   description: string;
   createdAt: Timestamp;
   messages?: DocumentReference;
@@ -47,15 +47,14 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
           };
           // tagsの取得・格納
           if (!!tempBelongRoomData.tags) {
-            await tempBelongRoomData.tags.map(
-              async (tag: ITagRef, j: number) => {
-                const tagDoc = await getDoc(tag.tagRef);
+            await Object.values(tempBelongRoomData.tags).map(
+              async (tag: DocumentReference, j: number) => {
+                const tagDoc = await getDoc(tag);
                 const tagData = await tagDoc.data();
                 await belongRoomData.tags.push({
-                  id: tag.tagRef.id,
+                  id: tag.id,
                   value: tagData?.value,
-                  genreId: tag.genreRef.id,
-                } as ITag);
+                });
               }
             );
           }
