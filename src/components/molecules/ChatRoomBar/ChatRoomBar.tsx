@@ -30,10 +30,7 @@ export const ChatRoomBar = ({ ...props }: Props) => {
                 id={`chat_room_bar-tag_${tag.id}`}
                 style={{ padding: 1 }}
               >
-                <Tag
-                  {...tag}
-                  onClick={(id: string) => props.onTagClick(tag.genreId, id)}
-                />
+                <Tag {...tag} onClick={(id: string) => props.onTagClick(id)} />
               </span>
             ))}
           </Box>
