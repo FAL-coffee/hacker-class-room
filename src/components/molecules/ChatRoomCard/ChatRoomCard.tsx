@@ -19,8 +19,8 @@ export const ChatRoomCard = ({ ...props }: Props) => {
   const handleOpenClick = () => {
     props.onOpenClick(props.chatRoom.id);
   };
-  const handleTagClick = (genreId: string, id: string) => {
-    props.onTagClick(genreId, id);
+  const handleTagClick = (id: string) => {
+    props.onTagClick(id);
   };
   return (
     <Card>
@@ -92,10 +92,7 @@ export const ChatRoomCard = ({ ...props }: Props) => {
                   style={{ padding: 1 }}
                   id={`chat_room_card-tag_${tag.id}`}
                 >
-                  <Tag
-                    {...tag}
-                    onClick={(id: string) => handleTagClick(tag.genreId, id)}
-                  />
+                  <Tag {...tag} onClick={(id: string) => handleTagClick(id)} />
                 </span>
               ))}
             </Box>
