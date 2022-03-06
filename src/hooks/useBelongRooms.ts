@@ -23,10 +23,11 @@ interface ITempChatRoom {
 }
 
 export const useBelongRooms = (): //   initialState?: DocumentSnapshot
-[IChatRoom[], (userSnap?: DocumentSnapshot) => void] => {
+[IChatRoom[], Boolean, (userSnap?: DocumentSnapshot) => void] => {
   // const [tempBelongRooms, setTempBelongRooms] = useState<IChatRoom[]>([]);
   const [userSnap, setUserSnap] = useState<DocumentSnapshot>();
   const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
+  const [loading, setLoading] = useState<Boolean>(true);
   useEffect(() => {
     if (!userSnap) return;
     const userSnapData = userSnap.data() as IUser;
@@ -71,7 +72,8 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
         }
       );
     }
+    setLoading(false);
   }, [userSnap]);
 
-  return [belongRooms, setUserSnap];
+  return [belongRooms, loading, setUserSnap];
 };
