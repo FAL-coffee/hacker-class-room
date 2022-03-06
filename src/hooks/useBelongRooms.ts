@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getDoc,
   DocumentReference,
@@ -24,8 +24,10 @@ interface ITempChatRoom {
 
 export const useBelongRooms = (): //   initialState?: DocumentSnapshot
 [IChatRoom[], (userSnap?: DocumentSnapshot) => void] => {
-  const [tempBelongRooms, setTempBelongRooms] = useState<IChatRoom[]>([]);
-  const setBelongRooms = useCallback((userSnap?: DocumentSnapshot) => {
+  // const [tempBelongRooms, setTempBelongRooms] = useState<IChatRoom[]>([]);
+  const [userSnap, setUserSnap] = useState<DocumentSnapshot>();
+  const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
+  useEffect(() => {
     if (!userSnap) return;
     const userSnapData = userSnap.data() as IUser;
     if (!userSnapData?.belongRooms) return;
@@ -65,11 +67,11 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
           belongRoomData.owner = ownerData as IUser;
 
           await belongRoomDatas.push(belongRoomData);
-          await setTempBelongRooms([...belongRoomDatas]);
+          await setBelongRooms([...belongRoomDatas]);
         }
       );
     }
-  }, []);
+  }, [userSnap]);
 
-  return [tempBelongRooms, setBelongRooms];
+  return [belongRooms, setUserSnap];
 };
