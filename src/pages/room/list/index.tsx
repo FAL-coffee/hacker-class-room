@@ -13,7 +13,7 @@ import * as routes from "@routes";
 const RoomList: NextPage = () => {
   const { currentUser } = useAuth();
   const router = useRouter();
-  const [belongRooms, setBelongRooms] = useBelongRooms();
+  const [belongRooms, loading, doFetchBelongRooms] = useBelongRooms();
   // const [chatRooms, setChatRooms] = useState<Array<IChatRoom>>([]);
 
   const handleOpenChatRoom = (id: string) => {
@@ -35,9 +35,9 @@ const RoomList: NextPage = () => {
       const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
       // 特定したdocumentからデータを抽出する
       const currentUserSnap = await getDoc(currentUserRef);
-      setBelongRooms(currentUserSnap);
+      doFetchBelongRooms(currentUserSnap);
     })();
-  }, [currentUser, setBelongRooms]);
+  }, [currentUser, doFetchBelongRooms]);
 
   const chatRoomListProps = {
     chatRooms: belongRooms,
@@ -48,18 +48,22 @@ const RoomList: NextPage = () => {
   return (
     <Layout title="chat list">
       {!!currentUser ? (
-        <ChatRoomList
-          ChatRoomListDisplayArea={
-            <Box>
-              <Box sx={{ display: { xs: "none", md: "block" }, m: 1 }}>
-                <ChatRoomCardList {...chatRoomListProps} />
-              </Box>
-              <Box sx={{ display: { xs: "block", md: "none" }, m: 1 }}>
-                <ChatRoomBarList {...chatRoomListProps} />
-              </Box>
-            </Box>
-          }
-        />
+        <>
+          {!loading && (
+            <ChatRoomList
+              ChatRoomListDisplayArea={
+                <Box>
+                  <Box sx={{ display: { xs: "none", md: "block" }, m: 1 }}>
+                    <ChatRoomCardList {...chatRoomListProps} />
+                  </Box>
+                  <Box sx={{ display: { xs: "block", md: "none" }, m: 1 }}>
+                    <ChatRoomBarList {...chatRoomListProps} />
+                  </Box>
+                </Box>
+              }
+            />
+          )}
+        </>
       ) : (
         <p>
           ログインすると、デフォルトで参加可能なチャットルームを表示できます
