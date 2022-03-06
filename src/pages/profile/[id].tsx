@@ -40,7 +40,7 @@ const ProfilePage: NextPage = () => {
     uid: "404",
   });
   // const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
-  const [belongRooms, setBelongRooms] = useBelongRooms();
+  const [belongRooms, doFetchBelongRooms] = useBelongRooms();
   const [follows, setFollows] = useState<IUser[]>([]);
   const [followers, setFollowers] = useState<IUser[]>([]);
   const [following, setFollowing] = useState<boolean>(false);
@@ -65,7 +65,7 @@ const ProfilePage: NextPage = () => {
       const userRef = await doc(db, "users", `${router.query.id}`);
       // 特定したdocumentからデータを抽出する
       const userSnap = await getDoc(userRef);
-      setBelongRooms(userSnap);
+      doFetchBelongRooms(userSnap);
       // setUserSnap(userSnap);
       const userSnapData = userSnap.data() as IUser;
       if (!userSnapData) return;
@@ -111,7 +111,7 @@ const ProfilePage: NextPage = () => {
         );
       }
     })();
-  }, [router.query.id, currentUser, setBelongRooms]);
+  }, [router.query.id, currentUser, doFetchBelongRooms]);
 
   const handleUnFollow = async (uid: string) => {
     if (!currentUser) return;
