@@ -61,7 +61,6 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
                     id: tag.id,
                     value: tagData?.value,
                   });
-                  console.log(belongRoomData.tags);
                 }
               );
 
