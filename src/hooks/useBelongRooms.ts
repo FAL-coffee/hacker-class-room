@@ -46,26 +46,26 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
             },
           };
           // tagsの取得・格納
-          if (!!tempBelongRoomData.tags) {
-            await Object.values(tempBelongRoomData.tags).map(
-              async (tag: DocumentReference, j: number) => {
-                const tagDoc = await getDoc(tag);
-                const tagData = await tagDoc.data();
-                await belongRoomData.tags.push({
-                  id: tag.id,
-                  value: tagData?.value,
-                });
-              }
-            );
-          }
+          // if (!!tempBelongRoomData.tags) {
+          await Object.values(tempBelongRoomData.tags).map(
+            async (tag: DocumentReference, j: number) => {
+              const tagDoc = await getDoc(tag);
+              const tagData = await tagDoc.data();
+              await belongRoomData.tags.push({
+                id: tag.id,
+                value: tagData?.value,
+              });
+            }
+          );
+          // }
 
           const ownerRef = tempBelongRoomData.owner;
           const ownerDoc = await getDoc(ownerRef);
           const ownerData = ownerDoc.data();
           belongRoomData.owner = ownerData as IUser;
 
-          belongRoomDatas.push(belongRoomData);
-          setTempBelongRooms([...belongRoomDatas]);
+          await belongRoomDatas.push(belongRoomData);
+          await setTempBelongRooms([...belongRoomDatas]);
         }
       );
     }
