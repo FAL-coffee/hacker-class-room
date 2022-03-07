@@ -40,7 +40,7 @@ const ProfilePage: NextPage = () => {
     uid: "404",
   });
   // const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
-  const [belongRooms, doFetchBelongRooms] = useBelongRooms();
+  const [belongRooms, loading, doFetchBelongRooms] = useBelongRooms();
   const [follows, setFollows] = useState<IUser[]>([]);
   const [followers, setFollowers] = useState<IUser[]>([]);
   const [following, setFollowing] = useState<boolean>(false);
@@ -258,13 +258,15 @@ const ProfilePage: NextPage = () => {
               },
               {
                 name: "room",
-                component: (
+                component: loading ? (
                   <ChatRoomBarList
                     chatRooms={belongRooms ? belongRooms : []}
                     onOpenClick={handleOpenChatRoom}
                     onUserClick={handleOpenProfile}
                     onTagClick={handleChatRoomSearch}
                   />
+                ) : (
+                  <></>
                 ),
               },
             ]}
