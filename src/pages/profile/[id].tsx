@@ -258,7 +258,7 @@ const ProfilePage: NextPage = () => {
               },
               {
                 name: "room",
-                component: loading ? (
+                component: !loading ? (
                   <ChatRoomBarList
                     chatRooms={belongRooms ? belongRooms : []}
                     onOpenClick={handleOpenChatRoom}
