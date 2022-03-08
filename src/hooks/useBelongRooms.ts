@@ -53,15 +53,17 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
               };
               // tagsの取得・格納
               // if (!!tempBelongRoomData.tags) {
-              await Object.values(tempBelongRoomData.tags).map(
-                async (tag: DocumentReference, j: number) => {
-                  const tagDoc = await getDoc(tag);
-                  const tagData = await tagDoc.data();
-                  belongRoomData.tags.push({
-                    id: tag.id,
-                    value: tagData?.value,
-                  });
-                }
+              await Promise.all(
+                await Object.values(tempBelongRoomData.tags).map(
+                  async (tag: DocumentReference, j: number) => {
+                    const tagDoc = await getDoc(tag);
+                    const tagData = await tagDoc.data();
+                    await belongRoomData.tags.push({
+                      id: tag.id,
+                      value: tagData?.value,
+                    });
+                  }
+                )
               );
 
               const ownerRef = tempBelongRoomData.owner;
@@ -70,7 +72,7 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
               belongRoomData.owner = ownerData as IUser;
 
               await belongRoomDatas.push(belongRoomData);
-              setBelongRooms([...belongRoomDatas]);
+              await setBelongRooms([...belongRoomDatas]);
             }
           )
         );
