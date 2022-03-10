@@ -60,7 +60,7 @@ const Room: NextPage = () => {
     const q = query(
       collection(db, "chats", `${router.query.id}`, "messages"),
       orderBy("postedAt", "desc"),
-      limit(10)
+      limit(30)
     );
     onSnapshot(q, (snapshot) => {
       snapshot
