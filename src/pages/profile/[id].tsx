@@ -260,7 +260,7 @@ const ProfilePage: NextPage = () => {
                 name: "room",
                 component: !loading ? (
                   <ChatRoomBarList
-                    chatRooms={belongRooms ? belongRooms : []}
+                    chatRooms={belongRooms}
                     onOpenClick={handleOpenChatRoom}
                     onUserClick={handleOpenProfile}
                     onTagClick={handleChatRoomSearch}
