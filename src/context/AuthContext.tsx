@@ -7,10 +7,12 @@ import {
   db,
   setDoc,
   doc,
+  addDoc,
   updateDoc,
   getDoc,
   DocumentReference,
-  arrayUnion,
+  Timestamp,
+  collection,
 } from "@/plugin/firebase";
 import { IUser } from "@types";
 
@@ -74,18 +76,32 @@ const AuthProvider = ({ children }: Props) => {
           email: user.email,
           photoURL: user.photoURL,
           belongRooms: defaultBelongRooms,
-          follows: [doc(db, "users/xXaMhPIz9sP1ej7XHRRoUyxwDGZ2")],
         });
-        const officialAccountRef = await doc(
+        const followsRef = await collection(
           db,
-          "users/xXaMhPIz9sP1ej7XHRRoUyxwDGZ2"
+          "users",
+          `${user.uid}`,
+          "follows"
         );
-        const officialAccountSnap = await getDoc(officialAccountRef);
-        if (officialAccountSnap.exists()) {
-          await updateDoc(officialAccountRef, {
-            followers: arrayUnion(doc(db, "users", `${user.uid}`)),
-          });
-        }
+        await addDoc(followsRef, {
+          user: doc(
+            db,
+            `users/${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
+          ),
+          followAt: Timestamp.now(),
+          talk: null,
+        });
+        const OfficialUsersfollowersRef = await collection(
+          db,
+          "users",
+          `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`,
+          "followers"
+        );
+        await addDoc(OfficialUsersfollowersRef, {
+          user: doc(db, `users/${user.uid}`),
+          followedAt: Timestamp.now(),
+          talk: null,
+        });
       }
     });
   }, []);
