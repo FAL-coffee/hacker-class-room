@@ -77,13 +77,8 @@ const AuthProvider = ({ children }: Props) => {
           photoURL: user.photoURL,
           belongRooms: defaultBelongRooms,
         });
-        const followsRef = await collection(
-          db,
-          "users",
-          `${user.uid}`,
-          "follows"
-        );
-        await addDoc(followsRef, {
+        // login userのfollows collectionに公式アカウントを追加
+        await addDoc(await collection(db, "users", `${user.uid}`, "follows"), {
           user: doc(
             db,
             `users/${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
@@ -91,17 +86,21 @@ const AuthProvider = ({ children }: Props) => {
           followAt: Timestamp.now(),
           talk: null,
         });
-        const OfficialUsersfollowersRef = await collection(
-          db,
-          "users",
-          `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`,
-          "followers"
+
+        // 公式アカウントのfollowers collectionにlogin userを追加
+        await addDoc(
+          await collection(
+            db,
+            "users",
+            `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`,
+            "followers"
+          ),
+          {
+            user: doc(db, `users/${user.uid}`),
+            followedAt: Timestamp.now(),
+            talk: null,
+          }
         );
-        await addDoc(OfficialUsersfollowersRef, {
-          user: doc(db, `users/${user.uid}`),
-          followedAt: Timestamp.now(),
-          talk: null,
-        });
       }
     });
   }, []);
