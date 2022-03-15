@@ -10,11 +10,16 @@ import {
   DocumentReference,
   // DocumentSnapshot,
   // Timestamp,
+  // query,
+  // collection,
+  // where,
+  getDocs,
+  // addDoc,
   query,
   collection,
-  where,
-  getDocs,
-  addDoc,
+  orderBy,
+  // startAfter,
+  limit,
   updateDoc,
   arrayUnion,
   arrayRemove,
@@ -71,44 +76,46 @@ const ProfilePage: NextPage = () => {
       if (!userSnapData) return;
       setUserData(userSnapData);
 
-      // user.follows（DocumentData[]）を一件ずつ読み取り、dataを取得しfollows(useState)に格納する
-      if (!userSnapData.follows) setFollows([]);
-      else if (!!userSnapData.follows) {
-        const tempFollows: IUser[] = [];
-        await userSnapData.follows.map(
-          async (followRef: DocumentReference, i: number) => {
-            const followDoc = await getDoc(followRef);
-            const followData = followDoc.data() as IUser;
-            await tempFollows.push(followData);
-            await setFollows([...tempFollows]);
-          }
-        );
-      }
+      // follows取得
+      const followsQuery = query(
+        collection(db, "users", `${router.query.id}`, "follows"),
+        orderBy("followAt", "asc"),
+        limit(20)
+      );
+      const followsSnapShots = await getDocs(followsQuery);
+      const tempFollows: IUser[] = [];
+      await followsSnapShots.forEach(async (doc) => {
+        const ref = await getDoc(doc.data().user);
+        await tempFollows.push(ref.data() as IUser);
+        await setFollows([...tempFollows]);
+      });
 
-      // user.followers（DocumentData[]）を一件ずつ読み取り、dataを取得しfollowers(useState)に格納する
-      if (!userSnapData.followers) setFollowers([]);
-      else if (!!userSnapData.followers) {
-        const tempFollowers: IUser[] = [];
-        userSnapData.followers.map(
-          async (followerRef: DocumentReference, i: number) => {
-            const followerDoc = await getDoc(followerRef);
-            const followerData = followerDoc.data() as IUser;
-            await tempFollowers.push(followerData);
-            await setFollowers([...tempFollowers]);
-          }
-        );
-      }
+      // followers取得
+      const followersQuery = query(
+        collection(db, "users", `${router.query.id}`, "followers"),
+        orderBy("followedAt", "asc"),
+        limit(20)
+      );
+      const followersSnapShots = await getDocs(followersQuery);
+      const tempFollowers: IUser[] = [];
+      await followersSnapShots.forEach(async (doc) => {
+        const ref = await getDoc(doc.data().user);
+        await tempFollowers.push(ref.data() as IUser);
+        await setFollowers([...tempFollowers]);
+      });
 
-      // 自身が該当userではない場合、該当userをfollowしているかをsetする
+      // // 自身が該当userではない場合、該当userをfollowしているかをsetする
       if (!currentUser) return;
       if (currentUser.uid !== userSnapData.uid) {
-        const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
-        const currentUserSnap = await getDoc(currentUserRef);
-        setFollowing(
-          currentUserSnap
-            .data()
-            ?.follows.some((v: { id: string }) => v.id === userSnapData.uid)
+        const docRef = doc(
+          db,
+          "users",
+          currentUser.uid,
+          "follows",
+          userSnapData.uid
         );
+        const docSnap = await getDoc(docRef);
+        await setFollowing(docSnap.exists());
       }
     })();
   }, [router.query.id, currentUser, doFetchBelongRooms]);
@@ -163,46 +170,21 @@ const ProfilePage: NextPage = () => {
 
   const handleSendMessage = async (uid: string) => {
     if (uid === currentUser?.uid) return;
-    /**
-     *  chatRoom( chats/ )内に、type==="directMessage"、member = [ userData, currentUser ] の条件に当てはまる
-     *   roomが存在する場合、該当するroomのidを取得・room/list/$id画面を表示する
-     *  存在しなかった場合、type==="directMessage"、member = [ userData, currentUser ] の条件でroomを作成し、
-     *   作成したroomのidを取得・room/list/$id画面を表示する
-     */
-    const chatsRef = collection(db, "chats");
-    const q1 = query(
-      chatsRef,
-      where("type", "==", "directMessage"),
-      where("members", "==", [uid, currentUser?.uid])
-    );
-    const q2 = query(
-      chatsRef,
-      where("type", "==", "directMessage"),
-      where("members", "==", [currentUser?.uid, uid])
-    );
+    // const chatsRef = collection(db, "chats");
+    // const q1 = query(
+    //   chatsRef,
+    //   where("type", "==", "directMessage"),
+    //   where("members", "==", [uid, currentUser?.uid])
+    // );
 
-    const querySnapshot1 = await getDocs(q1);
-    const querySnapshot2 = await getDocs(q2);
-    const querySnapshot =
-      querySnapshot1.size > 0 ? querySnapshot1 : querySnapshot2;
-
-    let directMessageChatRoomId: string = "";
-    querySnapshot.forEach((doc) => {
-      directMessageChatRoomId = doc.id;
-    });
-
-    if (querySnapshot.size > 0)
-      return router.push(`${routes.ROOM}/${directMessageChatRoomId}`);
-    else {
-      const dmRef = await addDoc(chatsRef, {
-        name: `${currentUser?.displayName}と${userData.displayName}の会話`,
-        description: "",
-        members: [currentUser?.uid, uid],
-        owner: doc(db, "users", `${currentUser?.uid}`),
-        type: "directMessage",
-      });
-      return router.push(`${routes.ROOM}/${dmRef.id}`);
-    }
+    // const dmRef = await addDoc(chatsRef, {
+    //   name: `${currentUser?.displayName}と${userData.displayName}の会話`,
+    //   description: "",
+    //   members: [currentUser?.uid, uid],
+    //   owner: doc(db, "users", `${currentUser?.uid}`),
+    //   type: "directMessage",
+    // });
+    // return router.push(`${routes.ROOM}/${dmRef.id}`);
   };
 
   const handleOpenProfile = (uid: string) => {

@@ -6,6 +6,4 @@ export interface IUser {
   message?: string;
   photoURL?: string;
   belongRooms?: DocumentReference[];
-  follows?: DocumentReference[];
-  followers?: DocumentReference[];
 }
