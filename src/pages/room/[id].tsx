@@ -30,6 +30,8 @@ interface TempMessage {
 const Room: NextPage = () => {
   const { currentUser, loading } = useAuth();
   const [messages, setMessages] = useState<Array<IMessage>>([]);
+  const router = useRouter();
+  const type = router.query.type === "chat" ? "chats" : "talks";
 
   const post = async (value: string) => {
     if (!value || !currentUser || !currentUser.uid) return;
@@ -40,7 +42,7 @@ const Room: NextPage = () => {
     };
     const messagesRef = await collection(
       db,
-      "chats",
+      type,
       `${router.query.id}`,
       "messages"
     );
@@ -54,11 +56,10 @@ const Room: NextPage = () => {
     router.push(`${routes.PROFILE}/${uid}`);
   };
 
-  const router = useRouter();
   useEffect(() => {
     let snappedTempMessages: Array<IMessage> = [];
     const q = query(
-      collection(db, "chats", `${router.query.id}`, "messages"),
+      collection(db, type, `${router.query.id}`, "messages"),
       orderBy("postedAt", "desc"),
       limit(30)
     );
@@ -86,7 +87,7 @@ const Room: NextPage = () => {
           ]);
         });
     });
-  }, [router.query.id]);
+  }, [router.query.id, type]);
 
   return (
     <Layout title={router.query.id ? router.query.id : ""}>
