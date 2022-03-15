@@ -7,12 +7,12 @@ import {
   db,
   setDoc,
   doc,
-  addDoc,
+  // addDoc,
   updateDoc,
   getDoc,
   DocumentReference,
   Timestamp,
-  collection,
+  // collection,
 } from "@/plugin/firebase";
 import { IUser } from "@types";
 
@@ -78,22 +78,32 @@ const AuthProvider = ({ children }: Props) => {
           belongRooms: defaultBelongRooms,
         });
         // login userのfollows collectionに公式アカウントを追加
-        await addDoc(await collection(db, "users", `${user.uid}`, "follows"), {
-          user: doc(
+        await setDoc(
+          await doc(
             db,
-            `users/${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
+            "users",
+            `${user.uid}`,
+            "follows",
+            `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
           ),
-          followAt: Timestamp.now(),
-          talk: null,
-        });
+          {
+            user: doc(
+              db,
+              `users/${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
+            ),
+            followAt: Timestamp.now(),
+            talk: null,
+          }
+        );
 
         // 公式アカウントのfollowers collectionにlogin userを追加
-        await addDoc(
-          await collection(
+        await setDoc(
+          await doc(
             db,
             "users",
             `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`,
-            "followers"
+            "followers",
+            `${user.uid}`
           ),
           {
             user: doc(db, `users/${user.uid}`),
