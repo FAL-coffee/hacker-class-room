@@ -7,22 +7,21 @@ import {
   db,
   doc,
   getDoc,
-  DocumentReference,
+  // DocumentReference,
   // DocumentSnapshot,
   // Timestamp,
   // query,
-  // collection,
-  // where,
-  getDocs,
-  // addDoc,
-  query,
   collection,
+  updateDoc,
+  getDocs,
+  addDoc,
+  query,
   orderBy,
   // startAfter,
   limit,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
+  setDoc,
+  Timestamp,
+  deleteDoc,
 } from "@/plugin/firebase";
 // import { IChatRoom, ITag, IUser } from "@types";
 import { IUser } from "@types";
@@ -123,23 +122,10 @@ const ProfilePage: NextPage = () => {
   const handleUnFollow = async (uid: string) => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
-    // currentUser.followsから、userDataの参照を削除する
-    const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
-    const currentUserSnap = await getDoc(currentUserRef);
-    if (currentUserSnap.exists()) {
-      await updateDoc(currentUserRef, {
-        follows: arrayRemove(doc(db, "users", `${userData.uid}`)),
-      });
-    }
-
-    // userData.followersから、currentUserの参照を削除する
-    const targetUserRef = await doc(db, "users", `${userData.uid}`);
-    const targetUserSnap = await getDoc(targetUserRef);
-    if (targetUserSnap.exists()) {
-      await updateDoc(targetUserRef, {
-        followers: arrayRemove(doc(db, "users", `${currentUser.uid}`)),
-      });
-    }
+    // currentUser/followsからuidのdocumentを削除する
+    await deleteDoc(doc(db, "users", currentUser.uid, "follows", uid));
+    // uidのアカウント/followersからcurrentUser.uidのdocumentを削除する
+    await deleteDoc(doc(db, "users", uid, "followers", currentUser.uid));
     // reloadにより情報を最新化する
     router.reload();
   };
@@ -147,44 +133,56 @@ const ProfilePage: NextPage = () => {
   const handleFollow = async (uid: string) => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
-    // currentUser.followsにuserDataの参照を追加する
-    const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
-    const currentUserSnap = await getDoc(currentUserRef);
-    if (currentUserSnap.exists()) {
-      await updateDoc(currentUserRef, {
-        follows: arrayUnion(doc(db, "users", `${userData.uid}`)),
-      });
-    }
-
-    // userData.followersにcurrentUserの参照を追加する
-    const targetUserRef = await doc(db, "users", `${userData.uid}`);
-    const targetUserSnap = await getDoc(targetUserRef);
-    if (targetUserSnap.exists()) {
-      await updateDoc(targetUserRef, {
-        followers: arrayUnion(doc(db, "users", `${currentUser.uid}`)),
-      });
-    }
+    // currentUser/followsにuidのdocumentを追加する
+    await setDoc(doc(db, "users", currentUser.uid, "follows", uid), {
+      user: doc(db, `users/${uid}`),
+      followAt: Timestamp.now(),
+      talk: null,
+    });
+    // uidのアカウント/followersにcurrentUser.uidのdocumentを追加する
+    await setDoc(doc(db, "users", uid, "followers", currentUser.uid), {
+      user: doc(db, `users/${currentUser.uid}`),
+      followedAt: Timestamp.now(),
+      talk: null,
+    });
     // reloadにより情報を最新化する
     router.reload();
   };
 
   const handleSendMessage = async (uid: string) => {
-    if (uid === currentUser?.uid) return;
-    // const chatsRef = collection(db, "chats");
-    // const q1 = query(
-    //   chatsRef,
-    //   where("type", "==", "directMessage"),
-    //   where("members", "==", [uid, currentUser?.uid])
-    // );
+    if (!currentUser) return;
+    if (uid === currentUser.uid) return;
+    // users/currentUser.uid/follows/uidのtalkに参照が設定されているか
+    const associationRef = doc(db, "users", currentUser.uid, "follows", uid);
+    const associationSs = await getDoc(associationRef);
 
-    // const dmRef = await addDoc(chatsRef, {
-    //   name: `${currentUser?.displayName}と${userData.displayName}の会話`,
-    //   description: "",
-    //   members: [currentUser?.uid, uid],
-    //   owner: doc(db, "users", `${currentUser?.uid}`),
-    //   type: "directMessage",
-    // });
-    // return router.push(`${routes.ROOM}/${dmRef.id}`);
+    if (!associationSs.exists()) return;
+    if (!!associationSs.data().talk)
+      router.push({
+        pathname: `/${routes.ROOM}/${associationSs.data().talk.id}`,
+        query: { type: "talk" },
+      });
+    else if (!associationSs.data().talk) {
+      const dmRef = await addDoc(await collection(db, "talks"), {
+        member: [
+          await doc(db, `users/${uid}`),
+          await doc(db, `users/${currentUser.uid}`),
+        ],
+        type: "direct message",
+      });
+
+      await updateDoc(doc(db, "users", currentUser.uid, "follows", uid), {
+        talk: doc(db, `talks/${dmRef.id}`),
+      });
+      await updateDoc(doc(db, "users", uid, "followers", currentUser.uid), {
+        talk: doc(db, `talks/${dmRef.id}`),
+      });
+
+      return router.push({
+        pathname: `${routes.ROOM}/${dmRef.id}`,
+        query: { type: "talk" },
+      });
+    }
   };
 
   const handleOpenProfile = (uid: string) => {
@@ -194,7 +192,10 @@ const ProfilePage: NextPage = () => {
 
   const handleOpenChatRoom = (id: string) => {
     // /room/$idを表示する
-    router.push(`${routes.ROOM}/${id}`);
+    router.push({
+      pathname: `/${routes.ROOM}/${id}`,
+      query: { type: "chat" },
+    });
   };
 
   const handleChatRoomSearch = (id: string) => {
