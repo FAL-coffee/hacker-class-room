@@ -7,12 +7,7 @@ import {
   db,
   doc,
   getDoc,
-  // DocumentReference,
-  // DocumentSnapshot,
-  // Timestamp,
-  // query,
   collection,
-  // updateDoc,
   getDocs,
   addDoc,
   query,
@@ -23,7 +18,6 @@ import {
   Timestamp,
   deleteDoc,
 } from "@/plugin/firebase";
-// import { IChatRoom, ITag, IUser } from "@types";
 import { IUser } from "@types";
 import { Profile } from "@components/templates";
 import {
@@ -49,28 +43,14 @@ const ProfilePage: NextPage = () => {
   const [followers, setFollowers] = useState<IUser[]>([]);
   const [following, setFollowing] = useState<boolean>(false);
 
-  /**
-   * 画面表示時処理
-   * 1. routes.idからuidを持つuserを検索する
-   *     見つからなかった場合、undefined値を代入する
-   * 2. user.belongRoomsからroomの情報を取得する
-   *      ( room取得時、tagsの取得も同時に行う。（tagsはdocRef配列） )
-   * 3. user.followsからフォローリストを全件取得する
-   * 4. user.followersからフォロワーリストを全件取得する
-   *      ( 本番verでは件数制限を行い、「次の十件を取得」ボタンみたいなのを追加する )
-   */
   useEffect(() => {
-    // setBelongRooms(undefined);
     setFollows([]);
     setFollowers([]);
     setFollowing(false);
     (async () => {
-      // ログイン中のユーザー情報から、usersCollection内でのdocumentを特定する
       const userRef = doc(db, "users", `${router.query.id}`);
-      // 特定したdocumentからデータを抽出する
       const userSnap = await getDoc(userRef);
       doFetchBelongRooms(userSnap);
-      // setUserSnap(userSnap);
       const userSnapData = userSnap.data() as IUser;
       if (!userSnapData) return;
       setUserData(userSnapData);
