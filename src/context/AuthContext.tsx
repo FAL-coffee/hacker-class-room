@@ -5,14 +5,15 @@ import { signInWithRedirect } from "firebase/auth";
 import {
   auth,
   db,
+  addDoc,
   setDoc,
   doc,
-  // addDoc,
+  collection,
   updateDoc,
   getDoc,
   DocumentReference,
   Timestamp,
-  // collection,
+  arrayUnion,
 } from "@/plugin/firebase";
 import { IUser } from "@types";
 
@@ -64,10 +65,8 @@ const AuthProvider = ({ children }: Props) => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         await updateDoc(docRef, {
-          displayName: user.displayName,
-          email: user.email,
           photoURL: user.photoURL,
-          belongRooms: defaultBelongRooms,
+          lastLoginAt: Timestamp.now(),
         });
       } else {
         await setDoc(docRef, {
@@ -75,6 +74,7 @@ const AuthProvider = ({ children }: Props) => {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
+          lastLoginAt: Timestamp.now(),
           belongRooms: defaultBelongRooms,
         });
         // login userのfollows collectionに公式アカウントを追加
@@ -92,7 +92,6 @@ const AuthProvider = ({ children }: Props) => {
               `users/${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
             ),
             followAt: Timestamp.now(),
-            talk: null,
           }
         );
 
@@ -108,10 +107,18 @@ const AuthProvider = ({ children }: Props) => {
           {
             user: doc(db, `users/${user.uid}`),
             followedAt: Timestamp.now(),
-            talk: null,
           }
         );
       }
+
+      // login日時をdocumentを追加する形で記録していく
+      await addDoc(
+        await collection(db, "users", `${user.uid}`, "loginRecords"),
+        {
+          loginAt: Timestamp.now(),
+          // login時のipアドレスとかの取得については、規約の整備後
+        }
+      );
     });
   }, []);
 
