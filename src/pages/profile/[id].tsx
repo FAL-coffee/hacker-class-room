@@ -12,7 +12,7 @@ import {
   // Timestamp,
   // query,
   collection,
-  updateDoc,
+  // updateDoc,
   getDocs,
   addDoc,
   query,
@@ -66,7 +66,7 @@ const ProfilePage: NextPage = () => {
     setFollowing(false);
     (async () => {
       // ログイン中のユーザー情報から、usersCollection内でのdocumentを特定する
-      const userRef = await doc(db, "users", `${router.query.id}`);
+      const userRef = doc(db, "users", `${router.query.id}`);
       // 特定したdocumentからデータを抽出する
       const userSnap = await getDoc(userRef);
       doFetchBelongRooms(userSnap);
@@ -123,9 +123,9 @@ const ProfilePage: NextPage = () => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
     // currentUser/followsからuidのdocumentを削除する
-    await deleteDoc(await doc(db, "users", currentUser.uid, "follows", uid));
+    await deleteDoc(doc(db, "users", currentUser.uid, "follows", uid));
     // uidのアカウント/followersからcurrentUser.uidのdocumentを削除する
-    await deleteDoc(await doc(db, "users", uid, "followers", currentUser.uid));
+    await deleteDoc(doc(db, "users", uid, "followers", currentUser.uid));
     // reloadにより情報を最新化する
     router.reload();
   };
@@ -134,13 +134,13 @@ const ProfilePage: NextPage = () => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
     // currentUser/followsにuidのdocumentを追加する
-    await setDoc(await doc(db, "users", currentUser.uid, "follows", uid), {
-      user: await doc(db, `users/${uid}`),
+    await setDoc(doc(db, "users", currentUser.uid, "follows", uid), {
+      user: doc(db, `users/${uid}`),
       followAt: Timestamp.now(),
     });
     // uidのアカウント/followersにcurrentUser.uidのdocumentを追加する
-    await setDoc(await doc(db, "users", uid, "followers", currentUser.uid), {
-      user: await doc(db, `users/${currentUser.uid}`),
+    await setDoc(doc(db, "users", uid, "followers", currentUser.uid), {
+      user: doc(db, `users/${currentUser.uid}`),
       followedAt: Timestamp.now(),
     });
     // reloadにより情報を最新化する
@@ -151,27 +151,24 @@ const ProfilePage: NextPage = () => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
     // users/currentUser.uid/follows/uidのtalkに参照が設定されているか
-    const talkRef = await doc(db, "users", currentUser.uid, "talks", uid);
+    const talkRef = doc(db, "users", currentUser.uid, "talks", uid);
     const talkDoc = await getDoc(talkRef);
 
     // talkDocが存在していない場合
     if (!talkDoc.exists()) {
-      const dmRef = await addDoc(await collection(db, "talks"), {
-        member: [
-          await doc(db, `users/${uid}`),
-          await doc(db, `users/${currentUser.uid}`),
-        ],
+      const dmRef = await addDoc(collection(db, "talks"), {
+        member: [doc(db, `users/${uid}`), doc(db, `users/${currentUser.uid}`)],
         type: "direct message",
         createdAt: Timestamp.now(),
       });
 
-      await setDoc(await doc(db, "users", currentUser.uid, "talks", uid), {
-        user: await doc(db, `users/${uid}`),
-        talk: await doc(db, `talks/${dmRef.id}`),
+      await setDoc(doc(db, "users", currentUser.uid, "talks", uid), {
+        user: doc(db, `users/${uid}`),
+        talk: doc(db, `talks/${dmRef.id}`),
       });
-      await setDoc(await doc(db, "users", uid, "talks", currentUser.uid), {
-        user: await doc(db, `users/${currentUser.uid}`),
-        talk: await doc(db, `talks/${dmRef.id}`),
+      await setDoc(doc(db, "users", uid, "talks", currentUser.uid), {
+        user: doc(db, `users/${currentUser.uid}`),
+        talk: doc(db, `talks/${dmRef.id}`),
       });
 
       return router.push({
@@ -189,22 +186,19 @@ const ProfilePage: NextPage = () => {
       });
     // talk.data().talkが存在していない場合、開設処理を行いuserDocs.talksに相手ユーザーidで情報を登録する
     else if (!talkDoc.data().talk) {
-      const dmRef = await addDoc(await collection(db, "talks"), {
-        member: [
-          await doc(db, `users/${uid}`),
-          await doc(db, `users/${currentUser.uid}`),
-        ],
+      const dmRef = await addDoc(collection(db, "talks"), {
+        member: [doc(db, `users/${uid}`), doc(db, `users/${currentUser.uid}`)],
         type: "direct message",
         createdAt: Timestamp.now(),
       });
 
-      await setDoc(await doc(db, "users", currentUser.uid, "talks", uid), {
-        user: await doc(db, `users/${uid}`),
-        talk: await doc(db, `talks/${dmRef.id}`),
+      await setDoc(doc(db, "users", currentUser.uid, "talks", uid), {
+        user: doc(db, `users/${uid}`),
+        talk: doc(db, `talks/${dmRef.id}`),
       });
-      await setDoc(await doc(db, "users", uid, "talks", currentUser.uid), {
-        user: await doc(db, `users/${currentUser.uid}`),
-        talk: await doc(db, `talks/${dmRef.id}`),
+      await setDoc(doc(db, "users", uid, "talks", currentUser.uid), {
+        user: doc(db, `users/${currentUser.uid}`),
+        talk: doc(db, `talks/${dmRef.id}`),
       });
 
       return router.push({
