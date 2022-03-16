@@ -123,9 +123,9 @@ const ProfilePage: NextPage = () => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
     // currentUser/followsからuidのdocumentを削除する
-    await deleteDoc(doc(db, "users", currentUser.uid, "follows", uid));
+    await deleteDoc(await doc(db, "users", currentUser.uid, "follows", uid));
     // uidのアカウント/followersからcurrentUser.uidのdocumentを削除する
-    await deleteDoc(doc(db, "users", uid, "followers", currentUser.uid));
+    await deleteDoc(await doc(db, "users", uid, "followers", currentUser.uid));
     // reloadにより情報を最新化する
     router.reload();
   };
@@ -134,16 +134,14 @@ const ProfilePage: NextPage = () => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
     // currentUser/followsにuidのdocumentを追加する
-    await setDoc(doc(db, "users", currentUser.uid, "follows", uid), {
-      user: doc(db, `users/${uid}`),
+    await setDoc(await doc(db, "users", currentUser.uid, "follows", uid), {
+      user: await doc(db, `users/${uid}`),
       followAt: Timestamp.now(),
-      talk: null,
     });
     // uidのアカウント/followersにcurrentUser.uidのdocumentを追加する
-    await setDoc(doc(db, "users", uid, "followers", currentUser.uid), {
-      user: doc(db, `users/${currentUser.uid}`),
+    await setDoc(await doc(db, "users", uid, "followers", currentUser.uid), {
+      user: await doc(db, `users/${currentUser.uid}`),
       followedAt: Timestamp.now(),
-      talk: null,
     });
     // reloadにより情報を最新化する
     router.reload();
@@ -153,29 +151,60 @@ const ProfilePage: NextPage = () => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
     // users/currentUser.uid/follows/uidのtalkに参照が設定されているか
-    const associationRef = doc(db, "users", currentUser.uid, "follows", uid);
-    const associationSs = await getDoc(associationRef);
+    const talkRef = await doc(db, "users", currentUser.uid, "talks", uid);
+    const talkDoc = await getDoc(talkRef);
 
-    if (!associationSs.exists()) return;
-    if (!!associationSs.data().talk)
-      router.push({
-        pathname: `/${routes.ROOM}/${associationSs.data().talk.id}`,
-        query: { type: "talk" },
-      });
-    else if (!associationSs.data().talk) {
+    // talkDocが存在していない場合
+    if (!talkDoc.exists()) {
       const dmRef = await addDoc(await collection(db, "talks"), {
         member: [
           await doc(db, `users/${uid}`),
           await doc(db, `users/${currentUser.uid}`),
         ],
         type: "direct message",
+        createdAt: Timestamp.now(),
       });
 
-      await updateDoc(doc(db, "users", currentUser.uid, "follows", uid), {
-        talk: doc(db, `talks/${dmRef.id}`),
+      await setDoc(await doc(db, "users", currentUser.uid, "talks", uid), {
+        user: await doc(db, `users/${uid}`),
+        talk: await doc(db, `talks/${dmRef.id}`),
       });
-      await updateDoc(doc(db, "users", uid, "followers", currentUser.uid), {
-        talk: doc(db, `talks/${dmRef.id}`),
+      await setDoc(await doc(db, "users", uid, "talks", currentUser.uid), {
+        user: await doc(db, `users/${currentUser.uid}`),
+        talk: await doc(db, `talks/${dmRef.id}`),
+      });
+
+      return router.push({
+        pathname: `${routes.ROOM}/${dmRef.id}`,
+        query: { type: "talk" },
+      });
+    }
+
+    // talkDocが存在している場合
+    // talkDoc.data().talkが存在している場合（talkチャンネルが開設済）
+    if (!!talkDoc.data().talk)
+      router.push({
+        pathname: `${routes.ROOM}/${talkDoc.data().talk.id}`,
+        query: { type: "talk" },
+      });
+    // talk.data().talkが存在していない場合、開設処理を行いuserDocs.talksに相手ユーザーidで情報を登録する
+    else if (!talkDoc.data().talk) {
+      const dmRef = await addDoc(await collection(db, "talks"), {
+        member: [
+          await doc(db, `users/${uid}`),
+          await doc(db, `users/${currentUser.uid}`),
+        ],
+        type: "direct message",
+        createdAt: Timestamp.now(),
+      });
+
+      await setDoc(await doc(db, "users", currentUser.uid, "talks", uid), {
+        user: await doc(db, `users/${uid}`),
+        talk: await doc(db, `talks/${dmRef.id}`),
+      });
+      await setDoc(await doc(db, "users", uid, "talks", currentUser.uid), {
+        user: await doc(db, `users/${currentUser.uid}`),
+        talk: await doc(db, `talks/${dmRef.id}`),
       });
 
       return router.push({
