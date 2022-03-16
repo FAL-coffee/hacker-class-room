@@ -13,7 +13,6 @@ import {
   getDoc,
   DocumentReference,
   Timestamp,
-  arrayUnion,
 } from "@/plugin/firebase";
 import { IUser } from "@types";
 
