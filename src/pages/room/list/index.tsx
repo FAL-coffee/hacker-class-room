@@ -17,7 +17,10 @@ const RoomList: NextPage = () => {
   // const [chatRooms, setChatRooms] = useState<Array<IChatRoom>>([]);
 
   const handleOpenChatRoom = (id: string) => {
-    router.push(`${routes.ROOM}/${id}`);
+    router.push({
+      pathname: `/${routes.ROOM}/${id}`,
+      query: { type: "chat" },
+    });
   };
 
   const handleChatRoomSearch = (id: string) => {};

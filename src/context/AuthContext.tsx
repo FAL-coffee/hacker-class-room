@@ -5,12 +5,14 @@ import { signInWithRedirect } from "firebase/auth";
 import {
   auth,
   db,
+  addDoc,
   setDoc,
   doc,
+  collection,
   updateDoc,
   getDoc,
   DocumentReference,
-  arrayUnion,
+  Timestamp,
 } from "@/plugin/firebase";
 import { IUser } from "@types";
 
@@ -62,10 +64,8 @@ const AuthProvider = ({ children }: Props) => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         await updateDoc(docRef, {
-          displayName: user.displayName,
-          email: user.email,
           photoURL: user.photoURL,
-          belongRooms: defaultBelongRooms,
+          lastLoginAt: Timestamp.now(),
         });
       } else {
         await setDoc(docRef, {
@@ -73,20 +73,51 @@ const AuthProvider = ({ children }: Props) => {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
+          lastLoginAt: Timestamp.now(),
           belongRooms: defaultBelongRooms,
-          follows: [doc(db, "users/xXaMhPIz9sP1ej7XHRRoUyxwDGZ2")],
         });
-        const officialAccountRef = await doc(
-          db,
-          "users/xXaMhPIz9sP1ej7XHRRoUyxwDGZ2"
+        // login userのfollows collectionに公式アカウントを追加
+        await setDoc(
+          await doc(
+            db,
+            "users",
+            `${user.uid}`,
+            "follows",
+            `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
+          ),
+          {
+            user: doc(
+              db,
+              `users/${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
+            ),
+            followAt: Timestamp.now(),
+          }
         );
-        const officialAccountSnap = await getDoc(officialAccountRef);
-        if (officialAccountSnap.exists()) {
-          await updateDoc(officialAccountRef, {
-            followers: arrayUnion(doc(db, "users", `${user.uid}`)),
-          });
-        }
+
+        // 公式アカウントのfollowers collectionにlogin userを追加
+        await setDoc(
+          await doc(
+            db,
+            "users",
+            `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`,
+            "followers",
+            `${user.uid}`
+          ),
+          {
+            user: doc(db, `users/${user.uid}`),
+            followedAt: Timestamp.now(),
+          }
+        );
       }
+
+      // login日時をdocumentを追加する形で記録していく
+      await addDoc(
+        await collection(db, "users", `${user.uid}`, "loginRecords"),
+        {
+          loginAt: Timestamp.now(),
+          // login時のipアドレスとかの取得については、規約の整備後
+        }
+      );
     });
   }, []);
 
