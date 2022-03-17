@@ -29,6 +29,67 @@ import {
 import { useBelongRooms } from "@hooks";
 import * as routes from "@routes";
 
+/**
+ * currentUserUid, targetUserUidを受け取り、
+ * 対象２ユーザーに紐づくtalkが存在していないのであれば作成し、
+ * talkRoomのidを返す
+ */
+const fetchTalkRoom = async (
+  currentUserUid: string,
+  targetUserUid: string
+): Promise<string> => {
+  const talkRef = doc(db, "users", currentUserUid, "talks", targetUserUid);
+  const talkDoc = await getDoc(talkRef);
+  // talkDocが存在していない場合
+  if (!talkDoc.exists()) {
+    const dmRef = await addDoc(collection(db, "talks"), {
+      member: [
+        doc(db, `users/${targetUserUid}`),
+        doc(db, `users/${currentUserUid}`),
+      ],
+      type: "direct message",
+      createdAt: Timestamp.now(),
+    });
+
+    await setDoc(doc(db, "users", currentUserUid, "talks", targetUserUid), {
+      user: doc(db, `users/${targetUserUid}`),
+      talk: doc(db, `talks/${dmRef.id}`),
+    });
+    await setDoc(doc(db, "users", targetUserUid, "talks", currentUserUid), {
+      user: doc(db, `users/${currentUserUid}`),
+      talk: doc(db, `talks/${dmRef.id}`),
+    });
+
+    return dmRef.id;
+  }
+  // talkDocが存在している場合
+  // talkDoc.data().talkが存在している場合（talkチャンネルが開設済）
+  if (!!talkDoc.data().talk) return talkDoc.data().talk.id;
+  // talk.data().talkが存在していない場合、開設処理を行いuserDocs.talksに相手ユーザーidで情報を登録する
+  else if (!talkDoc.data().talk) {
+    const dmRef = await addDoc(collection(db, "talks"), {
+      member: [
+        doc(db, `users/${targetUserUid}`),
+        doc(db, `users/${currentUserUid}`),
+      ],
+      type: "direct message",
+      createdAt: Timestamp.now(),
+    });
+
+    await setDoc(doc(db, "users", currentUserUid, "talks", targetUserUid), {
+      user: doc(db, `users/${targetUserUid}`),
+      talk: doc(db, `talks/${dmRef.id}`),
+    });
+    await setDoc(doc(db, "users", targetUserUid, "talks", currentUserUid), {
+      user: doc(db, `users/${currentUserUid}`),
+      talk: doc(db, `talks/${dmRef.id}`),
+    });
+
+    return dmRef.id;
+  }
+  return "Error!";
+};
+
 const ProfilePage: NextPage = () => {
   const router = useRouter();
   const { currentUser } = useAuth();
@@ -130,62 +191,11 @@ const ProfilePage: NextPage = () => {
   const handleSendMessage = async (uid: string) => {
     if (!currentUser) return;
     if (uid === currentUser.uid) return;
-    // users/currentUser.uid/follows/uidのtalkに参照が設定されているか
-    const talkRef = doc(db, "users", currentUser.uid, "talks", uid);
-    const talkDoc = await getDoc(talkRef);
-
-    // talkDocが存在していない場合
-    if (!talkDoc.exists()) {
-      const dmRef = await addDoc(collection(db, "talks"), {
-        member: [doc(db, `users/${uid}`), doc(db, `users/${currentUser.uid}`)],
-        type: "direct message",
-        createdAt: Timestamp.now(),
-      });
-
-      await setDoc(doc(db, "users", currentUser.uid, "talks", uid), {
-        user: doc(db, `users/${uid}`),
-        talk: doc(db, `talks/${dmRef.id}`),
-      });
-      await setDoc(doc(db, "users", uid, "talks", currentUser.uid), {
-        user: doc(db, `users/${currentUser.uid}`),
-        talk: doc(db, `talks/${dmRef.id}`),
-      });
-
-      return router.push({
-        pathname: `${routes.ROOM}/${dmRef.id}`,
-        query: { type: "talk" },
-      });
-    }
-
-    // talkDocが存在している場合
-    // talkDoc.data().talkが存在している場合（talkチャンネルが開設済）
-    if (!!talkDoc.data().talk)
-      router.push({
-        pathname: `${routes.ROOM}/${talkDoc.data().talk.id}`,
-        query: { type: "talk" },
-      });
-    // talk.data().talkが存在していない場合、開設処理を行いuserDocs.talksに相手ユーザーidで情報を登録する
-    else if (!talkDoc.data().talk) {
-      const dmRef = await addDoc(collection(db, "talks"), {
-        member: [doc(db, `users/${uid}`), doc(db, `users/${currentUser.uid}`)],
-        type: "direct message",
-        createdAt: Timestamp.now(),
-      });
-
-      await setDoc(doc(db, "users", currentUser.uid, "talks", uid), {
-        user: doc(db, `users/${uid}`),
-        talk: doc(db, `talks/${dmRef.id}`),
-      });
-      await setDoc(doc(db, "users", uid, "talks", currentUser.uid), {
-        user: doc(db, `users/${currentUser.uid}`),
-        talk: doc(db, `talks/${dmRef.id}`),
-      });
-
-      return router.push({
-        pathname: `${routes.ROOM}/${dmRef.id}`,
-        query: { type: "talk" },
-      });
-    }
+    const dmId = await fetchTalkRoom(currentUser.uid, uid);
+    return router.push({
+      pathname: `${routes.ROOM}/${dmId}`,
+      query: { type: "talk" },
+    });
   };
 
   const handleOpenProfile = (uid: string) => {
