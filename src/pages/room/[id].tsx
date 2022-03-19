@@ -8,7 +8,7 @@ import {
   collection,
   limit,
   orderBy,
-  Timestamp,
+  // Timestamp,
   doc,
   getDoc,
   DocumentReference,
@@ -19,12 +19,14 @@ import { MessagePostForm } from "@components/molecules";
 import { Chats } from "@components/organisms";
 import { ChatRoom } from "@components/templates";
 import { IMessage, IUser } from "@types";
+
+import { converter } from "@/utils/firebase";
 import * as routes from "@routes";
 
 interface TempMessage {
-  postedAt: Timestamp;
+  postedAt: Date;
   value: string;
-  user: DocumentReference;
+  user: DocumentReference<IUser>;
 }
 
 const Room: NextPage = () => {
@@ -37,7 +39,7 @@ const Room: NextPage = () => {
     if (!value || !currentUser || !currentUser.uid) return;
     const data = {
       value: value,
-      postedAt: Timestamp.now(),
+      postedAt: new Date(),
       user: doc(db, "users/" + currentUser.uid),
     };
     const messagesRef = await collection(
@@ -59,7 +61,9 @@ const Room: NextPage = () => {
   useEffect(() => {
     let snappedTempMessages: Array<IMessage> = [];
     const q = query(
-      collection(db, type, `${router.query.id}`, "messages"),
+      collection(db, type, `${router.query.id}`, "messages").withConverter(
+        converter<TempMessage>()
+      ),
       orderBy("postedAt", "desc"),
       limit(30)
     );
@@ -72,17 +76,14 @@ const Room: NextPage = () => {
             const userSnap = await getDoc(change.doc.data().user);
             const userData = await userSnap.data();
             snappedTempMessages.push({
-              ...(change.doc.data() as TempMessage),
-              user: userData as IUser,
+              ...change.doc.data(),
+              user: userData,
             });
           }
 
           await setMessages([
-            ...snappedTempMessages.sort(
-              (a, b) =>
-                a.postedAt.seconds * 1000 +
-                a.postedAt.nanoseconds / 1000000 -
-                (b.postedAt.seconds * 1000 + b.postedAt.nanoseconds / 1000000)
+            ...snappedTempMessages.sort((a, b) =>
+              a.postedAt > b.postedAt ? 1 : -1
             ),
           ]);
         });
@@ -99,7 +100,12 @@ const Room: NextPage = () => {
             user={
               currentUser
                 ? currentUser
-                : { uid: "", displayName: "", email: "" }
+                : {
+                    uid: "",
+                    displayName: "",
+                    email: "",
+                    lastLoginAt: new Date("1900-01-01T00:00:00"),
+                  }
             }
           />
         }
