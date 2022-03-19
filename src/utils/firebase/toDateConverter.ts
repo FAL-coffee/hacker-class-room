@@ -2,24 +2,26 @@ import {
   FirestoreDataConverter,
   QueryDocumentSnapshot,
   WithFieldValue,
+  Timestamp,
 } from "firebase/firestore";
 
 interface DocumentSnapshotType {
-  [key: string | number]: any;
+  [key: string]: any | Timestamp;
 }
 
 export const toDateConverter = <
   T extends DocumentSnapshotType
 >(): FirestoreDataConverter<T> => ({
-  toFirestore: (data: WithFieldValue<T>) => data,
+  toFirestore: (data: WithFieldValue<DocumentSnapshotType>) => data,
   fromFirestore: (snapshot: QueryDocumentSnapshot<T>) => {
     const data = snapshot.data();
-    Object.keys(data).forEach((key, i) => {
+    Object.keys(data).forEach((key) => {
+      // Timestamp型の値をDate型に変換する
       if (
         typeof data[key].toString == "function" &&
         data[key].toString().startsWith("Timestamp")
       ) {
-        data[i] = data[key].toDate();
+        (data as DocumentSnapshotType)[key] = data[key].toDate();
       }
     });
 
