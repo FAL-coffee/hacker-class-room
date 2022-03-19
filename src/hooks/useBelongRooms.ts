@@ -58,7 +58,6 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
               if (!belongRoomDoc.exists()) return;
               const tempBelongRoomData = belongRoomDoc.data();
               Object.keys(tempBelongRoomData).forEach((key) => {
-                // Date型の値をTimestamp型に変換する
                 if (
                   typeof tempBelongRoomData[key].toString == "function" &&
                   tempBelongRoomData[key].toString().startsWith("Timestamp")
@@ -68,17 +67,25 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
                   ] = Timestamp.fromDate(tempBelongRoomData[key]);
                 }
               });
+
+              const ownerRef = tempBelongRoomData.owner;
+              const ownerDoc = await getDoc(ownerRef);
+              const ownerData = ownerDoc.data();
+              const owner = !!ownerData
+                ? ownerData
+                : {
+                    displayName: "user is not found",
+                    email: "user is not found",
+                    lastLoginAt: new Date("1900-01-01T00:00:00"),
+                    uid: "404",
+                  };
+
               const belongRoomData: IChatRoom = {
                 ...tempBelongRoomData,
                 id: belongRoomRef.id,
                 createdAt: new Date("1900-01-01T00:00:00"),
                 tags: [],
-                owner: {
-                  displayName: "user is not found",
-                  email: "user is not found",
-                  lastLoginAt: new Date("1900-01-01T00:00:00"),
-                  uid: "404",
-                },
+                owner: owner,
               };
               // tagsの取得・格納
               // if (!!tempBelongRoomData.tags) {
@@ -94,11 +101,6 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
                   }
                 )
               );
-
-              const ownerRef = tempBelongRoomData.owner;
-              const ownerDoc = await getDoc(ownerRef);
-              const ownerData = ownerDoc.data();
-              belongRoomData.owner = ownerData as IUser;
 
               await belongRoomDatas.push(belongRoomData);
               await setBelongRooms([...belongRoomDatas]);
