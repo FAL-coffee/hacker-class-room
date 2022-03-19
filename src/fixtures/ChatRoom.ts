@@ -1,4 +1,4 @@
-import { IChatRoom, IMessage } from "@types";
+import { IChatRoom } from "@types";
 import { USER } from "./User";
 
 export const CHATROOM: IChatRoom = {
@@ -11,5 +11,5 @@ export const CHATROOM: IChatRoom = {
     { id: "test-tag2-id", value: "test-tag2-value" },
   ],
   description: "hello! this is chatroom card testing for localhost.",
-  createdAt: { seconds: 0, nanoseconds: 0 } as IMessage["postedAt"],
+  createdAt: new Date(),
 };
