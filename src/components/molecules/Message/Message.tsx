@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import { SpeechBallon } from "@/components/atoms/SpeechBallon";
 import { Props } from "./types";
 import theme from "@/styles/theme";
@@ -5,21 +7,27 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 export const Message = ({
-  user = { uid: "", displayName: "", email: "", message: "" },
+  user = {
+    uid: "",
+    displayName: "",
+    email: "",
+    message: "",
+    lastLoginAt: new Date("1900-01-01T00:00:00"),
+  },
   ...props
 }: Props) => {
-  const postedDate = new Date(
-    props.message.postedAt.seconds * 1000 +
-      props.message.postedAt.nanoseconds / 1000000
-  );
+  const [dateTime, setDateTime] = useState<string>();
 
-  const month = postedDate.getMonth() + 1;
-  const day = postedDate.getDate();
-  const hours = postedDate.getHours();
-  const minutes = postedDate.getMinutes();
-  const seconds = postedDate.getSeconds();
+  useEffect(() => {
+    const postedDate = props.message.postedAt;
+    const month = postedDate.getMonth() + 1;
+    const day = postedDate.getDate();
+    const hours = postedDate.getHours();
+    const minutes = postedDate.getMinutes();
+    const seconds = postedDate.getSeconds();
 
-  const DateTime = `${month}/${day} ${hours}:${minutes}:${seconds}`;
+    setDateTime(`${month}/${day} ${hours}:${minutes}:${seconds}`);
+  }, [props.message.postedAt]);
 
   const handleUserClick = () => {
     if (!!props.message.user && !!props.onUserClick)
@@ -42,7 +50,7 @@ export const Message = ({
               value={props.message.value}
             />
             <Typography id="message_date-time" variant="body2" gutterBottom>
-              {DateTime}
+              {dateTime}
             </Typography>
           </div>
           <Avatar
@@ -73,7 +81,7 @@ export const Message = ({
               value={props.message.value}
             />
             <Typography id="message_date-time" variant="body2" gutterBottom>
-              {DateTime}
+              {dateTime}
             </Typography>
           </div>
         </Stack>
