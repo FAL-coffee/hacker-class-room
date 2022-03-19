@@ -37,6 +37,9 @@
       ],
       "@routes": [
         "./src/constants/routes.ts"
+      ],
+      "@utils": [
+        "./src/utils/*"
       ]
     },
     "incremental": true
