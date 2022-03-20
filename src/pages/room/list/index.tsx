@@ -8,6 +8,9 @@ import { Layout } from "@components/layout";
 import { ChatRoomList } from "@components/templates";
 import { ChatRoomCardList, ChatRoomBarList } from "@components/organisms";
 import { useBelongRooms } from "@hooks";
+
+import { IUser } from "@types";
+import { converter } from "@/utils/firebase";
 import * as routes from "@routes";
 
 const RoomList: NextPage = () => {
@@ -35,7 +38,11 @@ const RoomList: NextPage = () => {
     // const tempRooms: IChatRoom[] = [];
     (async () => {
       // ログイン中のユーザー情報から、usersCollection内でのdocumentを特定する
-      const currentUserRef = await doc(db, "users", `${currentUser.uid}`);
+      const currentUserRef = await doc(
+        db,
+        "users",
+        `${currentUser.uid}`
+      ).withConverter(converter<IUser>());
       // 特定したdocumentからデータを抽出する
       const currentUserSnap = await getDoc(currentUserRef);
       doFetchBelongRooms(currentUserSnap);

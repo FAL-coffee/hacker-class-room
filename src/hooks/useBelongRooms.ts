@@ -35,8 +35,10 @@ interface ITempUser {
 }
 
 export const useBelongRooms = (): //   initialState?: DocumentSnapshot
+// [IChatRoom[], Boolean, (userSnap?: DocumentSnapshot<ITempUser>) => void] => {
 [IChatRoom[], Boolean, (userSnap?: DocumentSnapshot) => void] => {
   // const [tempBelongRooms, setTempBelongRooms] = useState<IChatRoom[]>([]);
+  // const [userSnap, setUserSnap] = useState<DocumentSnapshot<ITempUser>>();
   const [userSnap, setUserSnap] = useState<DocumentSnapshot>();
   const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
   const [loading, setLoading] = useState<Boolean>(false);
