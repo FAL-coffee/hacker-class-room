@@ -6,6 +6,6 @@ export interface IUser {
   uid: string;
   message?: string;
   photoURL?: string;
-  lastLoginAt: Date;
+  lastLoginAt?: Date;
   belongRooms?: DocumentReference<IChatRoom>[];
 }
