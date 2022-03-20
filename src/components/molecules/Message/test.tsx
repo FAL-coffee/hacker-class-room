@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 import "jest-styled-components";
 import "jsdom-global/register";
 
@@ -10,15 +10,13 @@ import { Message } from ".";
 import { Props } from "./types";
 
 describe("<Message />", () => {
-  let props: Props = {
+  const props: Required<Props> = {
     user: USER,
     message: MESSAGE,
     isMine: true,
     onUserClick: jest.fn(),
   };
-  const postedDate = new Date(
-    MESSAGE.postedAt.seconds * 1000 + MESSAGE.postedAt.nanoseconds / 1000000
-  );
+  const postedDate = MESSAGE.postedAt;
 
   const month = postedDate.getMonth() + 1;
   const day = postedDate.getDate();
@@ -36,6 +34,7 @@ describe("<Message />", () => {
   describe("isMine=true", () => {
     props.isMine = true;
     const mineMessageWrapper = shallow(<Message {...props} />);
+    mineMessageWrapper.update();
     it("render", () => {
       expect(mineMessageWrapper.exists());
     });
@@ -54,7 +53,8 @@ describe("<Message />", () => {
     });
 
     it("renders dateTime", () => {
-      expect(mineMessageWrapper.find("#message_date-time").text()).toEqual(
+      const message = mount(<Message {...props} />);
+      expect(message.find("#message_date-time").first().text()).toEqual(
         DateTime
       );
     });
@@ -88,6 +88,7 @@ describe("<Message />", () => {
   describe("isMine=false", () => {
     props.isMine = false;
     const notMineMessageWrapper = shallow(<Message {...props} />);
+    notMineMessageWrapper.update();
     it("render", () => {
       expect(notMineMessageWrapper.exists());
     });
@@ -105,7 +106,8 @@ describe("<Message />", () => {
     });
 
     it("renders dateTime", () => {
-      expect(notMineMessageWrapper.find("#message_date-time").text()).toEqual(
+      const message = mount(<Message {...props} />);
+      expect(message.find("#message_date-time").first().text()).toEqual(
         DateTime
       );
     });
