@@ -77,7 +77,10 @@ Body、Footer については、必要な場合のみ。
   NEXT_PUBLIC_FIREBASE_APP_ID=
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
   
+  # firebase内、公式アカウントのUID
   NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID=
+  # 初期状態のアカウントが所属するチャットルーム（半角スペース区切り）
+  NEXT_PUBLIC_DEFAULT_BELONG_ROOM_IDS=
   ```
 3. cypress.env.jsonを作成する
   ```json
