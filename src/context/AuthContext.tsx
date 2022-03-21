@@ -12,9 +12,10 @@ import {
   updateDoc,
   getDoc,
   DocumentReference,
-  Timestamp,
 } from "@/plugin/firebase";
-import { IUser } from "@types";
+import { IUser, ILoginRecord, IFollow, IFollower } from "@types";
+import { converter } from "@/utils/firebase";
+import * as settings from "@/constants/settings";
 
 interface AuthContextProps {
   currentUser: IUser | null | undefined;
@@ -60,20 +61,22 @@ const AuthProvider = ({ children }: Props) => {
       setLoading(false);
       if (!user) return;
       // login時、firestore内のuser情報をuidをキーにし、登録を行う。
-      const docRef = await doc(db, "users", `${user.uid}`);
+      const docRef = await doc(db, "users", `${user.uid}`).withConverter(
+        converter<IUser>()
+      );
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         await updateDoc(docRef, {
-          photoURL: user.photoURL,
-          lastLoginAt: Timestamp.now(),
+          photoURL: !!user.photoURL ? user.photoURL : settings.NULL,
+          lastLoginAt: new Date(),
         });
       } else {
         await setDoc(docRef, {
           uid: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          lastLoginAt: Timestamp.now(),
+          displayName: !!user.displayName ? user.displayName : settings.NULL,
+          email: !!user.email ? user.email : settings.NULL,
+          photoURL: !!user.photoURL ? user.photoURL : settings.NULL,
+          lastLoginAt: new Date(),
           belongRooms: defaultBelongRooms,
         });
         // login userのfollows collectionに公式アカウントを追加
@@ -84,13 +87,13 @@ const AuthProvider = ({ children }: Props) => {
             `${user.uid}`,
             "follows",
             `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
-          ),
+          ).withConverter(converter<IFollow>()),
           {
             user: doc(
               db,
               `users/${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
             ),
-            followAt: Timestamp.now(),
+            followAt: new Date(),
           }
         );
 
@@ -102,19 +105,24 @@ const AuthProvider = ({ children }: Props) => {
             `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`,
             "followers",
             `${user.uid}`
-          ),
+          ).withConverter(converter<IFollower>()),
           {
             user: doc(db, `users/${user.uid}`),
-            followedAt: Timestamp.now(),
+            followedAt: new Date(),
           }
         );
       }
 
       // login日時をdocumentを追加する形で記録していく
       await addDoc(
-        await collection(db, "users", `${user.uid}`, "loginRecords"),
+        await collection(
+          db,
+          "users",
+          `${user.uid}`,
+          "loginRecords"
+        ).withConverter(converter<ILoginRecord>()),
         {
-          loginAt: Timestamp.now(),
+          loginAt: new Date(),
           // login時のipアドレスとかの取得については、規約の整備後
         }
       );
