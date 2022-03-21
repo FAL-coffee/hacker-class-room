@@ -1,4 +1,3 @@
-import { DocumentReference, Timestamp } from "@/plugin/firebase";
 import { IUser, ITag } from ".";
 
 export interface IChatRoom {
@@ -8,6 +7,5 @@ export interface IChatRoom {
   name: string;
   tags: ITag[];
   description: string;
-  createdAt: Timestamp;
-  messages?: DocumentReference;
+  createdAt: Date;
 }

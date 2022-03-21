@@ -10,6 +10,7 @@ module.exports = {
       "@fixtures": path.resolve(__dirname, "src/fixtures/index.ts"),
       "@hooks": path.resolve(__dirname, "src/hooks/index.ts"),
       "@routes": path.resolve(__dirname, "src/constants/routes.ts"),
+      "@utils": path.resolve(__dirname, "src/utils"),
     };
     return config;
   },

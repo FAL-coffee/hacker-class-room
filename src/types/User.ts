@@ -1,9 +1,11 @@
 import { DocumentReference } from "firebase/firestore";
+import { IChatRoom } from ".";
 export interface IUser {
   displayName: string;
   email: string;
   uid: string;
   message?: string;
   photoURL?: string;
-  belongRooms?: DocumentReference[];
+  lastLoginAt?: Date;
+  belongRooms?: DocumentReference<IChatRoom>[];
 }
