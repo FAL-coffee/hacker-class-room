@@ -17,7 +17,7 @@ export const converter = <
       // Date型の値をTimestamp型に変換する
       if (
         typeof data[key].toString == "function" &&
-        data[key].toString().call(new Date())
+        data[key].toString.call(new Date())
       ) {
         (data as DocumentSnapshotType)[key] = Timestamp.fromDate(data[key]);
       }
