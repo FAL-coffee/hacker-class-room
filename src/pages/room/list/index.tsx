@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/Auth/AuthContext";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { db, doc, getDoc } from "@/plugin/firebase";

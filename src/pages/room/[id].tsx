@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { db, onSnapshot, query } from "@/plugin/firebase";
 import React, { useEffect, useState } from "react";
 import { Layout } from "@components/layout";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/Auth/AuthContext";
 import {
   addDoc,
   collection,

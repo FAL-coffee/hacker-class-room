@@ -1,6 +1,6 @@
 import { Props } from "./types";
 import Head from "next/head";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/Auth/AuthContext";
 import { UserMenuKey, HeaderLinkKey } from "@types";
 import { AppHeader } from "@components/organisms";
 import { useRouter } from "next/router";
