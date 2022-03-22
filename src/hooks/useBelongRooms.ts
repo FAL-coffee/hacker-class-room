@@ -59,16 +59,17 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
               const belongRoomDoc = await getDoc(belongRoomRef);
               if (!belongRoomDoc.exists()) return;
               const tempBelongRoomData = belongRoomDoc.data();
-              // Object.keys(tempBelongRoomData).forEach((key) => {
-              //   if (
-              //     typeof tempBelongRoomData[key].toString == "function" &&
-              //     tempBelongRoomData[key].toString().startsWith("Timestamp")
-              //   ) {
-              //     (tempBelongRoomData as DocumentSnapshotType)[
-              //       key
-              //     ] = Timestamp.fromDate(tempBelongRoomData[key]);
-              //   }
-              // });
+              Object.keys(tempBelongRoomData).forEach((key) => {
+                // Timestamp型の値をDate型に変換する
+                if (
+                  typeof tempBelongRoomData[key].toString == "function" &&
+                  tempBelongRoomData[key].toString().startsWith("Timestamp")
+                ) {
+                  (tempBelongRoomData as DocumentSnapshotType)[
+                    key
+                  ] = tempBelongRoomData[key].toDate();
+                }
+              });
 
               const ownerRef = tempBelongRoomData.owner;
               const ownerDoc = await getDoc(ownerRef);
