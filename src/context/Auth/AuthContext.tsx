@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { ReactNode } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { signInWithRedirect } from "firebase/auth";
 import {
@@ -11,22 +10,19 @@ import {
   collection,
   updateDoc,
   getDoc,
-  DocumentReference,
 } from "@/plugin/firebase";
-import { IUser, ILoginRecord, IFollow, IFollower } from "@types";
+import {
+  IUser,
+  F_ILoginRecord,
+  F_IFollow,
+  F_IFollower,
+  F_IBelongRoom,
+} from "@types";
 import { converter } from "@/utils/firebase";
 import * as settings from "@/constants/settings";
 
-interface AuthContextProps {
-  currentUser: IUser | null | undefined;
-  login?: () => Promise<void>;
-  logout?: () => Promise<void>;
-  loading?: Boolean;
-}
-
-interface Props {
-  children: ReactNode;
-}
+import { AuthContextProps, Props } from "./types";
+import { DEFAULT_BELONG_ROOMS } from "./settings";
 
 const AuthContext = createContext<AuthContextProps>({ currentUser: null });
 
@@ -38,10 +34,6 @@ export const useAuth = () => {
  * β版ではユーザーには事前用意したデフォルトルームにのみ加入させる。
  * (その後、βではユーザーの操作によるルームへの加入は不可)
  */
-const defaultBelongRooms: DocumentReference[] = [
-  doc(db, "chats/" + "1NDPnApW4DvWR8HvyvvZ"),
-  doc(db, "chats/" + "ehV7kS3zRJ34Y6iWj4cz"),
-];
 
 const AuthProvider = ({ children }: Props) => {
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
@@ -61,7 +53,7 @@ const AuthProvider = ({ children }: Props) => {
       setLoading(false);
       if (!user) return;
       // login時、firestore内のuser情報をuidをキーにし、登録を行う。
-      const docRef = await doc(db, "users", `${user.uid}`).withConverter(
+      const docRef = doc(db, "users", `${user.uid}`).withConverter(
         converter<IUser>()
       );
       const docSnap = await getDoc(docRef);
@@ -77,8 +69,9 @@ const AuthProvider = ({ children }: Props) => {
           email: !!user.email ? user.email : settings.NULL,
           photoURL: !!user.photoURL ? user.photoURL : settings.NULL,
           lastLoginAt: new Date(),
-          belongRooms: defaultBelongRooms,
+          // belongRooms: defaultBelongRooms,
         });
+
         // login userのfollows collectionに公式アカウントを追加
         await setDoc(
           await doc(
@@ -87,7 +80,7 @@ const AuthProvider = ({ children }: Props) => {
             `${user.uid}`,
             "follows",
             `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`
-          ).withConverter(converter<IFollow>()),
+          ).withConverter(converter<F_IFollow>()),
           {
             user: doc(
               db,
@@ -105,12 +98,33 @@ const AuthProvider = ({ children }: Props) => {
             `${process.env.NEXT_PUBLIC_OFFICIAL_ACCOUNT_UID}`,
             "followers",
             `${user.uid}`
-          ).withConverter(converter<IFollower>()),
+          ).withConverter(converter<F_IFollower>()),
           {
             user: doc(db, `users/${user.uid}`),
             followedAt: new Date(),
           }
         );
+
+        // デフォルトで所属するルームをcollectionとして作成
+        DEFAULT_BELONG_ROOMS.forEach(async (roomRef) => {
+          await addDoc(
+            await collection(
+              db,
+              "users",
+              `${user.uid}`,
+              "belongRooms"
+            ).withConverter(converter<F_IBelongRoom>()),
+            {
+              room: roomRef,
+              joinAt: new Date(),
+            }
+          );
+
+          await addDoc(await collection(roomRef, "members"), {
+            user: doc(db, `users/${user.uid}`),
+            joinAt: new Date(),
+          });
+        });
       }
 
       // login日時をdocumentを追加する形で記録していく
@@ -120,7 +134,7 @@ const AuthProvider = ({ children }: Props) => {
           "users",
           `${user.uid}`,
           "loginRecords"
-        ).withConverter(converter<ILoginRecord>()),
+        ).withConverter(converter<F_ILoginRecord>()),
         {
           loginAt: new Date(),
           // login時のipアドレスとかの取得については、規約の整備後

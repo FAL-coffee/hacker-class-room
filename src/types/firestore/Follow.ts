@@ -1,6 +1,6 @@
 import { DocumentReference } from "firebase/firestore";
 import { IUser } from "..";
-export interface IFollow {
+export interface F_IFollow {
   user: DocumentReference<IUser>;
   followAt: Date;
 }
