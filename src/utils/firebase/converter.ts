@@ -20,7 +20,7 @@ export const converter = <
         typeof data[key].toString().call == "function" &&
         data[key].toString().call(new Date())
       ) {
-        // (data as DocumentSnapshotType)[key] = Timestamp.fromDate(data[key]);
+        (data as DocumentSnapshotType)[key] = Timestamp.fromDate(data[key]);
       }
     });
     return data;
