@@ -1,116 +1,91 @@
 import { useEffect, useState } from "react";
 import {
-  getDoc,
+  getDocs,
   DocumentReference,
-  Timestamp,
+  getDoc,
   DocumentSnapshot,
+  query,
+  collection,
+  orderBy,
+  // limit,
+  db,
 } from "@/plugin/firebase";
-import { IChatRoom, IUser, ITag } from "@types";
+import { converter } from "@/utils/firebase";
+import { IChatRoom, IUser, ITag, F_IChatRoom, F_ITag } from "@types";
 
-// interface ITagRef {
-//   genreRef: DocumentReference;
-//   tagRef: DocumentReference;
+interface IRoomRef {
+  joinAt: Date;
+  room: DocumentReference<F_IChatRoom>;
+}
+// interface DocumentSnapshotType {
+//   [key: string]: any | Timestamp;
 // }
-interface DocumentSnapshotType {
-  [key: string]: any | Timestamp;
-}
-
-interface ITempChatRoom extends DocumentSnapshotType {
-  id: string;
-  owner: DocumentReference<IUser>;
-  iconURL?: string;
-  name: string;
-  tags: DocumentReference<ITag>[];
-  description: string;
-  createdAt: Timestamp;
-}
-interface ITempUser {
-  displayName: string;
-  email: string;
-  uid: string;
-  message?: string;
-  photoURL?: string;
-  lastLoginAt: Date;
-  belongRooms?: DocumentReference<ITempChatRoom>[];
-}
 
 export const useBelongRooms = (): //   initialState?: DocumentSnapshot
 // [IChatRoom[], Boolean, (userSnap?: DocumentSnapshot<ITempUser>) => void] => {
-[IChatRoom[], Boolean, (userSnap?: DocumentSnapshot) => void] => {
+[IChatRoom[], Boolean, (userSnap?: DocumentSnapshot<IUser>) => void] => {
   // const [tempBelongRooms, setTempBelongRooms] = useState<IChatRoom[]>([]);
   // const [userSnap, setUserSnap] = useState<DocumentSnapshot<ITempUser>>();
-  const [userSnap, setUserSnap] = useState<DocumentSnapshot>();
+  const [userSnap, setUserSnap] = useState<DocumentSnapshot<IUser>>();
   const [belongRooms, setBelongRooms] = useState<IChatRoom[]>([]);
   const [loading, setLoading] = useState<Boolean>(false);
   useEffect(() => {
     (async () => {
       await setLoading(true);
       if (!userSnap) return;
-      const userSnapData = userSnap.data() as ITempUser;
-      if (!userSnapData?.belongRooms) return;
-      else if (!!userSnapData?.belongRooms) {
-        const belongRoomDatas: IChatRoom[] = [];
-        await Promise.all(
-          userSnapData.belongRooms.map(
-            async (
-              belongRoomRef: DocumentReference<ITempChatRoom>,
-              i: number
-            ) => {
-              const belongRoomDoc = await getDoc(belongRoomRef);
-              if (!belongRoomDoc.exists()) return;
-              const tempBelongRoomData = belongRoomDoc.data();
-              Object.keys(tempBelongRoomData).forEach((key) => {
-                // Timestamp型の値をDate型に変換する
-                if (
-                  typeof tempBelongRoomData[key].toString == "function" &&
-                  tempBelongRoomData[key].toString().startsWith("Timestamp")
-                ) {
-                  (tempBelongRoomData as DocumentSnapshotType)[
-                    key
-                  ] = tempBelongRoomData[key].toDate();
-                }
-              });
+      // owner:DocumentSnapshot<IUser>, tags:DocumentSnapshot
+      const tempBelongRooms: F_IChatRoom[] = [];
+      const rooms: IChatRoom[] = [];
 
-              const ownerRef = tempBelongRoomData.owner;
-              const ownerDoc = await getDoc(ownerRef);
-              const ownerData = ownerDoc.data();
-              const owner = !!ownerData
-                ? ownerData
-                : {
-                    displayName: "user is not found",
-                    email: "user is not found",
-                    lastLoginAt: new Date("1900-01-01T00:00:00"),
-                    uid: "404",
-                  };
+      const q = query(
+        collection(db, "users", userSnap.id, "belongRooms").withConverter(
+          converter<IRoomRef>()
+        ),
+        orderBy("joinAt", "asc")
+        // limit(30)
+      );
+      const querySnapshot = await getDocs(q);
+      // console.log(querySnapshot);
+      await Promise.all(
+        await querySnapshot.docs.map(async (doc) => {
+          const roomDoc = await getDoc(
+            doc.data().room.withConverter(converter<F_IChatRoom>())
+          );
+          await tempBelongRooms.push(roomDoc.data() as F_IChatRoom);
+        })
+      );
 
-              const belongRoomData: IChatRoom = {
-                ...tempBelongRoomData,
-                id: belongRoomRef.id,
-                createdAt: new Date("1900-01-01T00:00:00"),
-                tags: [],
-                owner: owner,
-              };
-              // tagsの取得・格納
-              // if (!!tempBelongRoomData.tags) {
-              await Promise.all(
-                await Object.values(tempBelongRoomData.tags).map(
-                  async (tag: DocumentReference<ITag>, j: number) => {
-                    const tagDoc = await getDoc(tag);
-                    const tagData = await tagDoc.data();
-                    await belongRoomData.tags.push({
-                      id: tag.id,
-                      value: tagData && tagData.value ? tagData.value : "",
-                    });
-                  }
-                )
+      // await tempBelongRooms.forEach(async (a) => {
+      //   await console.log(a.id);
+      // });
+
+      await Promise.all(
+        await tempBelongRooms.map(async (room) => {
+          const ownerDoc = await getDoc(
+            room.owner.withConverter(converter<IUser>())
+          );
+
+          const tags: ITag[] = [];
+          await Promise.all(
+            await Object.values(room.tags).map(async (tag) => {
+              const tagDoc = await getDoc(
+                tag.withConverter(converter<F_ITag>())
               );
+              await tags.push({
+                value: tagDoc.data()?.value as string,
+                id: tagDoc.id,
+              });
+            })
+          );
 
-              await belongRoomDatas.push(belongRoomData);
-              await setBelongRooms([...belongRoomDatas]);
-            }
-          )
-        );
-      }
+          await rooms.push({
+            ...room,
+            owner: ownerDoc.data() as IUser,
+            tags: tags,
+          });
+        })
+      );
+      await setBelongRooms([...rooms]);
       await setLoading(false);
     })();
   }, [userSnap]);
