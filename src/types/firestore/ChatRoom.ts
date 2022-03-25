@@ -1,4 +1,5 @@
 import { IUser } from "..";
+import { F_ITag } from ".";
 import { DocumentReference } from "firebase/firestore";
 export interface F_IChatRoom {
   id: string;
@@ -8,4 +9,8 @@ export interface F_IChatRoom {
   description: string;
   tags: DocumentReference[];
   createdAt: Date;
+}
+
+export interface F_IChatRoomsTags {
+  [key: string]: DocumentReference<F_ITag>;
 }

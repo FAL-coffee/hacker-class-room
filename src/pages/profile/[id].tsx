@@ -18,7 +18,7 @@ import {
   Timestamp,
   deleteDoc,
 } from "@/plugin/firebase";
-import { IUser } from "@types";
+import { IUser, F_IFollow, F_IFollower } from "@types";
 import { Profile } from "@components/templates";
 import {
   ListTab,
@@ -28,6 +28,7 @@ import {
 } from "@/components/organisms";
 import { useBelongRooms } from "@hooks";
 import * as routes from "@routes";
+import { converter } from "@/utils/firebase";
 
 /**
  * currentUserUid, targetUserUidを受け取り、
@@ -109,16 +110,20 @@ const ProfilePage: NextPage = () => {
     setFollowers([]);
     setFollowing(false);
     (async () => {
-      const userRef = doc(db, "users", `${router.query.id}`);
+      const userRef = doc(db, "users", `${router.query.id}`).withConverter(
+        converter<IUser>()
+      );
       const userSnap = await getDoc(userRef);
       doFetchBelongRooms(userSnap);
-      const userSnapData = userSnap.data() as IUser;
+      const userSnapData = userSnap.data();
       if (!userSnapData) return;
       setUserData(userSnapData);
 
       // follows取得
       const followsQuery = query(
-        collection(db, "users", `${router.query.id}`, "follows"),
+        collection(db, "users", `${router.query.id}`, "follows").withConverter(
+          converter<F_IFollow>()
+        ),
         orderBy("followAt", "asc"),
         limit(20)
       );
@@ -132,7 +137,12 @@ const ProfilePage: NextPage = () => {
 
       // followers取得
       const followersQuery = query(
-        collection(db, "users", `${router.query.id}`, "followers"),
+        collection(
+          db,
+          "users",
+          `${router.query.id}`,
+          "followers"
+        ).withConverter(converter<F_IFollower>()),
         orderBy("followedAt", "asc"),
         limit(20)
       );
@@ -161,8 +171,7 @@ const ProfilePage: NextPage = () => {
   }, [router.query.id, currentUser, doFetchBelongRooms]);
 
   const handleUnFollow = async (uid: string) => {
-    if (!currentUser) return;
-    if (uid === currentUser.uid) return;
+    if (!currentUser || uid === currentUser.uid) return;
     // currentUser/followsからuidのdocumentを削除する
     await deleteDoc(doc(db, "users", currentUser.uid, "follows", uid));
     // uidのアカウント/followersからcurrentUser.uidのdocumentを削除する
@@ -172,8 +181,7 @@ const ProfilePage: NextPage = () => {
   };
 
   const handleFollow = async (uid: string) => {
-    if (!currentUser) return;
-    if (uid === currentUser.uid) return;
+    if (!currentUser || uid === currentUser.uid) return;
     // currentUser/followsにuidのdocumentを追加する
     await setDoc(doc(db, "users", currentUser.uid, "follows", uid), {
       user: doc(db, `users/${uid}`),
@@ -223,7 +231,7 @@ const ProfilePage: NextPage = () => {
         userInformationArea={
           <UserInformation
             user={userData}
-            isMe={currentUser ? currentUser?.uid === userData.uid : false}
+            isMe={currentUser?.uid === userData.uid}
             following={following}
             freezeDirectMessage={false}
             onUnFollowClick={handleUnFollow}
@@ -254,15 +262,13 @@ const ProfilePage: NextPage = () => {
               },
               {
                 name: "room",
-                component: !loading ? (
+                component: !loading && (
                   <ChatRoomBarList
                     chatRooms={belongRooms}
                     onOpenClick={handleOpenChatRoom}
                     onUserClick={handleOpenProfile}
                     onTagClick={handleChatRoomSearch}
                   />
-                ) : (
-                  <></>
                 ),
               },
             ]}
