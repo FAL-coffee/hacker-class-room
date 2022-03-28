@@ -25,6 +25,8 @@
     "cypress": "^9.4.1",
     "cypress-firebase": "^2.2.1",
     "firebase": "^9.6.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.19.0",
     "firebase-tools-extra": "^1.0.0",
     "next": "12.1.0",
     "react": "17.0.2",
