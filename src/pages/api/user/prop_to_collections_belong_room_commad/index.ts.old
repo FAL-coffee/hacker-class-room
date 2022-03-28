@@ -1,0 +1,43 @@
+import type { NextApiRequest, NextApiResponse } from "next";
+// import admin from "firebase-admin";
+// import { getFirestore } from "@/plugin/firebase/server";
+// const db = getFirestore();
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // let batch = db.batch();
+  // // ): Promise<void> => {
+  // const snapshots = await db.collection("users").get();
+  // await Promise.all(
+  //   snapshots.docs.map(async (snapshot) => {
+  //     const docRef = db
+  //       .collection("users")
+  //       .doc(snapshot.id)
+  //       .collection("belongRooms")
+  //       .doc("1NDPnApW4DvWR8HvyvvZ");
+  //     // await docRef.set({
+  //     //   joinAt: admin.firestore.FieldValue.serverTimestamp(),
+  //     //   room: db.collection("chats").doc("1NDPnApW4DvWR8HvyvvZ"),
+  //     // });
+  //     batch.set(docRef, {
+  //       joinAt: admin.firestore.FieldValue.serverTimestamp(),
+  //       room: db.collection("chats").doc("1NDPnApW4DvWR8HvyvvZ"),
+  //     });
+  //     const docRef2 = db
+  //       .collection("users")
+  //       .doc(snapshot.id)
+  //       .collection("belongRooms")
+  //       .doc("ehV7kS3zRJ34Y6iWj4cz");
+  //     // await docRef2.set({
+  //     //   joinAt: admin.firestore.FieldValue.serverTimestamp(),
+  //     //   room: db.collection("chats").doc("ehV7kS3zRJ34Y6iWj4cz"),
+  //     // });
+  //     batch.set(docRef2, {
+  //       joinAt: admin.firestore.FieldValue.serverTimestamp(),
+  //       room: db.collection("chats").doc("ehV7kS3zRJ34Y6iWj4cz"),
+  //     });
+  //     // batch.set(docRef, {});
+  //   })
+  // );
+  // await batch.commit();
+  // await res.status(200).json({ message: "complate" });
+};
+export default handler;
