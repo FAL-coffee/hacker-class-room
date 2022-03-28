@@ -51,7 +51,10 @@ export const useBelongRooms = (): //   initialState?: DocumentSnapshot
           const roomDoc = await getDoc(
             doc.data().room.withConverter(converter<F_IChatRoom>())
           );
-          await tempBelongRooms.push(roomDoc.data() as F_IChatRoom);
+          await tempBelongRooms.push({
+            ...roomDoc.data(),
+            id: roomDoc.id,
+          } as F_IChatRoom);
         })
       );
 
