@@ -9,7 +9,7 @@ import { USER } from "@fixtures";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 
-describe("<UserInformation.FollowButton />", () => {
+describe("<FollowButton />", () => {
   const props = {
     following: false,
     onClick: jest.fn(),
@@ -41,7 +41,7 @@ describe("<UserInformation.FollowButton />", () => {
   });
 });
 
-describe("<UserInformation.DirectMessageIconButton />", () => {
+describe("<DirectMessageIconButton />", () => {
   const props = {
     disabled: false,
     onClick: jest.fn(),
