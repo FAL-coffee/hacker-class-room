@@ -3,67 +3,11 @@ import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 import { SpeechBallon } from "@components/atoms";
 
 import { Props } from "./types";
-
-interface FollowButtonProps {
-  following: boolean;
-  onClick: () => void;
-}
-export const FollowButton = ({ ...props }: FollowButtonProps) => {
-  return (
-    <>
-      {props.following ? (
-        <Button
-          id="unFollow_button"
-          fullWidth
-          variant="contained"
-          endIcon={<ArrowDropUpIcon />}
-          onClick={props.onClick}
-        >
-          Un Follow
-        </Button>
-      ) : (
-        <Button
-          id="follow_button"
-          fullWidth
-          variant="outlined"
-          endIcon={<KeyboardArrowDownIcon />}
-          onClick={props.onClick}
-        >
-          Follow
-        </Button>
-      )}
-    </>
-  );
-};
-
-interface DirectMessageIconButtonProps {
-  disabled: boolean;
-  onClick: () => void;
-}
-export const DirectMessageIconButton = ({
-  ...props
-}: DirectMessageIconButtonProps) => {
-  return (
-    <span style={{ display: "inline-flex" }}>
-      {props.disabled ? (
-        <></>
-      ) : (
-        <IconButton color="primary" onClick={props.onClick}>
-          <MailOutlineIcon />
-        </IconButton>
-      )}
-    </span>
-  );
-};
+import { DirectMessageIconButton, FollowButton } from ".";
 
 export const UserInformation = ({
   freezeDirectMessage = false,
