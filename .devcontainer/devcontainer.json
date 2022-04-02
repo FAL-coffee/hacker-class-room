@@ -3,7 +3,7 @@
     "dockerComposeFile": [
         "../docker-compose.yml"
     ],
-    "service": "t_met",
+    "service": "hacker_class_room",
     "workspaceFolder": "/app",
     "settings": {
         "files.trimTrailingWhitespace": true,
