@@ -1,9 +1,9 @@
 {
-    "name": "hacker_class_room",
+    "name": "hacker_class_room-dev",
     "dockerComposeFile": [
         "../docker-compose.yml"
     ],
-    "service": "hacker_class_room",
+    "service": "hacker_class_room-dev",
     "workspaceFolder": "/app",
     "settings": {
         "files.trimTrailingWhitespace": true,
@@ -16,8 +16,8 @@
             "editor.defaultFormatter": "svipas.prettier-plus"
         },
         "[typescript]": {
-          "editor.defaultFormatter": "svipas.prettier-plus"
-      },
+            "editor.defaultFormatter": "svipas.prettier-plus"
+        },
     },
     "extensions": [
         "eamodio.gitlens",
