@@ -6,7 +6,5 @@ COPY package-lock.json ./
 COPY tsconfig.json ./
 RUN npm ci --silent
 COPY . .
-RUN npm run dev
-RUN npm run storybook
 EXPOSE 3000
 EXPOSE 6006
